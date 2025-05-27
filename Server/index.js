@@ -33,10 +33,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://mizbaz.onrender.com",
+      "https://glittery-marigold-470383.netlify.app","redis://default:WNxvDrmiRVNYIytnbcxSCmDBUfqSqrAa@switchyard.proxy.rlwy.net:53134","mongo:qnbvRNGjuoXyTadarCmbvsUdSEwZKCTl@interchange.proxy.rlwy.net:45012"
+    ],
     credentials: true,
   })
 );
+
+MONGODB_URI=mongodb://localhost:27017/feed-the-kraken
 
 // Session setup (optional - only if you use session-based auth)
 app.use(
@@ -64,7 +71,7 @@ const io = require("socket.io")(server, {
       "http://localhost:5173",
       "http://localhost:3000",
       "https://mizbaz.onrender.com",
-      "https://glittery-marigold-470383.netlify.app",
+      "https://glittery-marigold-470383.netlify.app","redis://default:WNxvDrmiRVNYIytnbcxSCmDBUfqSqrAa@switchyard.proxy.rlwy.net:53134","mongo:qnbvRNGjuoXyTadarCmbvsUdSEwZKCTl@interchange.proxy.rlwy.net:45012"
     ],
     methods: ["GET", "POST"],
     credentials: true,
