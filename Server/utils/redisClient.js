@@ -1,6 +1,6 @@
 const { createClient } = require("redis");
 
-const redisUrl =
+const redisClient =
   process.env.NODE_ENV === "production"
     ? process.env.REDIS
     : "redis://localhost:6379";
