@@ -1,7 +1,7 @@
 import { journeyMapNodes, JOURNEY_TYPES } from "../config/journeyMapNodes";
 import { quickJourneyLayout, longJourneyLayout } from "../config/journeyLayout";
 import { useGameContext } from "../context/GameContext";
-import Hexagon from "./hexagon";
+import Hexagon from "./Hexagon";
 
 const MapPage = () => {
   const { gameState } = useGameContext();
