@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    const dbUri =
+      process.env.NODE_ENV === "production"
+        ? process.env.DATABASE
+        : process.env.MONGODB_URI;
+
+    await mongoose.connect(dbUri, {
       // useNewUrlParser: true,
       // useUnifiedTopology: true,
     });
