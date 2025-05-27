@@ -18,7 +18,7 @@ import LobbyPage from "./pages/LobbyPage";
 import GamePage from "./pages/GamePage";
 import { GameProvider } from "./context/GameContext.jsx";
 import { socket } from "./network/socket.js";
-import Hexagon from "./pages/hexagon.jsx";
+// import Hexagon from "./pages/hexagon.jsx";
 
 // Main App component with routing and layout
 function App() {
