@@ -1,8 +1,9 @@
 const { createClient } = require("redis");
 
-const redisClient = createClient({
-  url: "redis://localhost:6379", // اگر Redis روی پورت و لوکال پیش‌فرض است
-});
+const redisUrl =
+  process.env.NODE_ENV === "production"
+    ? process.env.REDIS
+    : "redis://localhost:6379";
 
 redisClient.on("error", (err) => console.error("Redis Client Error", err));
 
