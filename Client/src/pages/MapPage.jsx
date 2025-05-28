@@ -6,15 +6,24 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MapPage = () => {
+  const navigate = useNavigate();
   const { connectionState, gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
   console.log("connectionState:", connectionState);
   const { currentGameId } = connectionState;
-  const navigate = useNavigate();
-
+  console.log("currentGameId:", currentGameId);
   // انتخاب نوع نقشه (کوییک یا لانگ)
   // const [journeyType, setJourneyType] = useState(JOURNEY_TYPES.QUICK);
+  useEffect(() => {
+    console.log("Current Game ID:", currentGameId);
+    if (!currentGameId) {
+      alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
+      navigate("/lobby");
+      return;
+    }
+  }, [currentGameId, navigate]);
 
+  if (!currentGameId) return;
   // انتخاب نودهای نقشه و تصویر پس‌زمینه بر اساس نوع نقشه
   const nodes = journeyMapNodes[journeyType];
   const layout =
@@ -29,14 +38,6 @@ const MapPage = () => {
   // موقعیت کشتی (مثال برای تست)
   const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
   // const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
-  useEffect(() => {
-    console.log("Current Game ID:", currentGameId);
-    if (!currentGameId) {
-      alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
-      navigate("/lobby");
-      return;
-    }
-  }, [currentGameId, navigate]);
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-black">
