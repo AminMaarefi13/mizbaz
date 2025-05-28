@@ -41,6 +41,7 @@ export const GameProvider = ({ children }) => {
   const [energy, setEnergy] = useState(10);
   const [subscription, setSubscription] = useState(false);
   const [adSessionCount, setAdSessionCount] = useState(0);
+  console.log("connectionState sssss:", connectionState);
 
   useEffect(() => {
     if (connectionState.playerId) {

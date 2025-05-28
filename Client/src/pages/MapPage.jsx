@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const MapPage = () => {
   const { connectionState, gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
+  console.log("connectionState:", connectionState);
   const { currentGameId } = connectionState;
   const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ const MapPage = () => {
   const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
   // const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
   useEffect(() => {
+    console.log("Current Game ID:", currentGameId);
     if (!currentGameId) {
       alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
       navigate("/lobby");
