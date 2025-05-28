@@ -2,10 +2,15 @@ import { journeyMapNodes, JOURNEY_TYPES } from "../config/journeyMapNodes";
 import { quickJourneyLayout, longJourneyLayout } from "../config/journeyLayout";
 import { useGameContext } from "../context/GameContext";
 import Hexagon from "./Hexagon";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MapPage = () => {
-  const { gameState } = useGameContext();
+  const { connectionState, gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
+  const { currentGameId } = connectionState;
+  const navigate = useNavigate();
+
   // انتخاب نوع نقشه (کوییک یا لانگ)
   // const [journeyType, setJourneyType] = useState(JOURNEY_TYPES.QUICK);
 
@@ -23,6 +28,13 @@ const MapPage = () => {
   // موقعیت کشتی (مثال برای تست)
   const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
   // const shipPosition = layout[mapPosition]; // می‌توان این را به‌طور داینامیک تنظیم کرد
+  useEffect(() => {
+    if (!currentGameId) {
+      alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
+      navigate("/lobby");
+      return;
+    }
+  }, [currentGameId, navigate]);
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-black">
