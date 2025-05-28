@@ -114,7 +114,7 @@ export default function GamePage() {
   // console.log(roomPlayers);
   // console.log(currentPhase);
   // console.log(captainId === playerId);
-  console.log(currentPhase === "cabin_search");
+  // console.log(currentPhase === "cabin_search");
 
   // نمایش مناسب هنگام عدم دریافت اطلاعات یا ورود زودهنگام
   if (!currentGameId || !players || players.length === 0) {

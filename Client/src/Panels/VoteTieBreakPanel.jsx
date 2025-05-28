@@ -19,7 +19,7 @@ export default function VoteTieBreakPanel() {
   // ) {
   //   return null;
   // }
-  console.log(tiedPlayers);
+  // console.log(tiedPlayers);
 
   const handleSelect = (id) => {
     if (confirmed) return; // 🔒 جلوگیری از تغییر پس از تأیید
@@ -38,10 +38,10 @@ export default function VoteTieBreakPanel() {
     //   tiedPlayers: tiedPlayers,
     // });
     const payload = { tiedPlayers: tiedPlayers, eliminatorId: selectedId };
-    console.log({
-      eliminatorId: selectedId,
-      tiedPlayers: tiedPlayers,
-    });
+    // console.log({
+    //   eliminatorId: selectedId,
+    //   tiedPlayers: tiedPlayers,
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     setConfirmed(true); // 🔐 قفل کردن انتخاب
   };

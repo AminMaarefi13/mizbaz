@@ -16,7 +16,7 @@ export default function CultGunsDistributionPanel() {
     }, {})
   );
   const isCultLeader = playerId === cultLeaderId;
-  console.log(isCultLeader);
+  // console.log(isCultLeader);
 
   const totalGuns = Object.values(guns).reduce((sum, val) => sum + val, 0);
 
@@ -52,10 +52,10 @@ export default function CultGunsDistributionPanel() {
       data: { playerId, distribution: guns },
       type: "cult_guns_distributed",
     };
-    console.log({
-      data: { playerId, distribution: guns },
-      type: "cult_guns_distributed",
-    });
+    // console.log({
+    //   data: { playerId, distribution: guns },
+    //   type: "cult_guns_distributed",
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

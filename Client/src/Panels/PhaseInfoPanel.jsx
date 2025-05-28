@@ -12,7 +12,7 @@ export default function PhaseInfoPanel() {
   const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);
   const { title, message } = phaseData;
-  console.log(phaseData);
+  // console.log(phaseData);
 
   useEffect(() => {
     setConfirmed(false);

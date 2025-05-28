@@ -10,11 +10,11 @@ export default function FloggingChoicePanel() {
   const [revealedCard, setRevealedCard] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const { playerId } = connectionState;
-  console.log(privatePhaseData);
+  // console.log(privatePhaseData);
   const isCaptain = playerId === gameState.captainId;
   const { options, targetPlayerId } = privatePhaseData;
   const cards = options;
-  console.log(cards);
+  // console.log(cards);
   const handleSelect = (index) => {
     if (confirmed) return;
     setSelectedIndex(index);
@@ -30,10 +30,10 @@ export default function FloggingChoicePanel() {
       targetPlayerId,
       chosenCard,
     };
-    console.log({
-      targetPlayerId,
-      chosenCard,
-    });
+    // console.log({
+    //   targetPlayerId,
+    //   chosenCard,
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     // socket.emit("select_flogging_card", {
     //   gameId: currentGameId,

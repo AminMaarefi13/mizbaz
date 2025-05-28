@@ -41,7 +41,6 @@ export const GameProvider = ({ children }) => {
   const [energy, setEnergy] = useState(10);
   const [subscription, setSubscription] = useState(false);
   const [adSessionCount, setAdSessionCount] = useState(0);
-  console.log("connectionState sssss:", connectionState);
 
   useEffect(() => {
     if (connectionState.playerId) {
@@ -129,21 +128,19 @@ export const GameProvider = ({ children }) => {
     }
   };
 
-  console.log(roomPlayers);
-
   useEffect(() => {
     socket.on("connect", () => {
       requestGameState();
     });
 
     socket.on("gameState", (state) => {
-      console.log("📦 وضعیت بازی دریافت شد", state);
+      console.log("📦 gameState وضعیت بازی دریافت شد", state);
       setGameState(state.publicState);
       setUserState((prev) => ({ ...prev, ...state.privateState }));
     });
 
     socket.on("game_state_requested", (state) => {
-      console.log("📦 وضعیت بازی دریافت شد", state);
+      console.log("📦 game_state_requested وضعیت بازی دریافت شد", state);
       setGameState(state.publicState);
       setUserState((prev) => ({
         ...prev,
@@ -169,12 +166,10 @@ export const GameProvider = ({ children }) => {
     if (playerId && name) {
       socket.emit("register", { playerId, name });
       socket.emit("get_user_rooms", playerId, (rooms) => {
-        console.log("get_user_rooms dddddddddddddddddd");
         setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
       });
     }
     socket.emit("get_all_games", { roomId: currentRoomId }, (games) => {
-      console.log("get_all_games dddddddddddddddddd");
       setConnectionState((prev) => ({ ...prev, userGames: games }));
     });
   }, [playerId, name]);
@@ -188,8 +183,6 @@ export const GameProvider = ({ children }) => {
 
   useEffect(() => {
     socket.on("room_created", ({ roomId, roomPlayers, hostName, hostId }) => {
-      console.log("room_created dddddddddddddddddd");
-      console.log(roomId, roomPlayers, hostName, hostId);
       setConnectionState((prev) => ({
         ...prev,
         roomPlayers: roomPlayers,
@@ -201,8 +194,6 @@ export const GameProvider = ({ children }) => {
     socket.on(
       "joined_room",
       ({ roomId, roomPlayers, hostName, hostId, userGames }) => {
-        console.log("joined_room ddddddddddddddddd");
-        console.log(roomId, roomPlayers, hostName, hostId, userGames);
         setConnectionState((prev) => ({
           ...prev,
           roomPlayers: roomPlayers,
@@ -215,8 +206,6 @@ export const GameProvider = ({ children }) => {
     );
 
     socket.on("players_updated", ({ roomId, roomPlayers }) => {
-      console.log("players_updated dddddddddddddddddd");
-      console.log(roomId, roomPlayers);
       if (currentRoomId === roomId) {
         setConnectionState((prev) => ({
           ...prev,
@@ -229,8 +218,6 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on("user_rooms_updated", (rooms) => {
-      console.log("user_rooms_updated dddddddddddddddddd");
-      console.log(rooms);
       setConnectionState((prev) => ({
         ...prev,
         userRooms: rooms,
@@ -240,8 +227,6 @@ export const GameProvider = ({ children }) => {
     socket.on(
       "room_updated",
       ({ roomPlayers, hostName, hostId, userGames }) => {
-        console.log("room_updated dddddddddddddddddd");
-        console.log(roomPlayers, hostName, hostId, userGames);
         setConnectionState((prev) => ({
           ...prev,
           roomPlayers: roomPlayers,

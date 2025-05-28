@@ -11,8 +11,8 @@ export default function MermaidOrTelescopePanel() {
   const [confirmed, setConfirmed] = useState(false);
 
   const { selectablePlayers } = privatePhaseData;
-  console.log(selectablePlayers);
-  console.log(currentPhase);
+  // console.log(selectablePlayers);
+  // console.log(currentPhase);
   const typeLabel = currentPhase === "mermaid" ? "🧜‍♀️ پری دریایی" : "🔭 تلسکوپ";
   const title =
     currentPhase === "mermaid"

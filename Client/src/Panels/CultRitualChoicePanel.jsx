@@ -16,7 +16,7 @@ export default function CultRitualChoicePanel() {
     if (confirmed) return;
     setSelectedIndex(index);
   };
-  console.log(cards);
+  // console.log(cards);
 
   const handleConfirm = () => {
     if (selectedIndex === null) return;
@@ -32,9 +32,9 @@ export default function CultRitualChoicePanel() {
     const payload = {
       chosenCard,
     };
-    console.log({
-      chosenCard,
-    });
+    // console.log({
+    //   chosenCard,
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

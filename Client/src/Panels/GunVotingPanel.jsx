@@ -17,17 +17,17 @@ export default function GunVotingPanel() {
   if (!player || currentPhase !== "start_voting") return null;
 
   const maxGuns = player.guns;
-  console.log(selectedGunIds);
+  // console.log(selectedGunIds);
   useEffect(() => {
     const initialGuns = Array.from({ length: maxGuns }, (_, i) => ({
       id: i,
       rotate: 315, // چرخش بین -20 تا +20 درجه
     }));
-    console.log(initialGuns);
+    // console.log(initialGuns);
 
     if (votes.length > 0) {
-      console.log(votes[votes.length - 1].voteSessionId);
-      console.log(currentVoteSessionId);
+      // console.log(votes[votes.length - 1].voteSessionId);
+      // console.log(currentVoteSessionId);
       if (votes[votes.length - 1].voteSessionId === currentVoteSessionId) {
         const initialSetSelectedGunIds = initialGuns
           .filter((gun) => gun.id < votes[votes.length - 1].gunsUsed)
@@ -44,7 +44,7 @@ export default function GunVotingPanel() {
         //   }
         //   return acc;
         // }, []);
-        console.log(initialSetSelectedGunIds);
+        // console.log(initialSetSelectedGunIds);
         setGuns(initialGuns);
         setSelectedGunIds(initialSetSelectedGunIds);
         setConfirmed(true);
@@ -79,10 +79,10 @@ export default function GunVotingPanel() {
       playerId,
       gunsUsed: selectedGunIds.length,
     };
-    console.log({
-      playerId,
-      gunsUsed: selectedGunIds.length,
-    });
+    // console.log({
+    //   playerId,
+    //   gunsUsed: selectedGunIds.length,
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     console.log("✅ رأی با", selectedGunIds.length, "تفنگ ارسال شد");
     setConfirmed(true); // 🔐 قفل کردن انتخاب
@@ -102,9 +102,9 @@ export default function GunVotingPanel() {
         ) : (
           guns.map((gun) => {
             const isSelected = selectedGunIds.includes(gun.id);
-            console.log(gun.id);
-            console.log(gun);
-            console.log(isSelected);
+            // console.log(gun.id);
+            // console.log(gun);
+            // console.log(isSelected);
             return (
               <img
                 key={gun.id}

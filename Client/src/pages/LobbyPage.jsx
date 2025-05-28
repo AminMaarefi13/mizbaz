@@ -29,8 +29,8 @@ function LobbyPage() {
     userGames,
     roomPlayers,
   } = connectionState;
-  console.log(userRooms);
-  console.log(roomPlayers);
+  // console.log(userRooms);
+  // console.log(roomPlayers);
   // console.log(gameState);
   // بازیابی اطلاعات ذخیره شده
   useEffect(() => {
@@ -50,12 +50,12 @@ function LobbyPage() {
       if (playerId && name) {
         socket.emit("register", { playerId, name });
         socket.emit("get_user_rooms", playerId, (rooms) => {
-          console.log("get_user_rooms");
+          // console.log("get_user_rooms");
           setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
         });
         socket.emit("get_all_games", { roomId: currentRoomId }, (userGames) => {
-          console.log("get_all_games");
-          console.log(userGames);
+          // console.log("get_all_games");
+          // console.log(userGames);
           setConnectionState((prev) => ({ ...prev, userGames }));
         });
       }
@@ -74,8 +74,6 @@ function LobbyPage() {
 
   useEffect(() => {
     const onRoomCreated = ({ roomId, roomPlayers, hostName, hostId }) => {
-      console.log("get_user_rooms ffffffffffff");
-      console.log(roomId, roomPlayers, hostName, hostId);
       localStorage.setItem("currentRoomId", roomId);
       setConnectionState((prev) => ({
         ...prev,
@@ -87,7 +85,7 @@ function LobbyPage() {
     };
 
     const onPlayersUpdated = ({ roomId, roomPlayers }) => {
-      console.log("get_user_rooms");
+      // console.log("get_user_rooms");
 
       if (currentRoomId === roomId) {
         setConnectionState((prev) => ({
@@ -101,7 +99,7 @@ function LobbyPage() {
     };
 
     const onUserRoomsUpdated = (rooms) => {
-      console.log("get_user_rooms");
+      // console.log("get_user_rooms");
 
       setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
     };
@@ -125,7 +123,7 @@ function LobbyPage() {
       handleSelectGame(gameId);
     });
     socket.on("game_state_requested", (state) => {
-      console.log("📦 وضعیت بازی دریافت شد", state);
+      console.log("📦 game_state_requested lobby وضعیت بازی دریافت شد", state);
       setGameState(state.publicState);
       setUserState((prev) => ({
         ...prev,
@@ -193,16 +191,7 @@ function LobbyPage() {
     socket.emit("join_room", { roomId, name, playerId });
 
     socket.emit("get_room_state", roomId, (room) => {
-      console.log("get_room_state");
-      console.log(room);
-      console.log(room.roomPlayers);
-
       if (room) {
-        // if (room.activeGameId) {
-        //   localStorage.setItem("activeGameId", room.activeGameId);
-        // } else {
-        //   localStorage.removeItem("activeGameId");
-        // }
         setConnectionState((prev) => ({
           ...prev,
           currentRoomId: roomId,
@@ -215,45 +204,6 @@ function LobbyPage() {
         }));
       }
     });
-
-    // socket.emit("get_game_status", roomId, (gameStatus) => {
-    //   console.log("gameStatus", gameStatus);
-    //   if (gameStatus) {
-    //     const { gameId, gameState } = gameStatus;
-    //     console.log(gameId);
-    //     // به‌روزرسانی کامل وضعیت بازی
-    //     setGameState((prev) => ({
-    //       ...prev,
-    //       // gameId,
-    //       gameState,
-    //     }));
-
-    //     // setConnectionState((prev) => {
-    //     //   const existingGame = prev.userGames.find((g) => g.gameId === gameId);
-    //     //   const updatedGames = existingGame
-    //     //     ? prev.userGames.map((g) =>
-    //     //         g.gameId === gameId ? { ...g, gameStatus: "onGoing" } : g
-    //     //       )
-    //     //     : [...prev.userGames, { gameId, roomId, gameStatus: "onGoing" }];
-
-    //     //   return {
-    //     //     ...prev,
-    //     //     userGames: updatedGames,
-    //     //   };
-    //     // });
-
-    //     console.log("✅ بازی بازیابی شد:", gameStatus);
-    //   } else {
-    //     console.log(gameState);
-    //     // بازی فعالی وجود ندارد
-    //     // setConnectionState((prev) => ({
-    //     //   ...prev,
-    //     //   userGames: prev.userGames.map((g) =>
-    //     //     g.roomId === roomId ? { ...g, gameStatus: "notStarted" } : g
-    //     //   ),
-    //     // }));
-    //   }
-    // });
   };
 
   const handleBackToLobby = () => {
@@ -382,7 +332,7 @@ function LobbyPage() {
             <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
             <ul className="space-y-2">
               {userGames.map((game) => {
-                console.log(game);
+                // console.log(game);
                 const isPlayerInGame = game.gamePlayersIds?.includes(playerId);
                 return (
                   <li

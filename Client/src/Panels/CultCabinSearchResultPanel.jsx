@@ -21,11 +21,11 @@ export default function CultCabinSearchResultPanel() {
       data: { playerId },
       type: "cult_cabin_search",
     };
-    console.log({
-      gameId: currentGameId,
-      data: { playerId },
-      type: "cult_cabin_search",
-    });
+    // console.log({
+    //   gameId: currentGameId,
+    //   data: { playerId },
+    //   type: "cult_cabin_search",
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     setConfirmed(true);
   };

@@ -10,7 +10,7 @@ export default function TelescopeCardDecisionPanel() {
   const [decision, setDecision] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const { card } = privatePhaseData;
-  console.log(card);
+  // console.log(card);
 
   const handleConfirm = () => {
     if (!decision) {

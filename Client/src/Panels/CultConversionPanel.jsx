@@ -32,10 +32,10 @@ export default function CultConversionPanel() {
       data: { targetPlayerId: selectedPlayerId },
       type: "cult_conversion_target_selected",
     };
-    console.log({
-      data: { targetPlayerId: selectedPlayerId },
-      type: "cult_conversion_target_selected",
-    });
+    // console.log({
+    //   data: { targetPlayerId: selectedPlayerId },
+    //   type: "cult_conversion_target_selected",
+    // });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

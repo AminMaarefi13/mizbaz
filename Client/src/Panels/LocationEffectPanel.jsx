@@ -12,7 +12,7 @@ export default function LocationEffectPanel() {
   const [confirmed, setConfirmed] = useState(false);
 
   const effectType = currentPhase; // مثلاً "cabin_search", "off_with_tongue", ...
-  console.log(effectType);
+  // console.log(effectType);
 
   const handleSelect = (id) => {
     if (confirmed) return;
@@ -24,11 +24,11 @@ export default function LocationEffectPanel() {
       alert("لطفاً یک بازیکن را انتخاب کنید.");
       return;
     }
-    console.log({
-      gameId: currentGameId,
-      targetPlayerId: selectedPlayerId,
-      effectType,
-    });
+    // console.log({
+    //   gameId: currentGameId,
+    //   targetPlayerId: selectedPlayerId,
+    //   effectType,
+    // });
     const payload = {
       targetPlayerId: selectedPlayerId,
       effectType,
@@ -48,7 +48,7 @@ export default function LocationEffectPanel() {
   // );
 
   const selectablePlayers = privatePhaseData.selectablePlayers;
-  console.log(selectablePlayers);
+  // console.log(selectablePlayers);
   const effectTitles = {
     cabin_search: "🔍 جستجوی کابین",
     off_with_tongue: "😶 بریدن زبان",

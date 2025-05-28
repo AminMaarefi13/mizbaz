@@ -9,7 +9,7 @@ export default function PrivatePhaseInfoPanel() {
   const { privatePhaseData } = userState;
   // const [confirmed, setConfirmed] = useState(false);
   const { title, message } = privatePhaseData;
-  console.log(privatePhaseData);
+  // console.log(privatePhaseData);
   // const handleConfirm = () => {
   //   socket.emit("phase_seen", {
   //     gameId: currentGameId,

@@ -9,13 +9,13 @@ const MapPage = () => {
   const navigate = useNavigate();
   const { connectionState, gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
-  console.log("connectionState:", connectionState);
+  // console.log("connectionState:", connectionState);
   const { currentGameId } = connectionState;
-  console.log("currentGameId:", currentGameId);
+  // console.log("currentGameId:", currentGameId);
   // انتخاب نوع نقشه (کوییک یا لانگ)
   // const [journeyType, setJourneyType] = useState(JOURNEY_TYPES.QUICK);
   useEffect(() => {
-    console.log("Current Game ID:", currentGameId);
+    // console.log("Current Game ID:", currentGameId);
     if (!currentGameId) {
       alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
       navigate("/lobby");
