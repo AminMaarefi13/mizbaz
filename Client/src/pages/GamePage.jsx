@@ -44,6 +44,7 @@ export default function GamePage() {
     firstOfficerId,
     navigatorId,
     logs,
+    currentVoteSessionId,
     phaseData,
   } = gameState;
 
@@ -170,7 +171,7 @@ export default function GamePage() {
         privatePhaseData?.selectablePlayers && <CabinetSelectionPanel />}
       {currentPhase === "start_voting" &&
         !eliminated &&
-        playerId !== captainId && <GunVotingPanel />}
+        playerId !== captainId && <GunVotingPanel key={currentVoteSessionId} />}
       {
         // currentPhase === "vote_tie_break_start" &&
         privatePhaseData?.eliminatorId === playerId &&

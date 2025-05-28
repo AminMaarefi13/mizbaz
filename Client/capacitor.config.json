@@ -1,0 +1,9 @@
+{
+  "appId": "com.amin.boardgame",
+  "appName": "boardgame",
+  "webDir": "dist",
+  "server": {
+    "url": "https://glittery-marigold-470383.netlify.app",
+    "cleartext": true
+  }
+}

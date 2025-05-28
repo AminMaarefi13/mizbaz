@@ -13,6 +13,7 @@ export const GameProvider = ({ children }) => {
     captainId: null,
     firstOfficerId: null,
     navigatorId: null,
+    currentVoteSessionId: null,
     logs: [],
     gameStatus: "",
   });
