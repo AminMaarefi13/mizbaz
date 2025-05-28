@@ -272,6 +272,13 @@ function LobbyPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4">
       <div className="max-w-md w-full bg-gray-800 p-6 rounded-lg shadow-lg">
+        {/* دکمه ریلود صفحه */}
+        <button
+          className="w-full py-2 mb-4 bg-gray-500 hover:bg-gray-600 rounded font-semibold"
+          onClick={() => window.location.reload()}
+        >
+          🔄 ریلود صفحه
+        </button>
         <h2 className="text-2xl font-bold mb-6 text-center">🎮 ورود به بازی</h2>
 
         <input
