@@ -10,7 +10,7 @@ export default function HoldToConfirmButton({
   const [confirmed, setConfirmed] = useState(false);
   const [shaking, setShaking] = useState(false);
   const intervalRef = useRef(null);
-  const holdDuration = 1500; // میلی‌ثانیه
+  const holdDuration = 1000; // میلی‌ثانیه
   const step = 10; // هر 10ms، progress افزایش می‌یابد
 
   const startHold = () => {
