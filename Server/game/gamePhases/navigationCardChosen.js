@@ -20,15 +20,15 @@ async function navigationCardChosen(
     games,
     rooms,
   });
-  console.log("gameState navigationCardChosen");
-  console.log(gameState);
-  console.log("playerId");
-  console.log(playerId);
+  // console.log("gameState navigationCardChosen");
+  // console.log(gameState);
+  // console.log("playerId");
+  // console.log(playerId);
   if (!gameState.phaseData) gameState.phaseData = {};
   if (cabinRole === "navigator") {
     if (!emergency) {
-      console.log(gameState);
-      console.log(gameState.playedNavCards);
+      // console.log(gameState);
+      // console.log(gameState.playedNavCards);
       gameState.playedNavCards.push(chosenCard);
       gameState.discardPile.push(discardedCard);
       const captain = gameState.players.find(
@@ -58,7 +58,7 @@ async function navigationCardChosen(
         userSocketMap,
         io
       );
-      console.log("gameState.phaseData");
+      // console.log("gameState.phaseData");
     } else {
       gameState.discardPile.push(chosenCard);
       gameState.discardPile.push(discardedCard);
@@ -95,24 +95,24 @@ async function navigationCardChosen(
   }
   const isCaptain = playerId === gameState.captainId;
   const isFirstOfficer = playerId === gameState.firstOfficerId;
-  console.log("isCaptain");
-  console.log("isFirstOfficer");
-  console.log(isCaptain);
-  console.log(isFirstOfficer);
+  // console.log("isCaptain");
+  // console.log("isFirstOfficer");
+  // console.log(isCaptain);
+  // console.log(isFirstOfficer);
   if (!isCaptain && !isFirstOfficer) return;
 
   // ثبت انتخاب
   if (isCaptain && !gameState.nextPhaseData.captainCardChosen) {
     gameState.nextPhaseData.captainCardChosen = chosenCard;
     gameState.nextPhaseData.captainCardDiscarded = discardedCard;
-    console.log("gameState.nextPhaseData.captainSubmitted = true;");
+    // console.log("gameState.nextPhaseData.captainSubmitted = true;");
     gameState.nextPhaseData.captainSubmitted = true;
   }
 
   if (isFirstOfficer && !gameState.nextPhaseData.officerCardChosen) {
     gameState.nextPhaseData.officerCardChosen = chosenCard;
     gameState.nextPhaseData.officerCardDiscarded = discardedCard;
-    console.log("gameState.nextPhaseData.officerSubmitted = true;");
+    // console.log("gameState.nextPhaseData.officerSubmitted = true;");
     gameState.nextPhaseData.officerSubmitted = true;
   }
 
@@ -125,8 +125,8 @@ async function navigationCardChosen(
       gameState.nextPhaseData.captainCardChosen,
       gameState.nextPhaseData.officerCardChosen,
     ];
-    console.log("finalCards");
-    console.log(finalCards);
+    // console.log("finalCards");
+    // console.log(finalCards);
 
     // دو کارت دورریخته شده به دیسکارد
     gameState.discardPile.push(
@@ -136,8 +136,8 @@ async function navigationCardChosen(
 
     // شافل کارت‌ها
     const shuffled = finalCards.sort(() => Math.random() - 0.5);
-    console.log("shuffled");
-    console.log(shuffled);
+    // console.log("shuffled");
+    // console.log(shuffled);
 
     // فاز جدید
     const navigator = gameState.players.find(

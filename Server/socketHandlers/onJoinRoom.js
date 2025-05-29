@@ -80,7 +80,7 @@ async function onJoinRoom(
   //   hostName: room.players[0]?.nickname || "نامشخص",
   //   hostId: room.hostId,
   // });
-  console.log("room.players ghhhh", room.players);
+  // console.log("room.players ghhhh", room.players);
 
   io.to(socket.id).emit("joined_room", {
     roomId,
@@ -89,8 +89,8 @@ async function onJoinRoom(
     hostId: room.hostId,
     userGames: room.gameIds || [],
   });
-  console.log("room.players", room.players);
-  console.log("room.players eeeee", room.players);
+  // console.log("room.players", room.players);
+  // console.log("room.players eeeee", room.players);
 
   io.to(roomId).emit("players_updated", {
     roomId,
@@ -128,7 +128,7 @@ async function onJoinRoom(
       };
     })
     .filter(Boolean);
-  console.log("room.players result", result);
+  // console.log("room.players result", result);
 
   io.to(socket.id).emit("user_rooms_updated", result);
 
@@ -144,7 +144,7 @@ async function onJoinRoom(
       };
     })
     .filter(Boolean);
-  console.log("userRoomsArr eeeeeeeeee", userRoomsArr);
+  // console.log("userRoomsArr eeeeeeeeee", userRoomsArr);
 
   await connectionController.updateConnection(playerId, {
     currentRoomId: room.roomId,

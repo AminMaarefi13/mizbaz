@@ -20,15 +20,15 @@ async function resolveLocationEffect(
   });
   const { effectType, targetPlayerId } = eventSpecificData;
   const targetPlayer = gameState.players.find((p) => p.id === targetPlayerId);
-  console.log("targetPlayer");
-  console.log(targetPlayer);
+  // console.log("targetPlayer");
+  // console.log(targetPlayer);
   if (!targetPlayer) return;
 
   const captainSocketId = userSocketMap.get(gameState.captainId);
-  console.log("captainSocketId");
-  console.log(captainSocketId);
-  console.log("effectType");
-  console.log(effectType);
+  // console.log("captainSocketId");
+  // console.log(captainSocketId);
+  // console.log("effectType");
+  // console.log(effectType);
   switch (effectType) {
     case "cabin_search":
       // بازیکن دیگر نمی‌تواند به فرقه بپیوندد
@@ -87,8 +87,8 @@ async function resolveLocationEffect(
       targetPlayer.canJoinCult = false;
 
       const realRole = targetPlayer.role;
-      console.log("realRole");
-      console.log(realRole);
+      // console.log("realRole");
+      // console.log(realRole);
       let realCard;
       if (realRole === "sailor") {
         realCard = "sailor";
@@ -103,8 +103,8 @@ async function resolveLocationEffect(
 
       const floggingCards = ["sailor", "pirate", "cult"];
       const fakeCards = floggingCards.filter((card) => card !== realCard);
-      console.log("fakeCards");
-      console.log(fakeCards);
+      // console.log("fakeCards");
+      // console.log(fakeCards);
       // ذخیره وضعیت انتخاب برای بعد
       gameState.phaseData = {
         currentPhase: "select_flogging_card",

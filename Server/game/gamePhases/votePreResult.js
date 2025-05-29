@@ -18,7 +18,7 @@ async function votePreResult(
     rooms,
   });
   const { result } = preparedData;
-  console.log(result);
+  // console.log(result);
 
   const submittedVotes = result;
 
@@ -59,15 +59,15 @@ async function votePreResult(
       text: `✅ شورش موفق بود! کاپیتان جدید در راه است...`,
     });
     const tongueOffPlayer = gameState.players.find((p) => p.tongueOff);
-    console.log("submittedVotes");
-    console.log(submittedVotes);
-    console.log("tongueOffPlayer");
-    console.log(tongueOffPlayer);
+    // console.log("submittedVotes");
+    // console.log(submittedVotes);
+    // console.log("tongueOffPlayer");
+    // console.log(tongueOffPlayer);
     const submittedVotesExceptTongueOff = submittedVotes.filter(
       (v) => v.playerId !== tongueOffPlayer?.id
     );
-    console.log("submittedVotesExceptTongueOff");
-    console.log(submittedVotesExceptTongueOff);
+    // console.log("submittedVotesExceptTongueOff");
+    // console.log(submittedVotesExceptTongueOff);
     const maxGuns = Math.max(
       ...submittedVotesExceptTongueOff.map((v) => v.gunsUsed)
     );

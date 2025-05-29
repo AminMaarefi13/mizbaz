@@ -17,25 +17,25 @@ async function voteTieBreakStart(
     games,
     rooms,
   });
-  console.log(preparedData);
-  console.log(eventSpecificData);
+  // console.log(preparedData);
+  // console.log(eventSpecificData);
   let tiedPlayers;
   let eliminatorId;
   if (eventSpecificData) {
-    console.log("eventSpecificData");
+    // console.log("eventSpecificData");
     tiedPlayers = eventSpecificData.tiedPlayers;
     eliminatorId = eventSpecificData.eliminatorId;
   } else {
-    console.log("preparedData");
+    // console.log("preparedData");
     tiedPlayers = preparedData.tiedPlayers;
     eliminatorId = preparedData.eliminatorId;
     // gameState.nextPhaseData = {};
   }
-  console.log("eliminatorId");
-  console.log(eliminatorId);
-  console.log("tiedPlayers");
-  console.log(tiedPlayers);
-  console.log("Oneeee");
+  // console.log("eliminatorId");
+  // console.log(eliminatorId);
+  // console.log("tiedPlayers");
+  // console.log(tiedPlayers);
+  // console.log("Oneeee");
 
   // حذف بازیکن انتخاب‌شده از لیست تساوی
   let newTied;

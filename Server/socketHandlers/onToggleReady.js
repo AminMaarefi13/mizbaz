@@ -23,7 +23,7 @@ async function onToggleReady(roomId, playerId, rooms, io) {
       socketId: p.socketId,
     })),
   });
-  console.log("room.players  daaaaa", room.players);
+  // console.log("room.players  daaaaa", room.players);
   // ارسال وضعیت جدید به همه‌ی اعضای روم
   io.to(roomId).emit("players_updated", {
     roomId,

@@ -1,6 +1,6 @@
 async function onGetRoomState(roomId, callback, rooms) {
   const room = rooms.get(roomId);
-  console.log("room.players jjjjjjjjjjj", room.players);
+  // console.log("room.players jjjjjjjjjjj", room.players);
 
   if (!room) return callback(null);
   callback({

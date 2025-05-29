@@ -54,7 +54,7 @@ async function onReconnectPlayer(
   const roomIds = new Set(
     (connectionUser?.userRooms || []).map((room) => room.roomId)
   );
-  console.log("roomIds", roomIds);
+  // console.log("roomIds", roomIds);
   const userRoomsArr = Array.from([...roomIds])
     .map((roomId) => {
       console.log("roomId", roomId);
@@ -79,10 +79,10 @@ async function onReconnectPlayer(
         if (player) {
           player.socketId = socket.id;
         }
-        console.log(
-          "room.players rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-          room.players
-        );
+        // console.log(
+        //   "room.players rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+        //   room.players
+        // );
 
         // Send updated room state to all members
         // io.to(roomId).emit("room_updated", {

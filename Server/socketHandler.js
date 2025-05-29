@@ -126,11 +126,11 @@ function socketHandler(io) {
       const player = gameState.players.find(
         (p) => p.id === playerId && !p.eliminated
       );
-      console.log("player");
-      console.log(player);
+      // console.log("player");
+      // console.log(player);
       if (!player) return;
-      console.log("gameState?.phaseData?.phaseSeen beforeeeeeeeee");
-      console.log(gameState?.phaseData?.phaseSeen);
+      // console.log("gameState?.phaseData?.phaseSeen beforeeeeeeeee");
+      // console.log(gameState?.phaseData?.phaseSeen);
       // جلوگیری از تکرار
       if (gameState?.phaseData?.phaseSeen === undefined) {
         console.log("was undefined");
@@ -152,12 +152,12 @@ function socketHandler(io) {
         .filter((p) => !p.eliminated) // یا هر شرطی برای بازیکن فعال
         .map((p) => p.id);
       console.log("alivePlayerIds");
-      console.log(alivePlayerIds);
+      // console.log(alivePlayerIds);
       const allSeen = alivePlayerIds.every((id) =>
         gameState.phaseData.phaseSeen.includes(id)
       );
       console.log("allSeen");
-      console.log(allSeen);
+      // console.log(allSeen);
       const progress = {
         current: gameState.phaseData.phaseSeen.length,
         total: alivePlayerIds.length,
@@ -178,7 +178,7 @@ function socketHandler(io) {
         io
       );
       if (allSeen) {
-        console.log("allSeenssssssssss");
+        // console.log("allSeenssssssssss");
         proceedToNextPhase({
           games,
           gameState,
@@ -193,7 +193,7 @@ function socketHandler(io) {
     });
 
     socket.on("phase_confirm", async ({ gameId, payload }) => {
-      console.log(gameId);
+      // console.log(gameId);
       // console.log(playerId);
       const { game, room, roomId, gameState } = getValidGameAndRoom({
         gameId,
@@ -201,7 +201,7 @@ function socketHandler(io) {
         rooms,
       });
       console.log("payload");
-      console.log(payload);
+      // console.log(payload);
       proceedToNextPhase({
         games,
         gameState,
@@ -232,7 +232,7 @@ function socketHandler(io) {
     // هندل پاداش تبلیغ
     socket.on("reward_energy", async ({ playerId }, callback) => {
       const result = await connectionController.rewardEnergy(playerId);
-      console.log("reward_energy result", result);
+      // console.log("reward_energy result", result);
       callback(result); // مستقیماً آبجکت را برگردان
     });
     // socket.on("reward_energy", async ({ playerId }, callback) => {

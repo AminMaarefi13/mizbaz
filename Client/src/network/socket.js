@@ -1,9 +1,13 @@
 import { io } from "socket.io-client";
-
-const SOCKET_URL =
-  import.meta.env.VITE_MODE === "production"
-    ? import.meta.env.VITE_API_URL
-    : "http://localhost:3001";
+const SOCKET_URL = import.meta.env.VITE_API_URL;
+console.log("import.meta.env.VITE_MODE");
+console.log(import.meta.env.VITE_MODE);
+console.log("import.meta.env.VITE_API_URL");
+console.log(import.meta.env.VITE_API_URL);
+// const SOCKET_URL =
+//   import.meta.env.VITE_MODE === "production"
+//     ? import.meta.env.VITE_API_URL
+//     : "http://localhost:3001";
 
 export const socket = io(SOCKET_URL, {
   autoConnect: false,

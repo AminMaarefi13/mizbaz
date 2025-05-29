@@ -57,7 +57,7 @@ async function onCreateRoom(
     socket.emit("error", { message: "خطا در ساختن روم." });
     return;
   }
-  console.log("room.players oooooo", room.players);
+  // console.log("room.players oooooo", room.players);
 
   socket.join(roomId);
   socket.emit("room_created", {
@@ -73,7 +73,7 @@ async function onCreateRoom(
   const userRoomsSet = new Set(connectionUser.userRooms || []);
   userRoomsSet.add({ roomId, hostName: name, hostId: playerId });
   connectionUser.userRooms = [...userRoomsSet];
-  console.log("connectionUser.userRooms", connectionUser.userRooms);
+  // console.log("connectionUser.userRooms", connectionUser.userRooms);
   logAllUsers(userSocketMap, rooms);
 
   // ارسال لیست روم‌ها به کاربر
@@ -81,7 +81,7 @@ async function onCreateRoom(
   const roomIds = new Set(
     (connectionUser?.userRooms || []).map((room) => room.roomId)
   );
-  console.log("roomIds", roomIds);
+  // console.log("roomIds", roomIds);
   // const userRoomList = Array.from(roomIds)
   //   .map((id) => {
   //     const r = rooms.get(id);
@@ -111,7 +111,7 @@ async function onCreateRoom(
     .filter(Boolean);
   socket.emit("user_rooms_updated", userRoomsArr);
 
-  console.log("userRoomsArr wwwwwwwww", userRoomsArr);
+  // console.log("userRoomsArr wwwwwwwww", userRoomsArr);
 
   await connectionController.updateConnection(playerId, {
     currentRoomId: connectionUser.currentRoomId,

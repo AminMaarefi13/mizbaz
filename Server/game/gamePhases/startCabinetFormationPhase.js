@@ -13,8 +13,8 @@ async function startCabinetFormationPhase(
   eventSpecificData
 ) {
   const { emergency } = preparedData;
-  console.log("emergency");
-  console.log(emergency);
+  // console.log("emergency");
+  // console.log(emergency);
   const { game, room, roomId, gameState } = getValidGameAndRoom({
     gameId,
     games,
@@ -22,8 +22,8 @@ async function startCabinetFormationPhase(
   });
   const captain = gameState.players.find((p) => p.id === gameState.captainId);
   if (!captain) throw new Error("کاپیتان پیدا نشد.");
-  console.log("captain");
-  console.log(captain);
+  // console.log("captain");
+  // console.log(captain);
 
   let selectablePlayers;
   if (emergency) {
@@ -114,8 +114,8 @@ async function startCabinetFormationPhase(
   }
 
   gameState.currentPhase = "cabinet_formation";
-  console.log("gameState");
-  console.log(gameState);
+  // console.log("gameState");
+  // console.log(gameState);
 
   updateAndBroadcastGame(
     games,

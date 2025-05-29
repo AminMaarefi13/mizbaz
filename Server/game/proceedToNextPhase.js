@@ -18,21 +18,21 @@ async function proceedToNextPhase({
     }
   }
   const currentPhase = gameState.currentPhase;
-  console.log(currentPhase);
+  // console.log(currentPhase);
   const transition = phaseTransitionMap[currentPhase];
 
   if (!transition) {
     console.error(`❌ فاز ناشناخته یا پشتیبانی‌نشده: ${currentPhase}`);
     return;
   }
-  console.log("transition");
-  console.log(transition);
+  // console.log("transition");
+  // console.log(transition);
   const nextPhase = transition.next;
   const handler = transition.handler;
   const prepare = transition.prepare;
-  console.log(nextPhase);
-  console.log(handler);
-  console.log(prepare);
+  // console.log(nextPhase);
+  // console.log(handler);
+  // console.log(prepare);
 
   if (nextPhase) {
     // آپدیت فاز به فاز بعدی
@@ -47,7 +47,7 @@ async function proceedToNextPhase({
     preparedData = prepare(gameState);
   }
 
-  console.log(typeof handler);
+  // console.log(typeof handler);
   if (typeof handler === "function") {
     await handler(
       games,

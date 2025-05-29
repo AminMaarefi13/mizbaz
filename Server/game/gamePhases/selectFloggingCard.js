@@ -20,8 +20,8 @@ async function selectFloggingCard(
   const { chosenCard, targetPlayerId } = eventSpecificData;
 
   const targetPlayer = gameState.players.find((p) => p.id === targetPlayerId);
-  console.log("targetPlayer");
-  console.log(targetPlayer);
+  // console.log("targetPlayer");
+  // console.log(targetPlayer);
   if (!targetPlayer) return;
   targetPlayer.isNotARole = chosenCard;
   gameState.currentPhase = "location_effect_resolved";

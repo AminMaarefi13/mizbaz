@@ -18,21 +18,21 @@ async function startNavigationDrawPhase(
     rooms,
   });
   const { navigationDeck, captainId, firstOfficerId } = gameState;
-  console.log("gameState startNavigationDrawPhase");
-  console.log(gameState);
+  // console.log("gameState startNavigationDrawPhase");
+  // console.log(gameState);
   gameState.nextPhaseData = {};
   if (navigationDeck.length < 4) {
     throw new Error("تعداد کارت‌های مسیر برای توزیع کافی نیست.");
   }
-  console.log("navigationDeck before");
-  console.log(navigationDeck.length);
-  console.log(navigationDeck);
+  // console.log("navigationDeck before");
+  // console.log(navigationDeck.length);
+  // console.log(navigationDeck);
   // کارت‌ها را از ته deck بردار
   const captainCards = navigationDeck.splice(-2);
   const firstOfficerCards = navigationDeck.splice(-2);
-  console.log("navigationDeck after");
-  console.log(navigationDeck.length);
-  console.log(navigationDeck);
+  // console.log("navigationDeck after");
+  // console.log(navigationDeck.length);
+  // console.log(navigationDeck);
 
   // تنظیم فاز و داده‌ها
   gameState.currentPhase = "navigation_cards_draw";

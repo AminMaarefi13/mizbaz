@@ -17,25 +17,25 @@ async function voteTieBreakChoose(
     games,
     rooms,
   });
-  console.log(preparedData);
-  console.log(eventSpecificData);
+  // console.log(preparedData);
+  // console.log(eventSpecificData);
   let tiedPlayers;
   let eliminatorId;
   if (eventSpecificData) {
-    console.log("eventSpecificData");
+    // console.log("eventSpecificData");
     tiedPlayers = eventSpecificData.tiedPlayers;
     eliminatorId = eventSpecificData.eliminatorId;
   } else {
-    console.log("preparedData");
+    // console.log("preparedData");
     tiedPlayers = preparedData.tiedPlayers;
     eliminatorId = preparedData.eliminatorId;
     gameState.nextPhaseData = {};
   }
-  console.log("eliminatorId");
-  console.log(eliminatorId);
-  console.log("tiedPlayers");
-  console.log(tiedPlayers);
-  console.log("privateee");
+  // console.log("eliminatorId");
+  // console.log(eliminatorId);
+  // console.log("tiedPlayers");
+  // console.log(tiedPlayers);
+  // console.log("privateee");
   // حذف بازیکن انتخاب‌شده از لیست تساوی
   let newTied;
   if (eliminatorId === gameState.captainId) {
@@ -66,7 +66,7 @@ async function voteTieBreakChoose(
     title: "تساوی تفنگ ها",
     message: tiedPlayersString,
   };
-  console.log(newTied);
+  // console.log(newTied);
   eliminated.privatePhaseData = {
     tiedPlayers: newTied,
     eliminatorId: eliminatorId,

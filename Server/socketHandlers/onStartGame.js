@@ -13,9 +13,9 @@ async function onStartGame(
   games,
   io
 ) {
-  console.log("starstfbsaudsa;");
-  console.log(roomId);
-  console.log(playerId, socket, userSocketMap, rooms, games);
+  // console.log("starstfbsaudsa;");
+  // console.log(roomId);
+  // console.log(playerId, socket, userSocketMap, rooms, games);
   const room = rooms.get(roomId);
 
   if (!room) {

@@ -18,12 +18,12 @@ async function cultRitualFinished(
     rooms,
   });
   const { data, type } = eventSpecificData;
-  console.log("gameId");
-  console.log(gameId);
-  console.log("data");
-  console.log(data);
-  console.log("type");
-  console.log(type);
+  // console.log("gameId");
+  // console.log(gameId);
+  // console.log("data");
+  // console.log(data);
+  // console.log("type");
+  // console.log(type);
 
   gameState.currentPhase = "cult_ritual_resolved";
   const cultLeader = gameState.players.find((p) => p.role === "cultLeader");
@@ -32,8 +32,8 @@ async function cultRitualFinished(
 
   switch (type) {
     case "cult_cabin_search":
-      console.log(cultLeader);
-      console.log("cultLeader");
+      // console.log(cultLeader);
+      // console.log("cultLeader");
 
       const cabinet = [
         gameState.captainId,
@@ -63,7 +63,7 @@ async function cultRitualFinished(
 
     case "cult_guns_distributed":
       const distribution = data.distribution;
-      console.log("🔫 توزیع دریافت‌شده:", distribution);
+      // console.log("🔫 توزیع دریافت‌شده:", distribution);
 
       if (!distribution || typeof distribution !== "object") return;
 
@@ -95,9 +95,9 @@ async function cultRitualFinished(
       break;
 
     case "cult_conversion_target_selected":
-      console.log(data);
-      console.log(cultLeader);
-      console.log("cultLeader");
+      // console.log(data);
+      // console.log(cultLeader);
+      // console.log("cultLeader");
       const targetPlayerId = data.targetPlayerId;
       if (!targetPlayerId) return;
 

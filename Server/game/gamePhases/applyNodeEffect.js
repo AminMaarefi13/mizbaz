@@ -18,10 +18,10 @@ function applyNodeEffect(
     rooms,
   });
   const { effect, nodeId } = gameState.nextPhaseData;
-  console.log("effect");
-  console.log(effect);
-  console.log("nodeId");
-  console.log(nodeId);
+  // console.log("effect");
+  // console.log(effect);
+  // console.log("nodeId");
+  // console.log(nodeId);
   // cabin_search
   // feed_the_kraken
   // off_with_tongue
@@ -55,10 +55,10 @@ function applyNodeEffect(
     title: "انتخاب بازیکن برای افکت مکان",
     selectablePlayers,
   };
-  console.log(gameState);
-  console.log(captain);
-  console.log("gameState");
-  console.log("captain");
+  // console.log(gameState);
+  // console.log(captain);
+  // console.log("gameState");
+  // console.log("captain");
 
   updateAndBroadcastGame(
     games,

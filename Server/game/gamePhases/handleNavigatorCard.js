@@ -23,10 +23,10 @@ function handleNavigatorCard(
   const { journeyType, mapPosition } = gameState;
   const currentNode = journeyMapNodes[journeyType][mapPosition];
   const { card } = gameState.nextPhaseData;
-  console.log("card");
-  console.log(card);
-  console.log("currentNode");
-  console.log(currentNode);
+  // console.log("card");
+  // console.log(card);
+  // console.log("currentNode");
+  // console.log(currentNode);
   const cardColor = card.color;
 
   // ریست کردن وضعیت offDuty همه‌ی بازیکنان:

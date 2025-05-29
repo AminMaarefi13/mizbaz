@@ -12,7 +12,7 @@ async function telescopeCardDecision(
   preparedData,
   eventSpecificData
 ) {
-  console.log("TelescopeSeen");
+  // console.log("TelescopeSeen");
   const { game, room, roomId, gameState } = getValidGameAndRoom({
     gameId,
     games,

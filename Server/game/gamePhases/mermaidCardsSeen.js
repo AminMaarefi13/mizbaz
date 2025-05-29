@@ -12,7 +12,7 @@ async function mermaidCardsSeen(
   preparedData,
   eventSpecificData
 ) {
-  console.log("MermaidSeen");
+  // console.log("MermaidSeen");
   const { game, room, roomId, gameState } = getValidGameAndRoom({
     gameId,
     games,
@@ -20,7 +20,7 @@ async function mermaidCardsSeen(
   });
   const { playerId } = eventSpecificData;
   const player = gameState.players.find((p) => p.id === playerId);
-  console.log(playerId);
+  // console.log(playerId);
   if (!player) return;
   gameState.currentPhase = "mermaid_seen";
   gameState.phaseData = {

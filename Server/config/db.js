@@ -2,10 +2,15 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const dbUri =
-      process.env.NODE_ENV === "production"
-        ? process.env.DATABASE
-        : process.env.MONGODB_URI;
+    const dbUri = process.env.DATABASE;
+    console.log("process.env.NODE_ENV");
+    console.log("process.env.DATABASE");
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.DATABASE);
+    // const dbUri =
+    //   process.env.NODE_ENV === "production"
+    //     ? process.env.DATABASE
+    //     : process.env.MONGODB_URI;
 
     await mongoose.connect(dbUri, {
       // useNewUrlParser: true,

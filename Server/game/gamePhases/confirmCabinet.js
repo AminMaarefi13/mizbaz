@@ -12,7 +12,7 @@ async function confirmCabinet(
   preparedData,
   eventSpecificData
 ) {
-  console.log("✅ رویداد confirm_cabinet دریافت شد");
+  // console.log("✅ رویداد confirm_cabinet دریافت شد");
   const { game, room, roomId, gameState } = getValidGameAndRoom({
     gameId,
     games,

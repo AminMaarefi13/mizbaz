@@ -18,20 +18,20 @@ async function submitVote(
     rooms,
   });
   const { playerId, gunsUsed } = eventSpecificData;
-  console.log("playerId");
-  console.log(playerId);
-  console.log("gunsUsed");
-  console.log(gunsUsed);
+  // console.log("playerId");
+  // console.log(playerId);
+  // console.log("gunsUsed");
+  // console.log(gunsUsed);
   const player = gameState.players.find((p) => p.id === playerId);
   if (!player) return;
-  console.log("player");
-  console.log(player);
+  // console.log("player");
+  // console.log(player);
   const socketId = userSocketMap.get(playerId);
   const sessionId = gameState.currentVoteSessionId;
-  console.log("socket");
-  console.log(socketId);
-  console.log("gameState.currentPhase");
-  console.log(gameState.currentPhase);
+  // console.log("socket");
+  // console.log(socketId);
+  // console.log("gameState.currentPhase");
+  // console.log(gameState.currentPhase);
   // چک: در فاز رأی‌گیری باشیم
   if (gameState.currentPhase !== "start_voting") {
     io.to(socketId).emit(
@@ -105,11 +105,11 @@ async function submitVote(
     current: progress.current,
     total: progress.total,
   };
-  console.log("progress");
-  console.log(progress);
+  // console.log("progress");
+  // console.log(progress);
   gameState.currentPhase = "start_voting";
 
-  console.log("submittedVotes.length === eligibleVoters.length");
+  // console.log("submittedVotes.length === eligibleVoters.length");
   updateAndBroadcastGame(
     games,
     gameId,
@@ -119,12 +119,12 @@ async function submitVote(
     userSocketMap,
     io
   );
-  console.log(submittedVotes.length === eligibleVoters.length);
+  // console.log(submittedVotes.length === eligibleVoters.length);
   // اگر همه رأی دادند، نتایج ارسال شود
   if (submittedVotes.length === eligibleVoters.length) {
     gameState.currentPhase = "vote_pre_result";
-    console.log("gameState.currentPhase");
-    console.log(gameState.currentPhase);
+    // console.log("gameState.currentPhase");
+    // console.log(gameState.currentPhase);
     const result = submittedVotes.map((p) => {
       const vote = p.votes.find((v) => v.voteSessionId === sessionId);
       return {

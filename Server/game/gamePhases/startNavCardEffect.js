@@ -21,8 +21,8 @@ async function startNavCardEffect(
   // پایان فاز و رفتن به next_round_setup
   const latestNavCard =
     gameState.playedNavCards[gameState.playedNavCards.length - 1];
-  console.log("latestNavCard");
-  console.log(latestNavCard);
+  // console.log("latestNavCard");
+  // console.log(latestNavCard);
   const card = latestNavCard;
   const navigatorId = gameState.navigatorId;
   const captainId = gameState.captainId;

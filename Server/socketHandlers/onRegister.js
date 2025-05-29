@@ -15,7 +15,7 @@ async function onRegister(
 ) {
   // console.log("connectionsArr onRegister");
   // console.log(connectionsArr);
-  console.log("connectionsArr.get(playerId)", connectionsArr.get(playerId));
+  // console.log("connectionsArr.get(playerId)", connectionsArr.get(playerId));
   let connectionUser =
     connectionsArr.get(playerId) ||
     (await connectionController.getConnectionByPlayerId(playerId));
@@ -48,7 +48,7 @@ async function onRegister(
 
   // console.log("connectionUser onRegister");
   // console.log(connectionUser);
-  console.log("connectionUser", connectionUser);
+  // console.log("connectionUser", connectionUser);
   userSocketMap.set(playerId, socket.id);
   console.log(`📲 Player ${playerId} registered with socket ${socket.id}`);
 
@@ -95,7 +95,7 @@ async function onRegister(
     .filter(Boolean);
 
   socket.emit("user_rooms_updated", userRoomsArr);
-  console.log("userRoomsArr ddddd", userRoomsArr);
+  // console.log("userRoomsArr ddddd", userRoomsArr);
   await connectionController.updateConnection(playerId, {
     // currentGameId: gameId,
     userRooms: userRoomsArr,

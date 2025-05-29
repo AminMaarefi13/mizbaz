@@ -1,5 +1,11 @@
 const dotenv = require("dotenv");
-require("dotenv").config(); // Load .env vars
+// require("dotenv").config(); // Load .env vars
+require("dotenv").config({
+  path:
+    process.env.NODE_ENV === "production"
+      ? ".env.production"
+      : ".env.development",
+});
 
 const express = require("express");
 const http = require("http");
