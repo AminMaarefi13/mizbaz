@@ -11,7 +11,7 @@ router.post("/addFriend", authController.addFriend);
 router.post("/getFriendRequests", authController.getFriendRequests);
 router.post("/acceptFriendRequest", authController.acceptFriendRequest);
 // router.post("/generateInviteLink", authController.generateInviteLink);
-router.post("/telegramAddFriend", authController.telegramAddFriend);
+// router.post("/telegramAddFriend", authController.telegramAddFriend);
 
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);

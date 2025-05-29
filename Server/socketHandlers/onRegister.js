@@ -22,7 +22,7 @@ async function onRegister(
   console.log(`🔁 Updated socketId in connection for ${playerId}`);
   if (!connectionUser) {
     try {
-      await connectionController.createConnection(playerId, name, socket.id);
+      await connectionController.createConnection(playerId, socket.id);
     } catch (err) {
       console.error("❌ Failed to create user:", err);
       socket.emit("error", { message: "خطا در ساختن کاربر." });
@@ -46,15 +46,15 @@ async function onRegister(
   // console.log("connectionsArr onRegister");
   // console.log(connectionsArr);
 
-  // console.log("connectionUser onRegister");
-  // console.log(connectionUser);
+  console.log("connectionUser onRegister");
+  console.log(connectionUser);
   // console.log("connectionUser", connectionUser);
   userSocketMap.set(playerId, socket.id);
   console.log(`📲 Player ${playerId} registered with socket ${socket.id}`);
 
   // فقط roomIdها را استخراج کن
   const roomIds = new Set(
-    (connectionUser?.userRooms || []).map((room) => room.roomId)
+    Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
   // آپدیت socketId در room.players
   roomIds.forEach((roomId) => {

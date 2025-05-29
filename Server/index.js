@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const userRouter = require("./routes/userRoutes");
 // require("dotenv").config(); // Load .env vars
 require("dotenv").config({
   path:
@@ -67,6 +68,16 @@ app.use(
 // Test route
 app.get("/", (req, res) => {
   res.send("Server is running!");
+});
+
+app.use("/api/v1/users", userRouter);
+// app.use("/", gameRouter);
+
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({
+    status: err.status || "error",
+    message: err.message,
+  });
 });
 
 // ------------------- Socket.io Setup -------------------

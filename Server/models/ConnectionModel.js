@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const connectionSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // ارتباط با UserModel
   name: String,
   playerId: { type: String, required: true },
   socketId: String,

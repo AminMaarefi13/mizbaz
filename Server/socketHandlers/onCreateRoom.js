@@ -78,8 +78,11 @@ async function onCreateRoom(
 
   // ارسال لیست روم‌ها به کاربر
   // فقط roomIdها را استخراج کن
+  // const roomIds = new Set(
+  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
+  // );
   const roomIds = new Set(
-    (connectionUser?.userRooms || []).map((room) => room.roomId)
+    Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
   // console.log("roomIds", roomIds);
   // const userRoomList = Array.from(roomIds)

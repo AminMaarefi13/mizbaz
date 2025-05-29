@@ -43,17 +43,14 @@ export const GameProvider = ({ children }) => {
   const [adSessionCount, setAdSessionCount] = useState(0);
 
   useEffect(() => {
-    if (connectionState.playerId) {
-      socket.emit(
-        "get_energy",
-        { playerId: connectionState.playerId },
-        (data) => {
-          setEnergy(data.energy);
-          setSubscription(data.subscription);
-          if (typeof data.adSessionCount === "number")
-            setAdSessionCount(data.adSessionCount);
-        }
-      );
+    if (playerId && name) {
+      socket.emit("get_energy", { playerId: playerId }, (data) => {
+        console.log(data);
+        setEnergy(data.energy);
+        setSubscription(data.subscription);
+        if (typeof data.adSessionCount === "number")
+          setAdSessionCount(data.adSessionCount);
+      });
     }
   }, [connectionState.playerId]);
   // useEffect(() => {

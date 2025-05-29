@@ -217,6 +217,7 @@ function socketHandler(io) {
 
     // هندل گرفتن انرژی
     socket.on("get_energy", async ({ playerId }, callback) => {
+      console.log("get_energy", playerId);
       const data = await connectionController.getEnergyAndSubscription(
         playerId
       );

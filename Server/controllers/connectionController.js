@@ -1,27 +1,33 @@
 const Connection = require("../models/ConnectionModel");
+const User = require("../models/UserModel");
 
 // 📌 ایجاد یا آپدیت اتصال کاربر
 async function createConnection(
-  playerId,
-  name,
+  userId,
   socketId,
   userRooms = [],
   currentRoomId = null,
   currentGameId = null
 ) {
+  const user = await User.findById(userId); // یا هر روشی که داری
+
   const updates = {
-    playerId,
-    name,
+    name: user.name,
+    playerId: user._id.toString(), // یا user.playerId اگر داری
     socketId,
     userRooms,
     currentRoomId,
     currentGameId,
   };
 
-  return await Connection.findOneAndUpdate({ playerId }, updates, {
-    upsert: true,
-    new: true,
-  });
+  return await Connection.findOneAndUpdate(
+    { playerId: user._id.toString() },
+    updates,
+    {
+      upsert: true,
+      new: true,
+    }
+  );
 }
 
 // 📌 گرفتن اتصال با آیدی بازیکن
@@ -53,7 +59,11 @@ async function updateConnection(playerId, updates) {
 
 // گرفتن انرژی و سابسکریپشن کاربر
 async function getEnergyAndSubscription(playerId) {
+  console.log("getEnergyAndSubscription", playerId);
+  const users = await Connection.find();
+  console.log("users", users);
   const user = await Connection.findOne({ playerId });
+  console.log("user", user);
   if (!user) return null;
   return {
     energy: user.energy,

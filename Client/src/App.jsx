@@ -13,6 +13,8 @@ import LobbyPage from "./pages/LobbyPage";
 import GamePage from "./pages/GamePage";
 import { GameProvider } from "./context/GameContext.jsx";
 import { socket } from "./network/socket.js";
+import SignupPage from "./pages/SignupPage.jsx.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
 
 // Main App component with routing and layout
 function App() {
@@ -90,6 +92,22 @@ function App() {
             element={
               <AppLayout showChat={false}>
                 <SettingsPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <AppLayout showChat={false}>
+                <SignupPage />
+              </AppLayout>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <AppLayout showChat={false}>
+                <LoginPage />
               </AppLayout>
             }
           />

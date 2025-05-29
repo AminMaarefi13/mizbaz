@@ -17,7 +17,7 @@ async function onReconnectPlayer(
   console.log(`🔁 Updated socketId in connection for ${playerId}`);
   if (!connectionUser) {
     try {
-      await connectionController.createConnection(playerId, name, socket.id);
+      await connectionController.createConnection(playerId, socket.id);
     } catch (err) {
       console.error("❌ Failed to create user:", err);
       socket.emit("error", { message: "خطا در ساختن کاربر." });
@@ -52,8 +52,11 @@ async function onReconnectPlayer(
   // Join previous rooms again
   // فقط roomIdها را استخراج کن
   const roomIds = new Set(
-    (connectionUser?.userRooms || []).map((room) => room.roomId)
+    Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
+  // const roomIds = new Set(
+  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
+  // );
   // console.log("roomIds", roomIds);
   const userRoomsArr = Array.from([...roomIds])
     .map((roomId) => {

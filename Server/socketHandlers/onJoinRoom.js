@@ -112,8 +112,11 @@ async function onJoinRoom(
   // ارسال لیست روم‌ها به کاربر فعلی
   // const roomIds = connectionUser.userRooms;
   // فقط roomIdها را استخراج کن
+  // const roomIds = new Set(
+  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
+  // );
   const roomIds = new Set(
-    (connectionUser?.userRooms || []).map((room) => room.roomId)
+    Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
   const result = Array.from(roomIds)
     .map((id) => {

@@ -6,8 +6,8 @@ import { useState } from "react";
 
 function LobbyPage() {
   const [roomIdInputState, setRoomIdInputState] = useState("");
-  const [nameInputState, setNameInputState] = useState("");
-  const [playerIdInputState, setPlayerIdInputState] = useState("");
+  // const [nameInputState, setNameInputState] = useState("");
+  // const [playerIdInputState, setPlayerIdInputState] = useState("");
   const navigate = useNavigate();
   const {
     gameState,
@@ -40,14 +40,22 @@ function LobbyPage() {
       setConnectionState((prev) => ({ ...prev, name: savedName }));
     if (savedId && !playerId)
       setConnectionState((prev) => ({ ...prev, playerId: savedId }));
-    if (savedName && !nameInputState) setNameInputState(savedName);
-    if (savedId && !playerIdInputState) setPlayerIdInputState(savedId);
-  }, [name, playerId, setConnectionState, nameInputState, playerIdInputState]);
+
+    if (!savedName && !name) {
+      alert("لطفاً ابتدا وارد شوید.");
+      navigate("/login");
+      return;
+    }
+    // if (savedName && !nameInputState) setNameInputState(savedName);
+    // if (savedId && !playerIdInputState) setPlayerIdInputState(savedId);
+  }, [name, playerId, setConnectionState]);
 
   // ثبت بازیکن و دریافت روم‌ها و بازی‌ها
   useEffect(() => {
     const registerPlayer = () => {
       if (playerId && name) {
+        console.log(playerId);
+        console.log(name);
         socket.emit("register", { playerId, name });
         socket.emit("get_user_rooms", playerId, (rooms) => {
           // console.log("get_user_rooms");
@@ -231,7 +239,9 @@ function LobbyPage() {
         </button>
         <h2 className="text-2xl font-bold mb-6 text-center">🎮 ورود به بازی</h2>
 
-        <input
+        <div>!{name} خوش اومدی</div>
+        <div>{playerId} :آیدی</div>
+        {/* <input
           className="w-full mb-3 px-4 py-2 rounded bg-gray-700"
           placeholder="نام شما"
           value={nameInputState}
@@ -243,7 +253,7 @@ function LobbyPage() {
           placeholder="آیدی شما (مثلاً u1)"
           value={playerIdInputState}
           onChange={(e) => setPlayerIdInputState(e.target.value)}
-        />
+        /> */}
 
         {currentRoomId && (
           <button
@@ -254,7 +264,7 @@ function LobbyPage() {
           </button>
         )}
 
-        <button
+        {/* <button
           className="w-full py-2 mb-4 bg-green-600 hover:bg-green-700 rounded font-semibold"
           onClick={() => {
             setConnectionState((prev) => ({
@@ -267,7 +277,7 @@ function LobbyPage() {
           }}
         >
           ورود
-        </button>
+        </button> */}
 
         {!currentRoomId && (
           <>
