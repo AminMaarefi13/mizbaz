@@ -8,12 +8,12 @@ async function onToggleReady(roomId, playerId, rooms, io) {
 
   player.isReady = !player.isReady;
 
-  const roomObj = room.players.map((p) => ({
-    playerId: p.playerId,
-    nickname: p.nickname,
-    isReady: p.isReady,
-    socketId: p.socketId,
-  }));
+  // const roomObj = room.players.map((p) => ({
+  //   playerId: p.playerId,
+  //   nickname: p.nickname,
+  //   isReady: p.isReady,
+  //   socketId: p.socketId,
+  // }));
   // به‌روزرسانی دیتابیس
   await roomController.updateRoom(roomId, {
     players: room.players.map((p) => ({

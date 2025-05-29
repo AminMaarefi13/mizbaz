@@ -7,8 +7,8 @@ export default function CultConversionPanel() {
   const { connectionState, userState } = useGameContext();
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
-  const { currentGameId, privatePhaseData } = userState;
-  const { playerId } = connectionState;
+  const { privatePhaseData } = userState;
+  const { currentGameId, playerId } = connectionState;
   const { selectablePlayers, cultLeaderId } = privatePhaseData;
   const isCultLeader = playerId === cultLeaderId;
   const handleSelect = (playerId) => {

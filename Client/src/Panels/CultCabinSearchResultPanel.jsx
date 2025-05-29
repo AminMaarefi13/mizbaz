@@ -6,8 +6,8 @@ import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 export default function CultCabinSearchResultPanel() {
   const { connectionState, userState } = useGameContext();
   const [confirmed, setConfirmed] = useState(false);
-  const { currentGameId, privatePhaseData } = userState;
-  const { playerId } = connectionState;
+  const { privatePhaseData } = userState;
+  const { currentGameId, playerId } = connectionState;
   const { cabinInfo } = privatePhaseData;
   const handleConfirm = () => {
     // socket.emit("cult_ritual_finished", {

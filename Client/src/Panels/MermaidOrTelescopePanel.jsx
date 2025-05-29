@@ -4,9 +4,11 @@ import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 
 export default function MermaidOrTelescopePanel() {
-  const { userState, gameState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
+  const { connectionState, userState, gameState } = useGameContext();
+  const { privatePhaseData } = userState;
   const { currentPhase } = gameState;
+  const { currentGameId } = connectionState;
+
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 

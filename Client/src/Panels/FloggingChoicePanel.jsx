@@ -5,11 +5,11 @@ import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 
 export default function FloggingChoicePanel() {
   const { userState, gameState, connectionState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
+  const { privatePhaseData } = userState;
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [revealedCard, setRevealedCard] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
-  const { playerId } = connectionState;
+  const { currentGameId, playerId } = connectionState;
   // console.log(privatePhaseData);
   const isCaptain = playerId === gameState.captainId;
   const { options, targetPlayerId } = privatePhaseData;

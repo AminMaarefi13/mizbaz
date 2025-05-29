@@ -5,8 +5,8 @@ import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 
 export default function MermaidCardsViewPanel() {
   const { connectionState, userState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
-  const { playerId } = connectionState;
+  const { privatePhaseData } = userState;
+  const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);
   const { cards } = privatePhaseData;
   // console.log(cards);

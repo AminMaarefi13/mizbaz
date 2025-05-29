@@ -6,8 +6,8 @@ import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 export default function CultGunsDistributionPanel() {
   const [confirmed, setConfirmed] = useState(false);
   const { connectionState, userState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
-  const { playerId } = connectionState;
+  const { privatePhaseData } = userState;
+  const { currentGameId, playerId } = connectionState;
   const { selectablePlayers, cultLeaderId } = privatePhaseData;
   const [guns, setGuns] = useState(() =>
     selectablePlayers.reduce((acc, player) => {

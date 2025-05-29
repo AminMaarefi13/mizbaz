@@ -235,10 +235,6 @@ function socketHandler(io) {
       // console.log("reward_energy result", result);
       callback(result); // مستقیماً آبجکت را برگردان
     });
-    // socket.on("reward_energy", async ({ playerId }, callback) => {
-    //   const energy = await connectionController.rewardEnergy(playerId);
-    //   callback({ energy });
-    // });
 
     // هندل آپدیت سابسکریپشن
     socket.on("update_subscription", async ({ playerId, subscription }) => {

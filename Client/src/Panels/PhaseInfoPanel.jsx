@@ -11,7 +11,7 @@ export default function PhaseInfoPanel() {
   const { eliminated } = userState;
   const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);
-  const { title, message } = phaseData;
+  const { title, message, phaseSeen } = phaseData;
   // console.log(phaseData);
 
   useEffect(() => {
@@ -43,7 +43,10 @@ export default function PhaseInfoPanel() {
           key={title + message}
           label="دیدم"
           onConfirm={handleConfirm}
-          disabled={confirmed}
+          disabled={
+            confirmed ||
+            (Array.isArray(phaseSeen) && phaseSeen.includes(playerId))
+          }
         />
       )}
     </div>

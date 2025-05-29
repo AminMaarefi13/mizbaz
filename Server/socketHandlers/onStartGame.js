@@ -126,6 +126,29 @@ async function onStartGame(
     };
     await gameController.createGame(gameDataToSave);
 
+    room.players.forEach((p) => {
+      p.isReady = false;
+    });
+
+    // به‌روزرسانی دیتابیس
+    await roomController.updateRoom(roomId, {
+      players: room.players.map((p) => ({
+        playerId: p.playerId,
+        nickname: p.nickname,
+        isReady: p.isReady,
+        socketId: p.socketId,
+      })),
+    });
+    // ...existing code...
+    // console.log("room.players  daaaaa", room.players);
+    // ارسال وضعیت جدید به همه‌ی اعضای روم
+    io.to(roomId).emit("players_updated", {
+      roomId,
+      roomPlayers: room.players,
+      // hostName: room.players[0]?.nickname || "نامشخص",
+      // hostId: room.hostId,
+    });
+
     for (const p of gameState.players) {
       const socketId = userSocketMap.get(p.id);
       // console.log(userSocketMap);

@@ -8,8 +8,8 @@ export default function CultRitualChoicePanel() {
   const [revealedCard, setRevealedCard] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const { connectionState, userState, gameState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
-  const { playerId } = connectionState;
+  const { privatePhaseData } = userState;
+  const { currentGameId, playerId } = connectionState;
   const { options } = privatePhaseData;
   const cards = options;
   const handleSelect = (index) => {

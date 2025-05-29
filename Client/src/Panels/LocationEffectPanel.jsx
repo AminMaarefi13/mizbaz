@@ -4,10 +4,10 @@ import { socket } from "../network/socket";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 
 export default function LocationEffectPanel() {
-  const { userState, gameState } = useGameContext();
-  const { currentGameId, privatePhaseData } = userState;
+  const { connectionState, userState, gameState } = useGameContext();
+  const { privatePhaseData } = userState;
   const { currentPhase } = gameState;
-
+  const { currentGameId } = connectionState;
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
@@ -24,15 +24,16 @@ export default function LocationEffectPanel() {
       alert("لطفاً یک بازیکن را انتخاب کنید.");
       return;
     }
-    // console.log({
-    //   gameId: currentGameId,
-    //   targetPlayerId: selectedPlayerId,
-    //   effectType,
-    // });
+
     const payload = {
       targetPlayerId: selectedPlayerId,
       effectType,
     };
+    console.log({
+      gameId: currentGameId,
+      targetPlayerId: selectedPlayerId,
+      effectType,
+    });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     // socket.emit("resolve_location_effect", {
     //   gameId: currentGameId,
