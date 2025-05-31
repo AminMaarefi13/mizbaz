@@ -16,6 +16,7 @@ import { socket } from "./network/socket.js";
 import SignupPage from "./pages/SignupPage.jsx.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import AuthPage from "./pages/AuthPage .jsx";
+import FriendsPage from "./pages/FriendsPage.jsx";
 
 // Main App component with routing and layout
 function App() {
@@ -100,18 +101,10 @@ function App() {
             path="/friends"
             element={
               <AppLayout showChat={false}>
-                <SignupPage />
+                <FriendsPage />
               </AppLayout>
             }
           />
-          {/* <Route
-            path="/login"
-            element={
-              <AppLayout showChat={false}>
-                <LoginPage />
-              </AppLayout>
-            }
-          /> */}
           <Route
             path="/login"
             element={

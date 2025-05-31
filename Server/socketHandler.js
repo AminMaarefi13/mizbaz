@@ -11,6 +11,20 @@ const {
 const { onGetAllGames } = require("./socketHandlers/onGetAllGames.js");
 const { onGetGameStatus } = require("./socketHandlers/onGetGameStatus.js");
 const { onReconnectPlayer } = require("./socketHandlers/onReconnectPlayer.js");
+const {
+  sendFriendRequest,
+  getFriendsData,
+  respondFriendRequest,
+  cancelFriendRequest,
+} = require("./socketHandlers/friends");
+
+const {
+  inviteFriendToRoom,
+  getRoomInvites,
+  respondRoomInvite,
+  cancelRoomInvite,
+} = require("./socketHandlers/roomInvite");
+
 const { onDisconnect } = require("./socketHandlers/onDisconnect.js");
 
 // const rooms = new Map(); // roomId => { players: [] }
@@ -36,6 +50,7 @@ const {
 const User = require("./models/UserModel.js");
 const jwt = require("jsonwebtoken");
 const { onLogout } = require("./socketHandlers/onLogout.js");
+const { getPendingRoomInvites } = require("./socketHandlers/roomInvite.js");
 
 initializeMemoryAndRedis(rooms, games).then(() => {
   console.log("Memory and Redis initialized from DB");
@@ -67,7 +82,7 @@ function socketHandler(io) {
     }
   });
 
-  io.on("connection", (socket) => {
+  io.on("connection", async (socket) => {
     console.log(
       "⚡ New socket connected:",
       socket.id,
@@ -77,6 +92,26 @@ function socketHandler(io) {
     const playerId = socket.user._id.toString();
     userSocketMap.set(playerId, socket.id);
     // connectionsArr.set(playerId, { ...socket.user });
+
+    ////////////////////////////
+    /////////////////////////////
+    ////////////////////////////
+    /////////////////////////////
+    // const { userSocketMap } = require("../utils/memoryStore");
+
+    // به دوستان اطلاع بده که این کاربر آنلاین شد
+    const user = await User.findById(playerId).populate("friends", "_id");
+    user.friends.forEach((friend) => {
+      const friendSocketId = userSocketMap.get(friend._id.toString());
+      if (friendSocketId) {
+        io.to(friendSocketId).emit("friend_online", { playerId });
+      }
+    });
+
+    ////////////////////////////
+    /////////////////////////////
+    ////////////////////////////
+    /////////////////////////////
 
     socket.on("register", async () => {
       onRegister(socket, io);
@@ -273,12 +308,57 @@ function socketHandler(io) {
       await connectionController.updateSubscription(playerId, subscription);
     });
 
-    socket.on("logout", () => {
+    socket.on("logout", async () => {
+      // به دوستان اطلاع بده که این کاربر آفلاین شد
+      const user = await User.findById(playerId).populate("friends", "_id");
+      user.friends.forEach((friend) => {
+        const friendSocketId = userSocketMap.get(friend._id.toString());
+        if (friendSocketId) {
+          io.to(friendSocketId).emit("friend_offline", { playerId });
+        }
+      });
       onLogout(socket, connectionsArr, rooms, userSocketMap);
+
       // می‌توانی سایر cleanupها را هم اینجا انجام دهی
     });
 
-    socket.on("disconnect", () => {
+    socket.on("send_friend_request", (targetId, callback) =>
+      sendFriendRequest(socket, targetId, callback)
+    );
+    socket.on("get_friends_data", (callback) =>
+      getFriendsData(socket, callback)
+    );
+    socket.on("respond_friend_request", (data, callback) =>
+      respondFriendRequest(socket, data, callback)
+    );
+    socket.on("cancel_friend_request", (targetId, callback) =>
+      cancelFriendRequest(socket, targetId, callback)
+    );
+
+    socket.on("invite_friend_to_room", (data, cb) =>
+      inviteFriendToRoom(socket, data, cb)
+    );
+    socket.on("get_room_invites", (cb) => getRoomInvites(socket, cb));
+    socket.on("respond_room_invite", (data, cb) =>
+      respondRoomInvite(socket, io, data, cb)
+    );
+    socket.on("cancel_room_invite", (data, cb) =>
+      cancelRoomInvite(socket, data, cb)
+    );
+    socket.on("get_pending_room_invites", (data, cb) =>
+      getPendingRoomInvites(socket, data, cb)
+    );
+
+    socket.on("disconnect", async () => {
+      const user = await User.findById(playerId).populate("friends", "_id");
+      user.friends.forEach((friend) => {
+        const friendSocketId = userSocketMap.get(friend._id.toString());
+        if (friendSocketId) {
+          io.to(friendSocketId).emit("friend_offline", { playerId });
+        }
+      });
+
+      userSocketMap.delete(playerId);
       // userSocketMap.delete(playerId);
       // connectionsArr.delete(playerId);
       // onDisconnect(socket, userSocketMap);

@@ -21,10 +21,24 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user",
   },
-  friends: {
-    type: Array,
-    default: [],
-  },
+  // friends: {
+  //   type: Array,
+  //   default: [],
+  // },
+  // requests: {
+  //   type: Array,
+  //   default: [],
+  // },
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  pendingRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  // roomInvites: [
+  //   {
+  //     roomId: String,
+  //     from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  //     createdAt: { type: Date, default: Date.now },
+  //   },
+  // ],
   stats: {
     type: Array,
   },
@@ -36,10 +50,6 @@ const userSchema = new mongoose.Schema({
     default: function () {
       return this._id.toString().slice(7, 11);
     },
-  },
-  requests: {
-    type: Array,
-    default: [],
   },
   password: {
     type: String,

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../network/socket";
 import { useGameContext } from "../context/GameContext";
 import { useState } from "react";
+import RoomInvite from "../components/Room/RoomInvite";
+import RoomInvitesInbox from "../components/Room/RoomInvitesInbox";
 
 function LobbyPage() {
   const [roomIdInputState, setRoomIdInputState] = useState("");
@@ -230,6 +232,8 @@ function LobbyPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4">
       <div className="max-w-md w-full bg-gray-800 p-6 rounded-lg shadow-lg">
+        <RoomInvitesInbox />
+
         {/* دکمه ریلود صفحه */}
         <button
           className="w-full py-2 mb-4 bg-gray-500 hover:bg-gray-600 rounded font-semibold"
@@ -320,7 +324,7 @@ function LobbyPage() {
             </ul>
           </div>
         )}
-
+        {currentRoomId && <RoomInvite roomId={currentRoomId} />}
         {/* {userGames.length > 0 && currentRoomId && (
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>

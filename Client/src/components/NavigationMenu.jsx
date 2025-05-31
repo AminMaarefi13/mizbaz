@@ -7,7 +7,7 @@ const NavigationMenu = () => {
   const navItems = [
     { label: "🏠 Home", path: "/" },
     { label: "⚙️ Login", path: "/login" },
-    { label: "👥 Friends", path: "/Signup" },
+    { label: "👥 Friends", path: "/friends" },
     { label: "🗺️ Lobby", path: "/lobby" },
     { label: "🎲 Game", path: "/game" },
     { label: "🗺️ Map", path: "/map" },

@@ -16,6 +16,15 @@ const roomSchema = new mongoose.Schema(
     // gamePhase: { type: String, default: "lobby" },
     gameIds: { type: Array, default: [] },
     // activeGameId: { type: String, default: null }, // ✅ اضافه کن برای مشخص کردن بازی فعال کنونی در این اتاق
+    pendingInvites: [
+      {
+        from: String, // userId دعوت‌کننده
+        fromName: String, // نام دعوت‌کننده
+        to: String, // userId دعوت‌شونده
+        toName: String, // نام دعوت‌شونده
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   {
     timestamps: true,
