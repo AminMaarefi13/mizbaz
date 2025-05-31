@@ -3,16 +3,12 @@ const gameController = require("../controllers/gameController");
 const { describeKnownRoles } = require("../utils/describeKnownRoles");
 const { makePublicState, makePrivateState } = require("../utils/makeStates");
 const { gameStartPhase } = require("../utils/gameStartPhase");
-
-async function onStartGame(
-  roomId,
-  playerId,
-  socket,
-  userSocketMap,
-  rooms,
-  games,
-  io
-) {
+const { rooms, games, userSocketMap } = require("../utils/memoryStore");
+async function onStartGame(roomId, socket, io) {
+  const playerId = socket.user._id.toString();
+  console.log(`🔗 Player ${playerId} is starting game in room ${roomId}`);
+  // console.log(rooms, games, userSocketMap);
+  // console.log("rooms, games, userSocketMap");
   // console.log("starstfbsaudsa;");
   // console.log(roomId);
   // console.log(playerId, socket, userSocketMap, rooms, games);

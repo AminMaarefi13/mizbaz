@@ -141,13 +141,9 @@ export default function GamePage() {
       <button
         onClick={() => {
           const amount = 1;
-          socket.emit(
-            "consume_energy",
-            { playerId: connectionState.playerId },
-            (data) => {
-              if (typeof data.energy === "number") setEnergy(data.energy);
-            }
-          );
+          socket.emit("consume_energy", { amount }, (data) => {
+            if (typeof data.energy === "number") setEnergy(data.energy);
+          });
           // socket.emit("consume_energy", { playerId, amount: 1 }, (data) => {
           //   if (data && typeof data.energy === "number") {
           //     setEnergy(data.energy);

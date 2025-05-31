@@ -1,5 +1,6 @@
 function makePublicState(gameState) {
-  console.log(gameState);
+  console.log("makePublicState");
+  // console.log(gameState);
   return {
     gameId: gameState.gameId,
     roomId: gameState.roomId,

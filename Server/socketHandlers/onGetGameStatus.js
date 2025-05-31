@@ -1,21 +1,21 @@
 const gameController = require("../controllers/gameController");
-
-async function onGetGameStatus(roomId, rooms, callback, rooms, games) {
+const { rooms, games } = require("../utils/memoryStore");
+async function onGetGameStatus(roomId, callback) {
   const room = rooms.get(roomId);
   console.log("roomId");
   console.log(roomId);
-
+  console.log("onGetGameStatus");
+  console.log(rooms, games);
+  console.log("rooms, games");
   // if (!room || !room.activeGameId) {
   //   return callback(null); // هیچ بازی فعالی وجود ندارد
   // }
-  console.log("room");
-  console.log(room);
   const gameId = room.activeGameId;
   console.log("gameId");
   console.log(gameId);
   let game = games.get(gameId);
   console.log("game");
-  console.log(game);
+  // console.log(game);
   if (!game) {
     const dbGame = await gameController.getGameByGameId(gameId);
     if (!dbGame) return callback(null); // بازی در پایگاه داده هم نبود

@@ -9,11 +9,20 @@ console.log(import.meta.env.VITE_API_URL);
 //     ? import.meta.env.VITE_API_URL
 //     : "http://localhost:3001";
 
+// export const socket = io(SOCKET_URL, {
+//   autoConnect: false,
+//   reconnection: true,
+//   reconnectionAttempts: 5,
+//   reconnectionDelay: 1000,
+// });
 export const socket = io(SOCKET_URL, {
   autoConnect: false,
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
+  auth: {
+    token: localStorage.getItem("token"),
+  },
 });
 // export const socket = io("http://localhost:3001", {
 //   autoConnect: false,
@@ -32,7 +41,7 @@ socket.connect();
 socket.on("connect", () => {
   console.log("Connected with socket ID:", socket.id);
   if (playerId) {
-    socket.emit("reconnect-player", { playerId });
+    socket.emit("reconnect-player");
   }
 });
 

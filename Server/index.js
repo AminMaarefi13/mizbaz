@@ -17,8 +17,13 @@ const session = require("express-session");
 const path = require("path");
 const connectDB = require("./config/db");
 
-const { socketHandler, rooms, games } = require("./socketHandler");
-
+const { socketHandler } = require("./socketHandler");
+const {
+  rooms,
+  games,
+  // connectionsArr,
+  // userSocketMap,
+} = require("./utils/memoryStore");
 const { startPeriodicDBSave } = require("./utils/startPeriodicDBSave");
 
 const app = express();

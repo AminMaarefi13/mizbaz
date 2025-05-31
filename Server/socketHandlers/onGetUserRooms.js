@@ -1,6 +1,12 @@
 const connectionController = require("../controllers/connectionController");
+const { rooms, connectionsArr } = require("../utils/memoryStore");
 
-async function onGetUserRooms(playerId, callback, connectionsArr, rooms) {
+async function onGetUserRooms(socket, callback) {
+  const playerId = socket.user._id.toString();
+  console.log(`🔍 Fetching rooms for player ${playerId}`);
+  console.log(rooms, connectionsArr);
+  console.log("rooms, connectionsArr");
+
   const connectionUser =
     connectionsArr.get(playerId) ||
     (await connectionController.getConnectionByPlayerId(playerId));
@@ -24,7 +30,8 @@ async function onGetUserRooms(playerId, callback, connectionsArr, rooms) {
       };
     })
     .filter(Boolean);
-
+  console.log("result");
+  console.log(result);
   callback(result);
 }
 

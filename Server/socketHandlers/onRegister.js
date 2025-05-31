@@ -2,17 +2,21 @@ const connectionController = require("../controllers/connectionController");
 const gameController = require("../controllers/gameController");
 const { logAllUsers } = require("../utils/logAllusers");
 const { makePublicState, makePrivateState } = require("../utils/makeStates");
-
-async function onRegister(
-  playerId,
-  name,
-  socket,
-  userSocketMap,
+const {
   rooms,
   games,
   connectionsArr,
-  io
-) {
+  userSocketMap,
+} = require("../utils/memoryStore");
+
+async function onRegister(socket, io) {
+  // console.log("socket.user");
+  // console.log(socket.user);
+  const playerId = socket.user._id.toString();
+  const name = socket.user.name || "نامشخص";
+  console.log(`🔗 Registering player ${playerId} with name ${name}`);
+  // console.log(rooms, games, connectionsArr, userSocketMap);
+  // console.log("rooms, games, connectionsArr, userSocketMap");
   // console.log("connectionsArr onRegister");
   // console.log(connectionsArr);
   // console.log("connectionsArr.get(playerId)", connectionsArr.get(playerId));

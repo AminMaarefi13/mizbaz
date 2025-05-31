@@ -1,16 +1,18 @@
 const { logAllUsers } = require("../utils/logAllusers");
 const roomController = require("../controllers/roomController");
 const connectionController = require("../controllers/connectionController");
-
-async function onCreateRoom(
-  name,
-  playerId,
-  socket,
-  userSocketMap,
+const {
   rooms,
   connectionsArr,
-  io
-) {
+  userSocketMap,
+} = require("../utils/memoryStore");
+
+async function onCreateRoom(socket, io) {
+  const playerId = socket.user._id.toString();
+  const name = socket.user.name || "نامشخص";
+  console.log(`🔗 Creating room for player ${playerId} with name ${name}`);
+  // console.log(rooms, connectionsArr, userSocketMap);
+  // console.log("rooms, connectionsArr, userSocketMap");
   const connectionUser =
     connectionsArr.get(playerId) ||
     (await connectionController.getConnectionByPlayerId(playerId));

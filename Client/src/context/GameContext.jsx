@@ -44,7 +44,7 @@ export const GameProvider = ({ children }) => {
 
   useEffect(() => {
     if (playerId && name) {
-      socket.emit("get_energy", { playerId: playerId }, (data) => {
+      socket.emit("get_energy", (data) => {
         console.log(data);
         setEnergy(data.energy);
         setSubscription(data.subscription);
@@ -52,7 +52,7 @@ export const GameProvider = ({ children }) => {
           setAdSessionCount(data.adSessionCount);
       });
     }
-  }, [connectionState.playerId]);
+  }, []);
   // useEffect(() => {
   //   if (connectionState.playerId) {
   //     socket.emit(
@@ -68,16 +68,12 @@ export const GameProvider = ({ children }) => {
   // تابع برای دریافت پاداش تبلیغ
   // rewardEnergy
   const rewardEnergy = (cb) => {
-    socket.emit(
-      "reward_energy",
-      { playerId: connectionState.playerId },
-      (data) => {
-        if (typeof data.energy === "number") setEnergy(data.energy);
-        if (typeof data.adSessionCount === "number")
-          setAdSessionCount(data.adSessionCount);
-        if (cb) cb(data); // اگر نیاز داری کل آبجکت را به callback بده
-      }
-    );
+    socket.emit("reward_energy", (data) => {
+      if (typeof data.energy === "number") setEnergy(data.energy);
+      if (typeof data.adSessionCount === "number")
+        setAdSessionCount(data.adSessionCount);
+      if (cb) cb(data); // اگر نیاز داری کل آبجکت را به callback بده
+    });
   };
 
   // const rewardEnergy = (cb) => {
@@ -106,7 +102,6 @@ export const GameProvider = ({ children }) => {
   const updateSubscription = (val) => {
     setSubscription(val);
     socket.emit("update_subscription", {
-      playerId: connectionState.playerId,
       subscription: val,
     });
   };
@@ -161,8 +156,8 @@ export const GameProvider = ({ children }) => {
   // ✅ هربار که اطلاعات هویت کامل شد
   useEffect(() => {
     if (playerId && name) {
-      socket.emit("register", { playerId, name });
-      socket.emit("get_user_rooms", playerId, (rooms) => {
+      socket.emit("register");
+      socket.emit("get_user_rooms", (rooms) => {
         setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
       });
     }

@@ -1,13 +1,14 @@
 const connectionController = require("../controllers/connectionController");
-
-async function onReconnectPlayer(
-  playerId,
+const {
   rooms,
-  socket,
-  userSocketMap,
   connectionsArr,
-  io
-) {
+  userSocketMap,
+} = require("../utils/memoryStore");
+async function onReconnectPlayer(socket, io) {
+  const playerId = socket.user._id.toString();
+  console.log(`🔗 Reconnecting player ${playerId} with socket ${socket.id}`);
+  // console.log(rooms, connectionsArr, userSocketMap);
+  // console.log("rooms, connectionsArr, userSocketMap");
   if (!playerId) return;
 
   const connectionUser =

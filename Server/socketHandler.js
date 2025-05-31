@@ -13,10 +13,17 @@ const { onGetGameStatus } = require("./socketHandlers/onGetGameStatus.js");
 const { onReconnectPlayer } = require("./socketHandlers/onReconnectPlayer.js");
 const { onDisconnect } = require("./socketHandlers/onDisconnect.js");
 
-const rooms = new Map(); // roomId => { players: [] }
-const games = new Map(); // gameId => { gameState, roomId }
-const connectionsArr = new Map(); // playerId => { player }
-const userSocketMap = new Map(); // playerId => socketId
+// const rooms = new Map(); // roomId => { players: [] }
+// const games = new Map(); // gameId => { gameState, roomId }
+// const connectionsArr = new Map(); // playerId => { player }
+// const userSocketMap = new Map(); // playerId => socketId
+const {
+  rooms,
+  games,
+  connectionsArr,
+  userSocketMap,
+} = require("./utils/memoryStore");
+
 const gameController = require("./controllers/gameController");
 const connectionController = require("./controllers/connectionController");
 
@@ -26,6 +33,9 @@ const { updateAndBroadcastGame } = require("./utils/updateAndBroadcastGame.js");
 const {
   initializeMemoryAndRedis,
 } = require("./utils/initializeMemoryAndRedis.js");
+const User = require("./models/UserModel.js");
+const jwt = require("jsonwebtoken");
+const { onLogout } = require("./socketHandlers/onLogout.js");
 
 initializeMemoryAndRedis(rooms, games).then(() => {
   console.log("Memory and Redis initialized from DB");
@@ -34,76 +44,74 @@ initializeMemoryAndRedis(rooms, games).then(() => {
 });
 
 function socketHandler(io) {
+  console.log("sdfsfsdfs");
+  io.use(async (socket, next) => {
+    const token = socket.handshake.auth?.token;
+    console.log("token");
+    console.log(token);
+    if (!token) return next(new Error("Authentication error: No token"));
+    try {
+      console.log("token:", token);
+      console.log("JWT_SECRET:", process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      process.env.JWT_SECRET;
+      console.log(decoded);
+      const user = await User.findById(decoded.id);
+      console.log("user", user);
+
+      if (!user) return next(new Error("Authentication error: User not found"));
+      socket.user = user; // اطلاعات کاربر را روی سوکت ذخیره کن
+      next();
+    } catch (err) {
+      return next(new Error("Authentication error: Invalid token"));
+    }
+  });
+
   io.on("connection", (socket) => {
-    console.log("⚡ New socket connected:", socket.id);
+    console.log(
+      "⚡ New socket connected:",
+      socket.id,
+      socket.user.name,
+      socket.user._id
+    );
+    const playerId = socket.user._id.toString();
+    userSocketMap.set(playerId, socket.id);
+    // connectionsArr.set(playerId, { ...socket.user });
 
-    socket.on("register", async ({ playerId, name }) => {
-      onRegister(
-        playerId,
-        name,
-        socket,
-        userSocketMap,
-        rooms,
-        games,
-        connectionsArr,
-        io
-      );
+    socket.on("register", async () => {
+      onRegister(socket, io);
     });
 
-    socket.on("create_room", async ({ name, playerId }) => {
-      onCreateRoom(
-        name,
-        playerId,
-        socket,
-        userSocketMap,
-        rooms,
-        connectionsArr,
-        io
-      );
+    socket.on("create_room", async () => {
+      onCreateRoom(socket, io);
     });
 
-    socket.on("join_room", async ({ roomId, name, playerId }) => {
-      onJoinRoom(
-        roomId,
-        name,
-        playerId,
-        socket,
-        userSocketMap,
-        rooms,
-        connectionsArr,
-        io
-      );
+    socket.on("join_room", async ({ roomId }) => {
+      onJoinRoom(roomId, socket, io);
     });
 
-    socket.on("get_user_rooms", (playerId, callback) => {
-      onGetUserRooms(playerId, callback, connectionsArr, rooms);
+    socket.on("get_user_rooms", (callback) => {
+      onGetUserRooms(socket, callback);
     });
 
     socket.on("get_room_state", (roomId, callback) => {
-      onGetRoomState(roomId, callback, rooms);
+      onGetRoomState(roomId, callback);
     });
 
-    socket.on("toggle_ready", async ({ roomId, playerId }) => {
-      onToggleReady(roomId, playerId, rooms, io);
+    socket.on("toggle_ready", async ({ roomId }) => {
+      onToggleReady(socket, roomId, io);
     });
 
-    socket.on("reconnect-player", ({ playerId }) => {
-      onReconnectPlayer(
-        playerId,
-        rooms,
-        socket,
-        userSocketMap,
-        connectionsArr,
-        io
-      );
+    socket.on("reconnect-player", () => {
+      onReconnectPlayer(socket, io);
     });
 
     // فرض می‌کنیم rooms،  userSocketMap وجود دارن
-    socket.on("start_game", async ({ roomId, playerId }) => {
-      onStartGame(roomId, playerId, socket, userSocketMap, rooms, games, io);
+    socket.on("start_game", async ({ roomId }) => {
+      onStartGame(roomId, socket, io);
     });
     socket.on("request_game_state", async (gameId) => {
-      onRequestGameState(games, gameId, rooms, socket, userSocketMap, io);
+      onRequestGameState(gameId, socket, io);
     });
 
     socket.on("get_all_games", async (roomId, callback) => {
@@ -111,10 +119,13 @@ function socketHandler(io) {
     });
 
     socket.on("get_game_status", async (roomId, callback) => {
-      onGetGameStatus(roomId, rooms, callback, rooms, games);
+      onGetGameStatus(roomId, callback);
     });
 
-    socket.on("phase_seen", async ({ gameId, playerId }) => {
+    socket.on("phase_seen", async ({ gameId }) => {
+      const playerId = socket.user._id.toString();
+      const name = socket.user.name || "نامشخص";
+      console.log(`🔗 Phase seen by ${playerId} (${name})`);
       const { game, room, roomId, gameState } = getValidGameAndRoom({
         gameId,
         games,
@@ -216,8 +227,11 @@ function socketHandler(io) {
     });
 
     // هندل گرفتن انرژی
-    socket.on("get_energy", async ({ playerId }, callback) => {
-      console.log("get_energy", playerId);
+    socket.on("get_energy", async (callback) => {
+      const playerId = socket.user._id.toString();
+      const name = socket.user.name || "نامشخص";
+      console.log(`🔗 Player ${playerId} (${name}) is requesting energy`);
+      // console.log("get_energy", playerId);
       const data = await connectionController.getEnergyAndSubscription(
         playerId
       );
@@ -225,32 +239,53 @@ function socketHandler(io) {
     });
 
     // فایل: Server/socketHandler.js
-    socket.on("consume_energy", async ({ playerId, amount }, callback) => {
+    socket.on("consume_energy", async ({ amount }, callback) => {
+      const playerId = socket.user._id.toString();
+      const name = socket.user.name || "نامشخص";
+      console.log(
+        `🔗 Player ${playerId} (${name}) is consuming energy: ${amount}`
+      );
       const user = await connectionController.consumeEnergy(playerId, amount);
       callback({ energy: user ? user.energy : null });
     });
 
     // هندل پاداش تبلیغ
-    socket.on("reward_energy", async ({ playerId }, callback) => {
+    socket.on("reward_energy", async (callback) => {
+      const playerId = socket.user._id.toString();
+      const name = socket.user.name || "نامشخص";
+      console.log(
+        `🔗 Player ${playerId} (${name}) is requesting energy reward`
+      );
       const result = await connectionController.rewardEnergy(playerId);
       // console.log("reward_energy result", result);
       callback(result); // مستقیماً آبجکت را برگردان
     });
 
     // هندل آپدیت سابسکریپشن
-    socket.on("update_subscription", async ({ playerId, subscription }) => {
+    socket.on("update_subscription", async ({ subscription }) => {
+      const playerId = socket.user._id.toString();
+      const name = socket.user.name || "نامشخص";
+      console.log(
+        `🔗 Player ${playerId} (${name}) is updating subscription: ${JSON.stringify(
+          subscription
+        )}`
+      );
       await connectionController.updateSubscription(playerId, subscription);
     });
 
+    socket.on("logout", () => {
+      onLogout(socket, connectionsArr, rooms, userSocketMap);
+      // می‌توانی سایر cleanupها را هم اینجا انجام دهی
+    });
+
     socket.on("disconnect", () => {
-      onDisconnect(socket, userSocketMap);
+      // userSocketMap.delete(playerId);
+      // connectionsArr.delete(playerId);
+      // onDisconnect(socket, userSocketMap);
     });
   });
 }
 
 module.exports = {
   socketHandler,
-  rooms,
-  games,
-  userSocketMap,
 };

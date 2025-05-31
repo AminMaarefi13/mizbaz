@@ -1,7 +1,10 @@
-async function onGetRoomState(roomId, callback, rooms) {
-  const room = rooms.get(roomId);
-  // console.log("room.players jjjjjjjjjjj", room.players);
+const { rooms } = require("../utils/memoryStore");
 
+async function onGetRoomState(roomId, callback) {
+  const room = rooms.get(roomId);
+  console.log("onGetRoomState");
+  console.log(rooms);
+  console.log("rooms onGetRoomState");
   if (!room) return callback(null);
   callback({
     roomId,

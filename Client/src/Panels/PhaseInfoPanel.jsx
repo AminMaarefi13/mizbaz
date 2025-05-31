@@ -21,7 +21,6 @@ export default function PhaseInfoPanel() {
   const handleConfirm = () => {
     socket.emit("phase_seen", {
       gameId: currentGameId,
-      playerId,
     });
 
     setConfirmed(true);

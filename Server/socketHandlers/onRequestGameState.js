@@ -1,20 +1,14 @@
 const { getValidGameAndRoom } = require("../utils/getValidGameAndRoom");
 const { makePublicState, makePrivateState } = require("../utils/makeStates");
-
-async function onRequestGameState(
-  games,
-  gameId,
-  rooms,
-  socket,
-  userSocketMap,
-  io
-) {
+const { rooms, games, userSocketMap } = require("../utils/memoryStore");
+async function onRequestGameState(gameId, socket, io) {
   const { game, room, roomId, gameState } = getValidGameAndRoom({
     gameId,
     games,
     rooms,
   });
-
+  // console.log(rooms, games, userSocketMap);
+  // console.log("rooms, games, userSocketMap");
   const publicState = makePublicState(gameState);
 
   const playerId = [...userSocketMap.entries()].find(

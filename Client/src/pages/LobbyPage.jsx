@@ -56,8 +56,8 @@ function LobbyPage() {
       if (playerId && name) {
         console.log(playerId);
         console.log(name);
-        socket.emit("register", { playerId, name });
-        socket.emit("get_user_rooms", playerId, (rooms) => {
+        socket.emit("register");
+        socket.emit("get_user_rooms", (rooms) => {
           // console.log("get_user_rooms");
           setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
         });
@@ -179,7 +179,7 @@ function LobbyPage() {
     setConnectionState((prev) => ({ ...prev, isHost: true }));
     localStorage.setItem("name", name);
     localStorage.setItem("playerId", playerId);
-    socket.emit("create_room", { name, playerId });
+    socket.emit("create_room");
   };
 
   const handleJoinRoom = () => {
@@ -188,7 +188,7 @@ function LobbyPage() {
     setConnectionState((prev) => ({ ...prev, isHost: false }));
     localStorage.setItem("name", name);
     localStorage.setItem("playerId", playerId);
-    socket.emit("join_room", { roomId: roomIdInputState, name, playerId });
+    socket.emit("join_room", { roomId: roomIdInputState });
     // localStorage.setItem("currentRoomId", currentRoomId);
   };
 
@@ -196,7 +196,7 @@ function LobbyPage() {
     // setConnectionState((prev) => ({ ...prev, currentRoomId: roomId }));
     localStorage.setItem("currentRoomId", roomId);
 
-    socket.emit("join_room", { roomId, name, playerId });
+    socket.emit("join_room", { roomId });
 
     socket.emit("get_room_state", roomId, (room) => {
       if (room) {
@@ -400,7 +400,6 @@ function LobbyPage() {
             onClick={() =>
               socket.emit("toggle_ready", {
                 roomId: currentRoomId,
-                playerId,
               })
             }
             className="mt-4 w-full py-2 bg-purple-600 hover:bg-purple-700 rounded font-semibold"
@@ -416,7 +415,6 @@ function LobbyPage() {
             onClick={() =>
               socket.emit("start_game", {
                 roomId: currentRoomId,
-                playerId,
               })
             }
             className="mt-2 w-full py-2 bg-red-600 hover:bg-red-700 rounded font-semibold"
