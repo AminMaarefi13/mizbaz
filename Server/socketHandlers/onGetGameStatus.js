@@ -7,9 +7,7 @@ async function onGetGameStatus(roomId, callback) {
   console.log("onGetGameStatus");
   console.log(rooms, games);
   console.log("rooms, games");
-  // if (!room || !room.activeGameId) {
-  //   return callback(null); // هیچ بازی فعالی وجود ندارد
-  // }
+
   const gameId = room.activeGameId;
   console.log("gameId");
   console.log(gameId);
@@ -34,9 +32,6 @@ async function onGetGameStatus(roomId, callback) {
       navigationDeck: dbGame.navigationDeck,
       discardPile: dbGame.discardPile,
       cultRitualDeck: dbGame.cultRitualDeck,
-      // navigationDeckLength: dbGame.navigationDeck.length,
-      // discardPileLength: dbGame.discardPile.length,
-      // cultRitualDeckLength: dbGame.cultRitualDeck.length,
       playedNavCards: dbGame.playedNavCards,
       gunReloadUsed: dbGame.gunReloadUsed,
       currentVoteSessionId: dbGame.currentVoteSessionId,
@@ -45,31 +40,7 @@ async function onGetGameStatus(roomId, callback) {
       logs: dbGame.logs,
       gameStatus: dbGame.gameStatus,
     };
-    // game = {
-    //   gameState: {
-    //     gameId,
-    //     journeyType: dbGame.journeyType,
-    //     players: dbGame.players,
-    //     captainId: dbGame.captainId,
-    //     firstOfficerId: dbGame.firstOfficerId,
-    //     navigatorId: dbGame.navigatorId,
-    //     offDutyIds: dbGame.offDutyIds,
-    //     mapPosition: dbGame.mapPosition,
-    //     currentPhase: dbGame.currentPhase,
-    //     navigationDeck: dbGame.navigationDeck,
-    //     discardPile: dbGame.discardPile,
-    //     cultRitualDeck: dbGame.cultRitualDeck,
-    //     playedNavCards: dbGame.playedNavCards,
-    //     phaseData: dbGame.phaseData,
-    //     currenVoteSessionId: dbGame.currenVoteSessionId,
-    //     nextPhaseData: dbGame.nextPhaseData,
-    //     logs: dbGame.logs,
-    //   },
-    //   roomId: dbGame.roomId,
-    // };
-
     games.set(gameId, game);
-    // games.set(gameId, game, roomId);
   }
 
   // ارسال وضعیت کامل بازی

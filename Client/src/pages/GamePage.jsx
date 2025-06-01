@@ -54,12 +54,6 @@ export default function GamePage() {
     playerId,
     currentRoomId,
     currentGameId,
-    // hostName,
-    // hostId,
-    // isHost,
-    // userRooms,
-    // userGames,
-    // roomPlayers,
   } = connectionState;
   // ⛵ جلوگیری از ورود بدون انتخاب بازی
   useEffect(() => {
@@ -106,16 +100,6 @@ export default function GamePage() {
       );
     }
   }, [currentRoomId, currentGameId, playerId, navigate]);
-
-  // console.log(phaseDataState?.tiedPlayers);
-  // console.log(phaseData);
-  // console.log(gameState);
-  // console.log(players);
-  // console.log(roomPlayers);
-  // console.log(currentPhase);
-  // console.log(captainId === playerId);
-  // console.log(currentPhase === "cabin_search");
-
   // نمایش مناسب هنگام عدم دریافت اطلاعات یا ورود زودهنگام
   if (!currentGameId || !players || players.length === 0) {
     return (
@@ -132,7 +116,6 @@ export default function GamePage() {
       </h1>
       <div className="bg-white shadow rounded p-4 mb-6">
         <h2 className="text-xl font-semibold mb-2">وضعیت کشتی</h2>
-        {/* <p>🔁 جهت حرکت: {mapDirection}</p> */}
         <p>📍 موقعیت نقشه: {mapPosition}</p>
         <p>🧩 فاز فعلی: {currentPhase}</p>
       </div>
@@ -144,11 +127,6 @@ export default function GamePage() {
           socket.emit("consume_energy", { amount }, (data) => {
             if (typeof data.energy === "number") setEnergy(data.energy);
           });
-          // socket.emit("consume_energy", { playerId, amount: 1 }, (data) => {
-          //   if (data && typeof data.energy === "number") {
-          //     setEnergy(data.energy);
-          //   }
-          // });
         }}
       >
         کاهش انرژی (تست)
@@ -211,13 +189,6 @@ export default function GamePage() {
         )}
       {currentPhase === "cult_conversion_choice" &&
         playerId === privatePhaseData.cultLeaderId && <CultConversionPanel />}
-      {/* {currentPhase === "cult_ritual_selection" &&
-        phaseDataState?.type === "cult_guns_distributed_done" &&
-        phaseDataState?.type === "cult_cabin_search_done" && (
-          <div className="mb-6 p-4 border border-yellow-500 rounded bg-yellow-50 shadow">
-            {phaseDataState.text}
-          </div>
-        )} */}
       {currentPhase === "cult_ritual_resolved" &&
         privatePhaseData?.type === "cult_info" && (
           <div className="mb-6 p-4 border border-yellow-500 rounded bg-yellow-50 shadow">

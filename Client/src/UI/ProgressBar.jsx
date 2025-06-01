@@ -29,27 +29,3 @@ export default function ProgressBar({ current = 0, total = 1 }) {
     </div>
   );
 }
-
-// import React from "react";
-
-// export default function ProgressBar({ current = 0, total = 1 }) {
-//   const percentage = Math.min((current / total) * 100, 100);
-
-//   return (
-//     <div className="w-full mb-4">
-//       <div className="flex justify-between text-sm font-medium mb-1 text-gray-700">
-//         <span>پیشرفت</span>
-//         <span>
-//           {current}/{total}
-//         </span>
-//       </div>
-
-//       <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-//         <div
-//           className="h-full bg-indigo-500 transition-all duration-500 ease-in-out"
-//           style={{ width: `${percentage}%` }}
-//         />
-//       </div>
-//     </div>
-//   );
-// }

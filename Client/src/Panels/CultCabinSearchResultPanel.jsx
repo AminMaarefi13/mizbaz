@@ -10,22 +10,14 @@ export default function CultCabinSearchResultPanel() {
   const { currentGameId, playerId } = connectionState;
   const { cabinInfo } = privatePhaseData;
   const handleConfirm = () => {
-    // socket.emit("cult_ritual_finished", {
-    //   gameId: currentGameId,
-    //   data: { playerId },
-    //   type: "cult_cabin_search",
-    // });
+
     console.log("نقش ها دیده شد");
     const payload = {
       gameId: currentGameId,
       data: { playerId },
       type: "cult_cabin_search",
     };
-    // console.log({
-    //   gameId: currentGameId,
-    //   data: { playerId },
-    //   type: "cult_cabin_search",
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     setConfirmed(true);
   };

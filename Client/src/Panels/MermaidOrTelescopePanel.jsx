@@ -13,8 +13,7 @@ export default function MermaidOrTelescopePanel() {
   const [confirmed, setConfirmed] = useState(false);
 
   const { selectablePlayers } = privatePhaseData;
-  // console.log(selectablePlayers);
-  // console.log(currentPhase);
+  
   const typeLabel = currentPhase === "mermaid" ? "🧜‍♀️ پری دریایی" : "🔭 تلسکوپ";
   const title =
     currentPhase === "mermaid"
@@ -30,11 +29,7 @@ export default function MermaidOrTelescopePanel() {
       alert("لطفاً یک بازیکن را انتخاب کنید.");
       return;
     }
-    // socket.emit("confirm_mermaid_or_telescope_choice", {
-    //   gameId: currentGameId,
-    //   targetPlayerId: selectedPlayerId,
-    //   type,
-    // });
+
     const payload = {
       targetPlayerId: selectedPlayerId,
       type: currentPhase,

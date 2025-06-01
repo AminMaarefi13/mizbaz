@@ -28,11 +28,9 @@ async function onCreateRoom(socket, io) {
   const room = {
     roomId,
     players: [newPlayer],
-    // gameStarted: false,
     hostName: name,
     hostId: playerId,
     gameIds: [],
-    // activeGameId: null,
   };
 
   rooms.set(roomId, room);
@@ -67,7 +65,7 @@ async function onCreateRoom(socket, io) {
     roomPlayers: room.players,
     hostName: room.hostName,
     hostId: room.hostId,
-    userGames: room.gameIds,
+    roomGames: room.gameIds,
   });
 
   // اطمینان از وجود Set برای roomIds و اضافه کردن roomId جدید
@@ -75,33 +73,14 @@ async function onCreateRoom(socket, io) {
   const userRoomsSet = new Set(connectionUser.userRooms || []);
   userRoomsSet.add({ roomId, hostName: name, hostId: playerId });
   connectionUser.userRooms = [...userRoomsSet];
-  // console.log("connectionUser.userRooms", connectionUser.userRooms);
+
   logAllUsers(userSocketMap, rooms);
 
   // ارسال لیست روم‌ها به کاربر
-  // فقط roomIdها را استخراج کن
-  // const roomIds = new Set(
-  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
-  // );
   const roomIds = new Set(
     Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
-  // console.log("roomIds", roomIds);
-  // const userRoomList = Array.from(roomIds)
-  //   .map((id) => {
-  //     const r = rooms.get(id);
-  //     if (!r) return null;
-  //     return {
-  //       roomId: id,
-  //       roomPlayers: r.players,
-  //       hostName: r.players[0]?.nickname || "نامشخص",
-  //       hostId: r.hostId,
-  //       userGames: [],
-  //     };
-  //   })
-  //   .filter(Boolean);
 
-  // io.to(socket.id).emit("user_rooms_updated", userRoomList);
   const userRoomsArr = Array.from(roomIds)
     .map((roomId) => {
       const room = rooms.get(roomId);
@@ -115,8 +94,6 @@ async function onCreateRoom(socket, io) {
     })
     .filter(Boolean);
   socket.emit("user_rooms_updated", userRoomsArr);
-
-  // console.log("userRoomsArr wwwwwwwww", userRoomsArr);
 
   await connectionController.updateConnection(playerId, {
     currentRoomId: connectionUser.currentRoomId,

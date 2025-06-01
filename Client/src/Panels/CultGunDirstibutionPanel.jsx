@@ -16,7 +16,6 @@ export default function CultGunsDistributionPanel() {
     }, {})
   );
   const isCultLeader = playerId === cultLeaderId;
-  // console.log(isCultLeader);
 
   const totalGuns = Object.values(guns).reduce((sum, val) => sum + val, 0);
 
@@ -42,20 +41,13 @@ export default function CultGunsDistributionPanel() {
     if (totalGuns !== 3) return;
 
     setConfirmed(true);
-    // socket.emit("cult_ritual_finished", {
-    //   gameId: currentGameId,
-    //   data: { playerId, distribution: guns },
-    //   type: "cult_guns_distributed",
-    // });
+
     console.log("تفنگ ها توزیع شدند");
     const payload = {
       data: { playerId, distribution: guns },
       type: "cult_guns_distributed",
     };
-    // console.log({
-    //   data: { playerId, distribution: guns },
-    //   type: "cult_guns_distributed",
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

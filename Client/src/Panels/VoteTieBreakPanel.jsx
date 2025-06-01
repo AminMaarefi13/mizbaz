@@ -11,15 +11,6 @@ export default function VoteTieBreakPanel() {
 
   const [confirmed, setConfirmed] = useState(false);
   const { tiedPlayers } = privatePhaseData;
-  // if (
-  //   gameState.currentPhase !== "vote_tie_break" ||
-  //   !phaseData?.tiedPlayers ||
-  //   phaseData.step !== "captain_eliminates_one" ||
-  //   gameState.captainId !== playerId
-  // ) {
-  //   return null;
-  // }
-  // console.log(tiedPlayers);
 
   const handleSelect = (id) => {
     if (confirmed) return; // 🔒 جلوگیری از تغییر پس از تأیید
@@ -32,16 +23,8 @@ export default function VoteTieBreakPanel() {
       return;
     }
 
-    // socket.emit("vote_tie_eliminate_one", {
-    //   gameId: currentGameId,
-    //   eliminatorId: selectedId,
-    //   tiedPlayers: tiedPlayers,
-    // });
     const payload = { tiedPlayers: tiedPlayers, eliminatorId: selectedId };
-    // console.log({
-    //   eliminatorId: selectedId,
-    //   tiedPlayers: tiedPlayers,
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     setConfirmed(true); // 🔐 قفل کردن انتخاب
   };

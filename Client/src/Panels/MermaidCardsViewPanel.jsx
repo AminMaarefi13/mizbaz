@@ -9,12 +9,8 @@ export default function MermaidCardsViewPanel() {
   const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);
   const { cards } = privatePhaseData;
-  // console.log(cards);
+
   const handleConfirm = () => {
-    // socket.emit("mermaid_cards_seen", {
-    //   gameId: currentGameId,
-    //   playerId,
-    // });
     const payload = {
       playerId,
     };

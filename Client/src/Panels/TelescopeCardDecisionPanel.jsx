@@ -10,7 +10,6 @@ export default function TelescopeCardDecisionPanel() {
   const [decision, setDecision] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const { card } = privatePhaseData;
-  // console.log(card);
 
   const handleConfirm = () => {
     if (!decision) {
@@ -18,11 +17,6 @@ export default function TelescopeCardDecisionPanel() {
       return;
     }
 
-    // socket.emit("telescope_card_decision", {
-    //   gameId: currentGameId,
-    //   playerId,
-    //   decision, // "keep" or "discard"
-    // });
     const payload = {
       playerId,
       decision, // "keep" or "discard"

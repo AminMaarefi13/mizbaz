@@ -9,13 +9,8 @@ const MapPage = () => {
   const navigate = useNavigate();
   const { connectionState, gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
-  // console.log("connectionState:", connectionState);
   const { currentGameId } = connectionState;
-  // console.log("currentGameId:", currentGameId);
-  // انتخاب نوع نقشه (کوییک یا لانگ)
-  // const [journeyType, setJourneyType] = useState(JOURNEY_TYPES.QUICK);
   useEffect(() => {
-    // console.log("Current Game ID:", currentGameId);
     if (!currentGameId) {
       alert("لطفاً ابتدا یک بازی را انتخاب کنید.");
       navigate("/lobby");
@@ -71,29 +66,6 @@ const MapPage = () => {
           );
         })}
 
-        {/* کشتی با موقعیت و چرخش */}
-        {/* {shipPosition && (
-          <div
-            className="absolute"
-            style={{
-              width: "20%",
-              height: "20%",
-              left: `${shipPosition.x}%`,
-              top: `${shipPosition.y}%`,
-              transform: `translate(-50%, -50%) rotate(${
-                shipPosition.rotate || 0
-              }deg)`, // چرخش کشتی
-              zIndex: 20,
-            }}
-          >
-            <img
-              src="/ship.png" // این آدرس تصویر کشتی است
-              alt="Ship"
-              className="w-full h-full object-contain"
-            />
-            <Hexagon size={10} glowColor="#00ffff" />
-          </div>
-        )} */}
         {shipPosition && (
           <div
             className="absolute"
@@ -140,21 +112,6 @@ const MapPage = () => {
         )}
       </div>
 
-      {/* دکمه تغییر نقشه */}
-      {/* <div className="absolute top-5 right-5">
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded"
-          onClick={() =>
-            setJourneyType((prevType) =>
-              prevType === JOURNEY_TYPES.QUICK
-                ? JOURNEY_TYPES.LONG
-                : JOURNEY_TYPES.QUICK
-            )
-          }
-        >
-          Change Map Type
-        </button>
-      </div> */}
     </div>
   );
 };

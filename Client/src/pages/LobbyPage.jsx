@@ -8,13 +8,10 @@ import RoomInvitesInbox from "../components/Room/RoomInvitesInbox";
 
 function LobbyPage() {
   const [roomIdInputState, setRoomIdInputState] = useState("");
-  // const [nameInputState, setNameInputState] = useState("");
-  // const [playerIdInputState, setPlayerIdInputState] = useState("");
+
   const navigate = useNavigate();
   const {
-    gameState,
     setGameState,
-    userState,
     setUserState,
     connectionState,
     setConnectionState,
@@ -23,17 +20,12 @@ function LobbyPage() {
     name,
     playerId,
     currentRoomId,
-    currentGameId,
     hostName,
-    hostId,
     isHost,
     userRooms,
-    userGames,
+    roomGames,
     roomPlayers,
   } = connectionState;
-  // console.log(userRooms);
-  // console.log(roomPlayers);
-  // console.log(gameState);
   // بازیابی اطلاعات ذخیره شده
   useEffect(() => {
     const savedName = localStorage.getItem("name");
@@ -48,8 +40,6 @@ function LobbyPage() {
       navigate("/login");
       return;
     }
-    // if (savedName && !nameInputState) setNameInputState(savedName);
-    // if (savedId && !playerIdInputState) setPlayerIdInputState(savedId);
   }, [name, playerId, setConnectionState]);
 
   // ثبت بازیکن و دریافت روم‌ها و بازی‌ها
@@ -60,13 +50,10 @@ function LobbyPage() {
         console.log(name);
         socket.emit("register");
         socket.emit("get_user_rooms", (rooms) => {
-          // console.log("get_user_rooms");
           setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
         });
-        socket.emit("get_all_games", { roomId: currentRoomId }, (userGames) => {
-          // console.log("get_all_games");
-          // console.log(userGames);
-          setConnectionState((prev) => ({ ...prev, userGames }));
+        socket.emit("get_all_games", { roomId: currentRoomId }, (roomGames) => {
+          setConnectionState((prev) => ({ ...prev, roomGames }));
         });
       }
     };
@@ -95,33 +82,20 @@ function LobbyPage() {
     };
 
     const onPlayersUpdated = ({ roomId, roomPlayers }) => {
-      // console.log("get_user_rooms");
 
       if (currentRoomId === roomId) {
         setConnectionState((prev) => ({
           ...prev,
           roomPlayers: roomPlayers,
           currentRoomId: roomId,
-          // hostName: hostName,
-          // hostId: hostId,
         }));
       }
     };
 
     const onUserRoomsUpdated = (rooms) => {
-      // console.log("get_user_rooms");
 
       setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
     };
-
-    // const onGameStatusUpdated = (roomId, gameStatus) => {
-    //   setUserState((prev) => ({
-    //     ...prev,
-    //     games: prev.games.map((g) =>
-    //       g.roomId === roomId ? { ...g, gameStatus } : g
-    //     ),
-    //   }));
-    // };
 
     socket.on("room_created", onRoomCreated);
     socket.on("players_updated", onPlayersUpdated);
@@ -153,7 +127,6 @@ function LobbyPage() {
       socket.off("room_created", onRoomCreated);
       socket.off("players_updated", onPlayersUpdated);
       socket.off("user_rooms_updated", onUserRoomsUpdated);
-      // socket.off("game_status_updated", onGameStatusUpdated);
       socket.off("game_state_requested");
     };
   }, [setGameState, setUserState, setConnectionState, currentRoomId]);
@@ -169,9 +142,6 @@ function LobbyPage() {
       roomId: localStorage.getItem("currentRoomId"),
       playerId: localStorage.getItem("playerId"),
     });
-    // socket.emit("callbackTest", gameId, (call) => {
-    //   console.log(call);
-    // });
     console.log(gameId);
     socket.emit("request_game_state", gameId);
   };
@@ -191,11 +161,9 @@ function LobbyPage() {
     localStorage.setItem("name", name);
     localStorage.setItem("playerId", playerId);
     socket.emit("join_room", { roomId: roomIdInputState });
-    // localStorage.setItem("currentRoomId", currentRoomId);
   };
 
   const handleEnterRoom = (roomId) => {
-    // setConnectionState((prev) => ({ ...prev, currentRoomId: roomId }));
     localStorage.setItem("currentRoomId", roomId);
 
     socket.emit("join_room", { roomId });
@@ -208,9 +176,7 @@ function LobbyPage() {
           roomPlayers: room.roomPlayers,
           hostId: room.hostId || "نامشخص",
           isHost: room.hostId === playerId,
-          // currentGameId: room.activeGameId,
-          // gameStatus:room.gameStarted
-          userGames: room.userGames,
+          roomGames: room.roomGames,
         }));
       }
     });
@@ -245,19 +211,6 @@ function LobbyPage() {
 
         <div>!{name} خوش اومدی</div>
         <div>{playerId} :آیدی</div>
-        {/* <input
-          className="w-full mb-3 px-4 py-2 rounded bg-gray-700"
-          placeholder="نام شما"
-          value={nameInputState}
-          onChange={(e) => setNameInputState(e.target.value)}
-        />
-
-        <input
-          className="w-full mb-3 px-4 py-2 rounded bg-gray-700"
-          placeholder="آیدی شما (مثلاً u1)"
-          value={playerIdInputState}
-          onChange={(e) => setPlayerIdInputState(e.target.value)}
-        /> */}
 
         {currentRoomId && (
           <button
@@ -267,21 +220,6 @@ function LobbyPage() {
             بازگشت به لابی
           </button>
         )}
-
-        {/* <button
-          className="w-full py-2 mb-4 bg-green-600 hover:bg-green-700 rounded font-semibold"
-          onClick={() => {
-            setConnectionState((prev) => ({
-              ...prev,
-              name: nameInputState,
-              playerId: playerIdInputState,
-            }));
-            localStorage.setItem("name", nameInputState);
-            localStorage.setItem("playerId", playerIdInputState);
-          }}
-        >
-          ورود
-        </button> */}
 
         {!currentRoomId && (
           <>
@@ -325,27 +263,12 @@ function LobbyPage() {
           </div>
         )}
         {currentRoomId && <RoomInvite roomId={currentRoomId} />}
-        {/* {userGames.length > 0 && currentRoomId && (
+        
+        {roomGames.length > 0 && currentRoomId && (
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
             <ul className="space-y-2">
-              {userGames.map((game) => (
-                <li
-                  key={game.gameId}
-                  className="bg-gray-700 p-2 rounded cursor-pointer hover:bg-gray-600"
-                  onClick={() => handleSelectGame(game.gameId)}
-                >
-                  🎮 {game.gameId} | وضعیت: {game.gameStatus}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )} */}
-        {userGames.length > 0 && currentRoomId && (
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
-            <ul className="space-y-2">
-              {userGames.map((game) => {
+              {roomGames.map((game) => {
                 // console.log(game);
                 const isPlayerInGame = game.gamePlayersIds?.includes(playerId);
                 return (

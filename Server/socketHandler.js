@@ -26,11 +26,6 @@ const {
 } = require("./socketHandlers/roomInvite");
 
 const { onDisconnect } = require("./socketHandlers/onDisconnect.js");
-
-// const rooms = new Map(); // roomId => { players: [] }
-// const games = new Map(); // gameId => { gameState, roomId }
-// const connectionsArr = new Map(); // playerId => { player }
-// const userSocketMap = new Map(); // playerId => socketId
 const {
   rooms,
   games,
@@ -91,13 +86,6 @@ function socketHandler(io) {
     );
     const playerId = socket.user._id.toString();
     userSocketMap.set(playerId, socket.id);
-    // connectionsArr.set(playerId, { ...socket.user });
-
-    ////////////////////////////
-    /////////////////////////////
-    ////////////////////////////
-    /////////////////////////////
-    // const { userSocketMap } = require("../utils/memoryStore");
 
     // به دوستان اطلاع بده که این کاربر آنلاین شد
     const user = await User.findById(playerId).populate("friends", "_id");
@@ -107,11 +95,6 @@ function socketHandler(io) {
         io.to(friendSocketId).emit("friend_online", { playerId });
       }
     });
-
-    ////////////////////////////
-    /////////////////////////////
-    ////////////////////////////
-    /////////////////////////////
 
     socket.on("register", async () => {
       onRegister(socket, io);
@@ -141,7 +124,6 @@ function socketHandler(io) {
       onReconnectPlayer(socket, io);
     });
 
-    // فرض می‌کنیم rooms،  userSocketMap وجود دارن
     socket.on("start_game", async ({ roomId }) => {
       onStartGame(roomId, socket, io);
     });
@@ -172,11 +154,8 @@ function socketHandler(io) {
       const player = gameState.players.find(
         (p) => p.id === playerId && !p.eliminated
       );
-      // console.log("player");
-      // console.log(player);
       if (!player) return;
-      // console.log("gameState?.phaseData?.phaseSeen beforeeeeeeeee");
-      // console.log(gameState?.phaseData?.phaseSeen);
+
       // جلوگیری از تکرار
       if (gameState?.phaseData?.phaseSeen === undefined) {
         console.log("was undefined");
@@ -188,10 +167,6 @@ function socketHandler(io) {
       console.log("continued...");
       gameState.phaseData.phaseSeen.push(playerId);
       await gameController.updateGame(gameId, gameState);
-      //  await gameController.updateGame(gameId, {
-      //   gameState: gameState,
-      //   roomId,
-      // });
 
       // چک کن همه دیدن یا نه
       const alivePlayerIds = gameState.players
@@ -224,7 +199,6 @@ function socketHandler(io) {
         io
       );
       if (allSeen) {
-        // console.log("allSeenssssssssss");
         proceedToNextPhase({
           games,
           gameState,
@@ -234,13 +208,11 @@ function socketHandler(io) {
           userSocketMap,
           io,
           eventSpecificData: "",
-        }); // ادامه بازی
+        });
       }
     });
 
     socket.on("phase_confirm", async ({ gameId, payload }) => {
-      // console.log(gameId);
-      // console.log(playerId);
       const { game, room, roomId, gameState } = getValidGameAndRoom({
         gameId,
         games,
@@ -257,8 +229,7 @@ function socketHandler(io) {
         userSocketMap,
         io,
         eventSpecificData: payload,
-      }); // ادامه بازی
-      // }
+      });
     });
 
     // هندل گرفتن انرژی
@@ -266,7 +237,6 @@ function socketHandler(io) {
       const playerId = socket.user._id.toString();
       const name = socket.user.name || "نامشخص";
       console.log(`🔗 Player ${playerId} (${name}) is requesting energy`);
-      // console.log("get_energy", playerId);
       const data = await connectionController.getEnergyAndSubscription(
         playerId
       );
@@ -292,7 +262,6 @@ function socketHandler(io) {
         `🔗 Player ${playerId} (${name}) is requesting energy reward`
       );
       const result = await connectionController.rewardEnergy(playerId);
-      // console.log("reward_energy result", result);
       callback(result); // مستقیماً آبجکت را برگردان
     });
 
@@ -318,8 +287,6 @@ function socketHandler(io) {
         }
       });
       onLogout(socket, connectionsArr, rooms, userSocketMap);
-
-      // می‌توانی سایر cleanupها را هم اینجا انجام دهی
     });
 
     socket.on("send_friend_request", (targetId, callback) =>
@@ -359,9 +326,6 @@ function socketHandler(io) {
       });
 
       userSocketMap.delete(playerId);
-      // userSocketMap.delete(playerId);
-      // connectionsArr.delete(playerId);
-      // onDisconnect(socket, userSocketMap);
     });
   });
 }

@@ -10,7 +10,7 @@ export default function SignupPage() {
     passwordConfirm: "",
   });
   const [error, setError] = useState("");
-  const { connectionState, setConnectionState } = useGameContext();
+  const { setConnectionState } = useGameContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -31,7 +31,7 @@ export default function SignupPage() {
       );
       const data = await res.json();
       if (data.token) {
-        // localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token);
         localStorage.setItem("name", data.data.user.name);
         localStorage.setItem("playerId", data.data.user._id);
         setConnectionState((prev) => ({

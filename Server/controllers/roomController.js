@@ -15,8 +15,6 @@ async function createRoom(
     hostName,
     players,
     gameIds: [],
-    // gamePhase: "lobby",
-    // activeGameId, // اختیاری: اگر می‌خوای همون لحظه یک بازی هم بسازی
   });
 
   await room.save();

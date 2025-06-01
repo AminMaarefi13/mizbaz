@@ -9,18 +9,11 @@ async function onStartGame(roomId, socket, io) {
   console.log(`🔗 Player ${playerId} is starting game in room ${roomId}`);
   // console.log(rooms, games, userSocketMap);
   // console.log("rooms, games, userSocketMap");
-  // console.log("starstfbsaudsa;");
-  // console.log(roomId);
-  // console.log(playerId, socket, userSocketMap, rooms, games);
   const room = rooms.get(roomId);
 
   if (!room) {
     return socket.emit("error_message", "اتاق مورد نظر یافت نشد.");
   }
-
-  // if (room.activeGameId) {
-  //   return socket.emit("error_message", "بازی قبلاً در این اتاق شروع شده است.");
-  // }
 
   if (room.hostId !== playerId) {
     return socket.emit(
@@ -42,15 +35,9 @@ async function onStartGame(roomId, socket, io) {
     const gameState = gameStartPhase(readyPlayers, "quick", roomId);
 
     // ثبت در حافظه
-    // room.activeGameId = gameId;
     games.set(gameId, gameState);
     rooms.set(roomId, room);
 
-    // اطمینان از وجود Set برای roomIds و اضافه کردن roomId جدید
-    // if (!room.gameIds) {
-    //   room.gameIds = new Set();
-    // }
-    // room.gameIds.add(gameId);
     const readyPlayersIds = readyPlayers.map((p) => p.playerId);
 
     if (!room.gameIds) {
@@ -65,7 +52,6 @@ async function onStartGame(roomId, socket, io) {
     room.gameIds = [...gameIdsSet];
     // بروزرسانی دیتابیس روم
     await roomController.updateRoom(roomId, {
-      // activeGameId: gameId,
       gameIds: [...room.gameIds],
     });
     const captain = gameState.players.find(
@@ -109,9 +95,6 @@ async function onStartGame(roomId, socket, io) {
       navigationDeck: gameState.navigationDeck,
       discardPile: gameState.discardPile,
       cultRitualDeck: gameState.cultRitualDeck,
-      // navigationDeckLength: gameState.navigationDeck.length,
-      // discardPileLength: gameState.discardPile.length,
-      // cultRitualDeckLength: gameState.cultRitualDeck.length,
       playedNavCards: gameState.playedNavCards,
       gunReloadUsed: gameState.gunReloadUsed,
       currentVoteSessionId: gameState.currentVoteSessionId,
@@ -135,19 +118,14 @@ async function onStartGame(roomId, socket, io) {
         socketId: p.socketId,
       })),
     });
-    // ...existing code...
-    // console.log("room.players  daaaaa", room.players);
     // ارسال وضعیت جدید به همه‌ی اعضای روم
     io.to(roomId).emit("players_updated", {
       roomId,
       roomPlayers: room.players,
-      // hostName: room.players[0]?.nickname || "نامشخص",
-      // hostId: room.hostId,
     });
 
     for (const p of gameState.players) {
       const socketId = userSocketMap.get(p.id);
-      // console.log(userSocketMap);
 
       if (!socketId) continue;
 
@@ -158,7 +136,6 @@ async function onStartGame(roomId, socket, io) {
       io.to(socketId).emit("gameState", { publicState, privateState });
 
       io.to(socketId).emit("game_started", gameId);
-      // مرحله اطلاع‌رسانی فاز فعلی
     }
   } catch (err) {
     console.error("❌ خطا در شروع بازی:", err);

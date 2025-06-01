@@ -64,20 +64,6 @@ async function getFriendsData(socket, callback) {
     onlineFriends, // اضافه شد
   });
 }
-// async function getFriendsData(socket, callback) {
-//   const userId = socket.user._id;
-//   const user = await User.findById(userId)
-//     .populate("friends", "name _id")
-//     .populate("requests", "name _id")
-//     .populate("pendingRequests", "name _id");
-//   callback({
-//     friends: user.friends,
-//     requests: user.requests,
-//     pendingRequests: user.pendingRequests,
-//     onlineFriends, // اضافه شد
-//   });
-// }
-
 // پاسخ به درخواست دوستی (قبول یا رد)
 async function respondFriendRequest(socket, { fromId, accept }, callback) {
   const userId = socket.user._id.toString();

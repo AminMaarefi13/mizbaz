@@ -47,18 +47,12 @@ async function onReconnectPlayer(socket, io) {
   }
 
   userSocketMap.set(playerId, socket.id);
-
-  // connectionUser.socketId = socket.id;
-
   // Join previous rooms again
   // فقط roomIdها را استخراج کن
   const roomIds = new Set(
     Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
-  // const roomIds = new Set(
-  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
-  // );
-  // console.log("roomIds", roomIds);
+
   const userRoomsArr = Array.from([...roomIds])
     .map((roomId) => {
       console.log("roomId", roomId);
@@ -83,18 +77,6 @@ async function onReconnectPlayer(socket, io) {
         if (player) {
           player.socketId = socket.id;
         }
-        // console.log(
-        //   "room.players rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-        //   room.players
-        // );
-
-        // Send updated room state to all members
-        // io.to(roomId).emit("room_updated", {
-        //   roomPlayers: room.players,
-        //   hostName: room.players[0]?.nickname || "نامشخص",
-        //   hostId: room.hostId,
-        //   userGames: room.gameIds,
-        // });
       }
     });
   }

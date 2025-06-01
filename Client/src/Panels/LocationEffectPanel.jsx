@@ -11,8 +11,7 @@ export default function LocationEffectPanel() {
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
-  const effectType = currentPhase; // مثلاً "cabin_search", "off_with_tongue", ...
-  // console.log(effectType);
+  const effectType = currentPhase; // مثلاً "cabin_search", 
 
   const handleSelect = (id) => {
     if (confirmed) return;
@@ -35,21 +34,12 @@ export default function LocationEffectPanel() {
       effectType,
     });
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
-    // socket.emit("resolve_location_effect", {
-    //   gameId: currentGameId,
-    //   targetPlayerId: selectedPlayerId,
-    //   effectType,
-    // });
 
     setConfirmed(true);
   };
 
-  // const selectablePlayers = gameState.players.filter(
-  //   (p) => p.id !== gameState.captainId && !p.eliminated // حذف کاپیتان و بازیکنان حذف‌شده
-  // );
 
   const selectablePlayers = privatePhaseData.selectablePlayers;
-  // console.log(selectablePlayers);
   const effectTitles = {
     cabin_search: "🔍 جستجوی کابین",
     off_with_tongue: "😶 بریدن زبان",

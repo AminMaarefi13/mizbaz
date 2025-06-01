@@ -15,7 +15,7 @@ async function restoreRoomsFromDB(rooms) {
       // gameStarted: dbRoom.gamePhase !== "lobby",
       hostId: dbRoom.hostId,
       // activeGameId: dbRoom.activeGameId,
-      userGames: dbRoom.userGames,
+      roomGames: dbRoom.roomGames,
     });
   });
 

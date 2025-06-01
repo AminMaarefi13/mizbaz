@@ -10,7 +10,7 @@ export default function CabinetSelectionPanel() {
   const { privatePhaseData } = userState;
   const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);
-  // console.log(privatePhaseData);
+
   const isEmergency = privatePhaseData?.emergency === true;
 
   if (
@@ -42,22 +42,12 @@ export default function CabinetSelectionPanel() {
       return;
     }
 
-    // socket.emit("confirm_cabinet", {
-    //   gameId: currentGameId,
-    //   emergency: isEmergency,
-    //   navigatorId,
-    //   firstOfficerId: isEmergency ? gameState.firstOfficerId : firstOfficerId, // استفاده از افسر قبلی در حالت اضطراری
-    // });
     const payload = {
       emergency: isEmergency,
       navigatorId,
       firstOfficerId: isEmergency ? gameState.firstOfficerId : firstOfficerId, // استفاده از افسر قبلی در حالت اضطراری
     };
-    // console.log({
-    //   emergency: isEmergency,
-    //   navigatorId,
-    //   firstOfficerId: isEmergency ? gameState.firstOfficerId : firstOfficerId, // استفاده از افسر قبلی در حالت اضطراری
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
 
     setConfirmed(true); // 🔐 قفل کردن انتخاب

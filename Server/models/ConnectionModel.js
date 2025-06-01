@@ -16,16 +16,3 @@ const connectionSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Connection", connectionSchema);
-
-// const mongoose = require("mongoose");
-
-// const connectionSchema = new mongoose.Schema({
-//   name: String,
-//   playerId: { type: String, required: true },
-//   socketId: String,
-//   currentRoomId: String,
-//   currentGameId: String,
-//   userRooms: [],
-// });
-
-// module.exports = mongoose.model("Connection", connectionSchema);

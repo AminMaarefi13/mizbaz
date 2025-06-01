@@ -15,9 +15,7 @@ async function onGetUserRooms(socket, callback) {
   const roomIds = new Set(
     Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
-  // const roomIds = new Set(
-  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
-  // );
+
   const result = Array.from(roomIds)
     .map((roomId) => {
       const room = rooms.get(roomId);

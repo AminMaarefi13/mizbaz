@@ -21,21 +21,12 @@ export default function CultConversionPanel() {
 
     setConfirmed(true);
 
-    // socket.emit("cult_ritual_finished", {
-    //   gameId: currentGameId,
-    //   data: { targetPlayerId: selectedPlayerId },
-    //   type: "cult_conversion_target_selected",
-    // });
     console.log("عضو جدید فرقه انتخاب شد");
-    // console.log(selectedPlayerId);
     const payload = {
       data: { targetPlayerId: selectedPlayerId },
       type: "cult_conversion_target_selected",
     };
-    // console.log({
-    //   data: { targetPlayerId: selectedPlayerId },
-    //   type: "cult_conversion_target_selected",
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

@@ -23,7 +23,6 @@ async function onJoinRoom(roomId, socket, io) {
     return;
   }
   connectionUser.currentRoomId = room.roomId;
-  // connectionUser.currentGameId = room.activeGameId;
   connectionUser.socketId = socket.id;
 
   // بررسی اینکه آیا بازیکن قبلاً در لیست هست یا نه
@@ -55,7 +54,6 @@ async function onJoinRoom(roomId, socket, io) {
         nickname: p.nickname,
         isReady: p.isReady,
         socketId: p.socketId,
-        // seat: p.seat, // اگر از seat استفاده می‌کنی
       })),
     });
   } catch (err) {
@@ -67,28 +65,12 @@ async function onJoinRoom(roomId, socket, io) {
   // اتصال به سوکت روم
   socket.join(roomId);
 
-  // ارسال وضعیت به همه بازیکنان روم
-  // io.to(roomId).emit("joined_room", {
-  //   roomId,
-  //   roomPlayers: room.players,
-  //   hostName: room.hostName,
-  //   hostId: room.hostId,
-  // });
-
-  // io.to(roomId).emit("players_updated", {
-  //   roomId,
-  //   roomPlayers: room.players,
-  //   hostName: room.players[0]?.nickname || "نامشخص",
-  //   hostId: room.hostId,
-  // });
-  // console.log("room.players ghhhh", room.players);
-
   io.to(socket.id).emit("joined_room", {
     roomId,
     roomPlayers: room.players,
     hostName: room.hostName,
     hostId: room.hostId,
-    userGames: room.gameIds || [],
+    roomGames: room.gameIds || [],
   });
   // console.log("room.players", room.players);
   // console.log("room.players eeeee", room.players);
@@ -110,12 +92,6 @@ async function onJoinRoom(roomId, socket, io) {
   // لاگ برای بررسی
   logAllUsers(userSocketMap, rooms);
 
-  // ارسال لیست روم‌ها به کاربر فعلی
-  // const roomIds = connectionUser.userRooms;
-  // فقط roomIdها را استخراج کن
-  // const roomIds = new Set(
-  //   (connectionUser?.userRooms || []).map((room) => room.roomId)
-  // );
   const roomIds = new Set(
     Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
   );
@@ -128,11 +104,10 @@ async function onJoinRoom(roomId, socket, io) {
         roomPlayers: r.players,
         hostName: r.players[0]?.nickname || "نامشخص",
         hostId: r.hostId,
-        userGames: r.gameIds,
+        roomGames: r.gameIds,
       };
     })
     .filter(Boolean);
-  // console.log("room.players result", result);
 
   io.to(socket.id).emit("user_rooms_updated", result);
 
@@ -148,11 +123,9 @@ async function onJoinRoom(roomId, socket, io) {
       };
     })
     .filter(Boolean);
-  // console.log("userRoomsArr eeeeeeeeee", userRoomsArr);
 
   await connectionController.updateConnection(playerId, {
     currentRoomId: room.roomId,
-    // currentGameId: room.activeGameId,
     socketId: socket.id,
     name: connectionUser.name,
     userRooms: userRoomsArr,

@@ -13,9 +13,7 @@ const roomSchema = new mongoose.Schema(
     hostId: { type: String, required: true },
     hostName: { type: String },
     players: [playerRoomSchema],
-    // gamePhase: { type: String, default: "lobby" },
     gameIds: { type: Array, default: [] },
-    // activeGameId: { type: String, default: null }, // ✅ اضافه کن برای مشخص کردن بازی فعال کنونی در این اتاق
     pendingInvites: [
       {
         from: String, // userId دعوت‌کننده

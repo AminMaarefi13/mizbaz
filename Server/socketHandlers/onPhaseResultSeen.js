@@ -39,7 +39,6 @@ async function onPhaseResultSeen(
   );
 
   games.set(gameId, gameState);
-  // games.set(gameId, { gameState, roomId });
   await gameController.updateGame(gameState.gameId, gameState);
 
   if (seenCount < alivePlayersCount) return;
@@ -65,7 +64,6 @@ async function onPhaseResultSeen(
   await handler(games, gameState, gameId, roomId, userSocketMap, io);
 
   games.set(gameId, gameState);
-  // games.set(gameId, { gameState, roomId });
   await gameController.updateGame(gameState.gameId, gameState);
 
   // پخش state جدید

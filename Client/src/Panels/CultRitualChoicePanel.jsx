@@ -16,7 +16,6 @@ export default function CultRitualChoicePanel() {
     if (confirmed) return;
     setSelectedIndex(index);
   };
-  // console.log(cards);
 
   const handleConfirm = () => {
     if (selectedIndex === null) return;
@@ -25,16 +24,11 @@ export default function CultRitualChoicePanel() {
     setRevealedCard(chosenCard);
     setConfirmed(true);
 
-    // socket.emit("cult_ritual_choice", {
-    //   gameId: currentGameId,
-    //   chosenCard,
-    // });
+
     const payload = {
       chosenCard,
     };
-    // console.log({
-    //   chosenCard,
-    // });
+
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
   };
 

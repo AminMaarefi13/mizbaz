@@ -29,19 +29,10 @@ export default function NavigationCardChoicePanel() {
     const payload = {
       emergency: false,
       playerId,
-      // gameId: currentGameId,
       chosenCard,
       discardedCard: cards[1 - selectedIndex],
       cabinRole,
     };
-
-    // if (playerId === captainId) {
-    //   payload.role = "captain";
-    // } else if (playerId === firstOfficerId) {
-    //   payload.role = "firstOfficer";
-    // } else if (playerId === navigatorId) {
-    //   payload.role = "navigator";
-    // }
 
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
     setConfirmed(true);

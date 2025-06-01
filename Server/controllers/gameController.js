@@ -11,11 +11,6 @@ async function getGameByGameId(gameId) {
   return await Game.findOne({ gameId });
 }
 
-// async function getGameByRoomId(roomId) {
-//   const room = await Room.findOne({ roomId });
-//   if (!room?.activeGameId) return null;
-//   return await Game.findOne({ gameId: room.activeGameId });
-// }
 async function getAllGames() {
   return await Game.find();
 }
@@ -31,7 +26,6 @@ async function deleteGame(gameId) {
 module.exports = {
   createGame,
   getGameByGameId,
-  // getGameByRoomId,
   getAllGames,
   updateGame,
   deleteGame,

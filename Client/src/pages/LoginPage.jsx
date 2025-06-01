@@ -5,7 +5,7 @@ import { useGameContext } from "../context/GameContext";
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { connectionState, setConnectionState } = useGameContext();
+  const { setConnectionState } = useGameContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,7 +27,6 @@ export default function LoginPage() {
       const data = await res.json();
       if (data.token) {
         localStorage.setItem("token", data.token);
-        // localStorage.setItem("token", data.token);
         localStorage.setItem("name", data.data.user.name);
         localStorage.setItem("playerId", data.data.user._id);
         setConnectionState((prev) => ({

@@ -14,7 +14,6 @@ const HomePage = () => {
     <div className="space-y-4">
       <ShipStatusBar />
       <PhaseIndicator />
-      {/* <pre>{JSON.stringify(setup, null, 2)}</pre> */}
       <CabinetUI isCaptain={isCaptain} onConfirmCabinet={onConfirmCabinet} />
     </div>
   );

@@ -35,7 +35,7 @@ export const GameProvider = ({ children }) => {
     isHost: "",
     roomPlayers: [],
     userRooms: [], // list of { roomId, host, players, hostId }
-    userGames: [],
+    roomGames: [],
   });
   const [phaseDataState, setPhaseDataState] = useState({});
   const [energy, setEnergy] = useState(10);
@@ -53,18 +53,6 @@ export const GameProvider = ({ children }) => {
       });
     }
   }, []);
-  // useEffect(() => {
-  //   if (connectionState.playerId) {
-  //     socket.emit(
-  //       "get_energy",
-  //       { playerId: connectionState.playerId },
-  //       (data) => {
-  //         setEnergy(data.energy);
-  //         setSubscription(data.subscription);
-  //       }
-  //     );
-  //   }
-  // }, [connectionState.playerId]);
   // تابع برای دریافت پاداش تبلیغ
   // rewardEnergy
   const rewardEnergy = (cb) => {
@@ -75,29 +63,6 @@ export const GameProvider = ({ children }) => {
       if (cb) cb(data); // اگر نیاز داری کل آبجکت را به callback بده
     });
   };
-
-  // const rewardEnergy = (cb) => {
-  //   socket.emit(
-  //     "reward_energy",
-  //     { playerId: connectionState.playerId },
-  //     (data) => {
-  //       if (data.energy !== undefined) setEnergy(data.energy);
-  //       if (typeof data.adSessionCount === "number")
-  //         setAdSessionCount(data.adSessionCount);
-  //       if (cb) cb(data);
-  //     }
-  //   );
-  // };
-  // const rewardEnergy = () => {
-  //   socket.emit(
-  //     "reward_energy",
-  //     { playerId: connectionState.playerId },
-  //     (data) => {
-  //       if (data.energy !== undefined) setEnergy(data.energy);
-  //     }
-  //   );
-  // };
-
   // تابع برای آپدیت سابسکریپشن (مثلاً بعد از خرید)
   const updateSubscription = (val) => {
     setSubscription(val);
@@ -105,7 +70,7 @@ export const GameProvider = ({ children }) => {
       subscription: val,
     });
   };
-  const { playerId, name, currentRoomId, currentGameId, roomPlayers } =
+  const { playerId, name, currentRoomId, currentGameId } =
     connectionState;
 
   // ✅ درخواست وضعیت بازی وقتی context کامل شد
@@ -162,7 +127,7 @@ export const GameProvider = ({ children }) => {
       });
     }
     socket.emit("get_all_games", { roomId: currentRoomId }, (games) => {
-      setConnectionState((prev) => ({ ...prev, userGames: games }));
+      setConnectionState((prev) => ({ ...prev, roomGames: games }));
     });
   }, [playerId, name]);
 
@@ -185,14 +150,14 @@ export const GameProvider = ({ children }) => {
     });
     socket.on(
       "joined_room",
-      ({ roomId, roomPlayers, hostName, hostId, userGames }) => {
+      ({ roomId, roomPlayers, hostName, hostId, roomGames }) => {
         setConnectionState((prev) => ({
           ...prev,
           roomPlayers: roomPlayers,
           currentRoomId: roomId,
           hostName: hostName,
           hostId: hostId,
-          userGames,
+          roomGames,
         }));
       }
     );
@@ -218,34 +183,21 @@ export const GameProvider = ({ children }) => {
 
     socket.on(
       "room_updated",
-      ({ roomPlayers, hostName, hostId, userGames }) => {
+      ({ roomPlayers, hostName, hostId, roomGames }) => {
         setConnectionState((prev) => ({
           ...prev,
           roomPlayers: roomPlayers,
           hostName: hostName,
           hostId: hostId,
-          userGames,
+          roomGames,
         }));
       }
     );
-
-    // socket.on("game_status_updated", (roomId, gameStatus) => {
-    //   console.log("game_status_updated dddddddddddddddddd");
-    //   console.log("roomId", "gameStatus");
-    //   console.log(roomId, gameStatus);
-    //   setConnectionState((prevState) => ({
-    //     ...prevState,
-    //     userGames: prevState.userGames.map((game) =>
-    //       game.roomId === roomId ? { ...game, gameStatus } : game
-    //     ),
-    //   }));
-    // });
 
     return () => {
       socket.off("room_created");
       socket.off("players_updated");
       socket.off("user_rooms_updated");
-      // socket.off("game_status_updated");
     };
   }, [currentGameId, currentRoomId, playerId, userState]);
 
