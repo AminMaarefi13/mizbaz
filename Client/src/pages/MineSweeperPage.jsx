@@ -4,6 +4,8 @@ import { socket } from "../network/socket";
 import { useGameContext } from "../context/GameContext";
 import { useAppContext } from "../context/AppContext";
 import Tiles from "../components/MineSweeper/Tiles";
+import getGradientClass from "../UI/getGradientClass";
+import getScoreShadowClass from "../UI/getScoreShadowClass";
 // import ProfileImage from "../components/MineSweeper/ProfileImage";
 
 export default function MineSweeperPage() {
@@ -63,38 +65,38 @@ export default function MineSweeperPage() {
     // score = [0, 0],
     allTime = [0, 0],
   } = gameState;
+  const myIndex = players.findIndex((p) => p.id === playerId);
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center pt-20 pb-8 px-2">
+      {/* All Time Score */}
+      <div className="w-full max-w-lg bg-cyan-800 text-white rounded-lg shadow px-4 py-2 mb-3 flex justify-center font-mono text-sm sm:text-base">
+        امتیاز کلی: {allTime[1]} : {allTime[0]}
+      </div>
+
+      {/* Remaining Bombs */}
+      {players[0].score < 8 && players[1].score < 8 && (
+        <div className="w-full max-w-md bg-white text-black rounded-lg shadow px-4 py-2 mb-3 flex justify-center items-center opacity-90 text-sm sm:text-base">
+          {15 - players[0].score - players[1].score}{" "}
+          <span className="text-2xl mx-2">💣</span>
+          بمب باقی‌مانده
+        </div>
+      )}
+
+      {/* Turn Banner */}
+      {players[0].score < 8 && players[1].score < 8 && (
+        <div
+          className={`w-full max-w-md rounded-lg shadow px-4 py-2 mb-3 flex flex-col items-center
+      ${getGradientClass({ type: "turn", myIndex, turnIndex: turn, playerId })}
+    `}
+        >
+          <div className="font-bold text-xs sm:text-base">نوبت:</div>
+          <div className="text-base sm:text-lg">{players[turn]?.name}</div>
+        </div>
+      )}
+
       {/* Score Banner */}
-      <div
-        className={`w-full max-w-lg flex justify-between items-center rounded-lg shadow-lg px-4 py-3 mb-3
-    ${
-      players[0].score > players[1].score
-        ? players[0].id === playerId
-          ? "bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-700 text-white"
-          : "bg-gradient-to-r from-pink-400 via-fuchsia-400 to-rose-400 text-white"
-        : players[0].score === players[1].score
-        ? "bg-cyan-600 text-white"
-        : players[0].id === playerId
-        ? "bg-gradient-to-r from-pink-400 via-fuchsia-400 to-rose-400 text-white"
-        : "bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-700 text-white"
-    }`}
-      >
-        {/* <div
-        className={`w-full max-w-lg flex justify-between items-center rounded-lg shadow-lg px-4 py-3 mb-3
-        ${
-          players[0].score > players[1].score
-            ? players[0].id === playerId
-              ? "bg-green-400"
-              : "bg-pink-400"
-            : players[0].score === players[1].score
-            ? "bg-cyan-600"
-            : players[0].id === playerId
-            ? "bg-pink-400"
-            : "bg-green-400"
-        }`}
-      > */}
+      <div className="w-full max-w-lg flex justify-between items-center rounded-lg shadow-lg px-4 py-3 mb-3 bg-gradient-to-r from-gray-700 to-gray-800 text-white">
         <div className="flex flex-col items-center">
           {/* <ProfileImage src={players[0].photo} isBig={false} /> */}
           <span className="font-bold text-xs sm:text-base">
@@ -111,70 +113,6 @@ export default function MineSweeperPage() {
           </span>
         </div>
       </div>
-
-      {/* All Time Score */}
-      <div className="w-full max-w-lg bg-cyan-800 text-white rounded-lg shadow px-4 py-2 mb-3 flex justify-center font-mono text-sm sm:text-base">
-        امتیاز کلی: {allTime[1]} : {allTime[0]}
-      </div>
-
-      {/* Turn Banner */}
-      {players[0].score < 8 && players[1].score < 8 && (
-        <div
-          className={`w-full max-w-md rounded-lg shadow px-4 py-2 mb-3 flex flex-col items-center
-      ${
-        players[turn].id === playerId
-          ? "bg-gradient-to-r from-blue-400 via-blue-500 via-blue-600 to-cyan-400 text-white"
-          : "bg-gradient-to-r from-pink-400 via-pink-500 via-fuchsia-400 to-rose-400 text-white"
-      }
-    `}
-        >
-          <div className="font-bold text-xs sm:text-base">نوبت:</div>
-          <div className="text-base sm:text-lg">{players[turn]?.name}</div>
-        </div>
-      )}
-      {/* {players[0].score < 8 && players[1].score < 8 && (
-        <div
-          className={`w-full max-w-md rounded-lg shadow px-4 py-2 mb-3 flex flex-col items-center
-      ${
-        players[turn].id === playerId
-          ? "bg-gradient-to-r from-green-400 via-blue-400 to-cyan-400 text-black"
-          : "bg-gradient-to-r from-pink-400 via-fuchsia-400 to-purple-400 text-black"
-      }
-    `}
-        >
-          <div className="font-bold text-xs sm:text-base">نوبت:</div>
-          <div className="text-base sm:text-lg">{players[turn]?.name}</div>
-        </div>
-      )} */}
-      {/* {players[0].score < 8 && players[1].score < 8 && (
-        <div
-          className={`w-full max-w-md rounded-lg shadow px-4 py-2 mb-3 flex flex-col items-center
-      ${
-        players[turn].id === playerId
-          ? "bg-green-400 text-black"
-          : "bg-pink-400 text-black"
-      }
-    `}
-        >
-          <div className="font-bold text-xs sm:text-base">نوبت:</div>
-          <div className="text-base sm:text-lg">{players[turn]?.name}</div>
-        </div>
-      )} */}
-      {/* {players[0].score < 8 && players[1].score < 8 && (
-        <div className="w-full max-w-md bg-gray-800 text-white rounded-lg shadow px-4 py-2 mb-3 flex flex-col items-center">
-          <div className="font-bold text-xs sm:text-base">نوبت:</div>
-          <div className="text-base sm:text-lg">{players[turn]?.name}</div>
-        </div>
-      )} */}
-
-      {/* Remaining Bombs */}
-      {players[0].score < 8 && players[1].score < 8 && (
-        <div className="w-full max-w-md bg-white text-black rounded-lg shadow px-4 py-2 mb-3 flex justify-center items-center opacity-90 text-sm sm:text-base">
-          {15 - players[0].score - players[1].score}{" "}
-          <span className="text-2xl mx-2">💣</span>
-          بمب باقی‌مانده
-        </div>
-      )}
 
       {/* Winner Banner */}
       {(players[0].score === 8 || players[1].score === 8) && (
@@ -208,6 +146,25 @@ export default function MineSweeperPage() {
       mx-auto
       w-full
       max-w-xl
+      ${getScoreShadowClass({ players, playerId })}
+    `}
+          style={{ transition: "box-shadow 0.3s" }}
+        >
+          <div className="w-full max-w-[420px] aspect-[7/8] flex items-center justify-center">
+            <Tiles />
+          </div>
+        </div>
+      )}
+
+      {/* {players[0].score < 8 && players[1].score < 8 && (
+        <div
+          className={`
+      flex justify-center items-center
+      rounded-2xl
+      transition
+      mx-auto
+      w-full
+      max-w-xl
       ${(() => {
         const myIndex = players.findIndex((p) => p.id === playerId);
         const otherIndex = myIndex === 0 ? 1 : 0;
@@ -226,7 +183,7 @@ export default function MineSweeperPage() {
             <Tiles />
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
