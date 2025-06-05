@@ -11,7 +11,7 @@ async function onGetRoomState(roomId, callback) {
     roomPlayers: room.players,
     hostName: room.players[0]?.nickname || "نامشخص",
     hostId: room.hostId,
-    roomGames: room.gameIds || [],
+    roomGames: room.games || [],
   });
 }
 

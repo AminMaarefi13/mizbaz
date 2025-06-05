@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function FloggingChoicePanel() {
-  const { userState, gameState, connectionState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { privatePhaseData } = userState;
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [revealedCard, setRevealedCard] = useState(null);
@@ -32,7 +34,6 @@ export default function FloggingChoicePanel() {
     };
 
     socket.emit("phase_confirm", { gameId: currentGameId, payload });
-
   };
 
   if (!isCaptain) return null;

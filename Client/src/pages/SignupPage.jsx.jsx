@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGameContext } from "../context/GameContext";
+import { useAppContext } from "../context/AppContext";
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -10,7 +10,7 @@ export default function SignupPage() {
     passwordConfirm: "",
   });
   const [error, setError] = useState("");
-  const { setConnectionState } = useGameContext();
+  const { setConnectionState } = useAppContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

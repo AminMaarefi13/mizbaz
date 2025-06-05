@@ -1,6 +1,12 @@
 // utils/gameUtils.js
 
 function getValidGameAndRoom({ gameId, games, rooms }) {
+  console.log("rooms");
+  // console.log(rooms);
+  console.log("games");
+  // console.log(games);
+  console.log("gameId");
+  console.log(gameId);
   const game = games.get(gameId);
   console.log("getValidGameAndRoom");
   console.log("game");

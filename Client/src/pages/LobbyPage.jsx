@@ -1,25 +1,28 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import { useState } from "react";
 import RoomInvite from "../components/Room/RoomInvite";
 import RoomInvitesInbox from "../components/Room/RoomInvitesInbox";
+import GameLobby from "../components/Room/GameLobby";
+import CreateGameBox from "../components/Room/CreateGameBox";
+import { getStatusIcon } from "../utils/getStatusIcon";
+import { useGameContext } from "../context/GameContext";
+import { useAppContext } from "../context/AppContext";
 
 function LobbyPage() {
   const [roomIdInputState, setRoomIdInputState] = useState("");
 
   const navigate = useNavigate();
-  const {
-    setGameState,
-    setUserState,
-    connectionState,
-    setConnectionState,
-  } = useGameContext();
+  const { setUserState, connectionState, setConnectionState } = useAppContext();
+  const { setGameState } = useGameContext();
+
   const {
     name,
     playerId,
     currentRoomId,
+    currentGameId,
+    currentGame,
     hostName,
     isHost,
     userRooms,
@@ -41,6 +44,54 @@ function LobbyPage() {
       return;
     }
   }, [name, playerId, setConnectionState]);
+
+  useEffect(() => {
+    socket.on("game_created", ({ game }) => {
+      console.log(game);
+      setConnectionState((prev) => ({
+        ...prev,
+        currentGameId: game.gameId,
+        currentGame: game,
+      }));
+    });
+
+    return () => {
+      socket.off("game_created");
+    };
+  }, []);
+
+  useEffect(() => {
+    function handleRoomGamesUpdated({ games }) {
+      console.log(games);
+      setConnectionState((prev) => ({
+        ...prev,
+        roomGames: games,
+      }));
+    }
+    socket.on("room_games_updated", handleRoomGamesUpdated);
+    return () => {
+      socket.off("room_games_updated", handleRoomGamesUpdated);
+    };
+  }, [setConnectionState]);
+
+  useEffect(() => {
+    function handleGamePlayersUpdated({ gameId, gamePlayers }) {
+      console.log(handleGamePlayersUpdated);
+      if (currentGame && currentGame.gameId === gameId) {
+        setConnectionState((prev) => ({
+          ...prev,
+          currentGame: {
+            ...prev.currentGame,
+            players: gamePlayers,
+          },
+        }));
+      }
+    }
+    socket.on("game_players_updated", handleGamePlayersUpdated);
+    return () => {
+      socket.off("game_players_updated", handleGamePlayersUpdated);
+    };
+  }, [currentGame, setConnectionState]);
 
   // ثبت بازیکن و دریافت روم‌ها و بازی‌ها
   useEffect(() => {
@@ -67,7 +118,7 @@ function LobbyPage() {
     return () => {
       socket.off("connect", registerPlayer);
     };
-  }, [playerId, name, setConnectionState]);
+  }, [playerId, name, currentRoomId, currentGameId, setConnectionState]);
 
   useEffect(() => {
     const onRoomCreated = ({ roomId, roomPlayers, hostName, hostId }) => {
@@ -82,7 +133,6 @@ function LobbyPage() {
     };
 
     const onPlayersUpdated = ({ roomId, roomPlayers }) => {
-
       if (currentRoomId === roomId) {
         setConnectionState((prev) => ({
           ...prev,
@@ -93,7 +143,6 @@ function LobbyPage() {
     };
 
     const onUserRoomsUpdated = (rooms) => {
-
       setConnectionState((prev) => ({ ...prev, userRooms: rooms }));
     };
 
@@ -101,26 +150,75 @@ function LobbyPage() {
     socket.on("players_updated", onPlayersUpdated);
     socket.on("user_rooms_updated", onUserRoomsUpdated);
     // socket.on("game_status_updated", onGameStatusUpdated);
-    socket.on("game_started", (gameId) => {
-      console.log("بازی شروع شد");
-      console.log(gameId);
-      handleSelectGame(gameId);
+    socket.on("game_started", (gameId, gamePlayer) => {
+      console.log(gamePlayer);
+      if (gamePlayer) {
+        console.log("بازی شروع شد");
+        console.log(gameId);
+        handleStartGame(gameId);
+      } else {
+        alert("بازی شروع شد و شما عضو این بازی نیستید!");
+        setConnectionState((prev) => ({
+          ...prev,
+          currentGameId: null,
+          currentGame: null,
+        }));
+        localStorage.removeItem("currentGameId");
+        localStorage.removeItem("currentGame");
+      }
     });
+
+    socket.on("gameState", (state) => {
+      console.log("📦 gameState وضعیت بازی دریافت شد", state);
+      if (state?.publicState.type === "feedTheKraken") {
+        setGameState(state.publicState);
+        setUserState((prev) => ({ ...prev, ...state.privateState }));
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        localStorage.setItem("currentGameId", state.publicState.gameId);
+      } else if (state?.publicState.type === "mineSweeper") {
+        console.log("MineSweeper game state received:");
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        localStorage.setItem("currentGameId", state.publicState.gameId);
+      }
+      navigate(`/game/${state.publicState.gameId}`);
+    });
+
     socket.on("game_state_requested", (state) => {
       console.log("📦 game_state_requested lobby وضعیت بازی دریافت شد", state);
-      setGameState(state.publicState);
-      setUserState((prev) => ({
-        ...prev,
-        ...state.privateState,
-      }));
-      setConnectionState((prev) => ({
-        ...prev,
-        currentRoomId: state.publicState.roomId,
-        currentGameId: state.publicState.gameId,
-      }));
-      localStorage.setItem("activeGameId", state.publicState.gameId);
+      if (state?.publicState.type === "feedTheKraken") {
+        setGameState(state.publicState);
+        setUserState((prev) => ({ ...prev, ...state.privateState }));
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        navigate(`/game/${state.publicState.gameId}`);
+        localStorage.setItem("currentGameId", state.gameId);
+      } else if (state?.publicState.type === "mineSweeper") {
+        console.log("MineSweeper game state received:", state.publicState);
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        console.log(state.publicState.gameId);
+        console.log(state.publicState);
+        navigate(`/game/${state.publicState.gameId}`);
+        localStorage.setItem("currentGameId", state.publicState.gameId);
+      }
 
-      navigate("/game");
+      // navigate("/game");
     });
 
     return () => {
@@ -137,13 +235,50 @@ function LobbyPage() {
     console.log(currentRoomId);
     console.log(localStorage.getItem("playerId"));
     console.log(localStorage.getItem("currentRoomId"));
-    socket.emit("join_game", {
-      gameId,
-      roomId: localStorage.getItem("currentRoomId"),
-      playerId: localStorage.getItem("playerId"),
-    });
-    console.log(gameId);
+    localStorage.setItem("currentGameId", gameId);
+    socket.emit(
+      "enter_game_lobby",
+      {
+        gameId,
+        roomId: currentRoomId,
+      },
+      (res) => {
+        console.log("🥨 نتیجه ورود به بازی:", res);
+        if (res?.success === false) {
+          alert(res.message || "بازی پیدا نشد.");
+          return;
+        }
+        if (res?.game) {
+          console.log("res.game");
+          setConnectionState((prev) => ({
+            ...prev,
+            currentGameId: res.game.gameId,
+            currentGame: res.game,
+          }));
+        }
+      }
+    );
+    // socket.emit("join_game", {
+    //   gameId,
+    //   roomId: localStorage.getItem("currentRoomId"),
+    //   playerId: localStorage.getItem("playerId"),
+    // });
+    // console.log(gameId);
+    // socket.emit("request_game_state", gameId);
+  };
+
+  const handleStartGame = (gameId) => {
+    console.log("🍔 شروع بازی:", gameId);
+    localStorage.setItem("currentGameId", gameId);
     socket.emit("request_game_state", gameId);
+    // if (currentGame.gameStatus && currentGame.gameStatus !== "waiting") {
+    //   // socket.emit("join_game", {
+    //   //   gameId,
+    //   //   roomId: localStorage.getItem("currentRoomId"),
+    //   //   playerId: localStorage.getItem("playerId"),
+    //   // });
+
+    // }
   };
 
   const handleCreateRoom = () => {
@@ -170,6 +305,7 @@ function LobbyPage() {
 
     socket.emit("get_room_state", roomId, (room) => {
       if (room) {
+        console.log(room.roomGames);
         setConnectionState((prev) => ({
           ...prev,
           currentRoomId: roomId,
@@ -192,8 +328,9 @@ function LobbyPage() {
       hostId: null,
     }));
     localStorage.removeItem("currentRoomId");
-    localStorage.removeItem("activeGameId");
+    localStorage.removeItem("currentGameId");
   };
+  // console.log(roomGames);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4">
@@ -212,7 +349,7 @@ function LobbyPage() {
         <div>!{name} خوش اومدی</div>
         <div>{playerId} :آیدی</div>
 
-        {currentRoomId && (
+        {currentRoomId && !currentGameId && !currentGame && (
           <button
             className="w-full py-2 mb-4 bg-yellow-600 hover:bg-yellow-700 rounded font-semibold"
             onClick={handleBackToLobby}
@@ -262,41 +399,115 @@ function LobbyPage() {
             </ul>
           </div>
         )}
-        {currentRoomId && <RoomInvite roomId={currentRoomId} />}
-        
-        {roomGames.length > 0 && currentRoomId && (
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
-            <ul className="space-y-2">
-              {roomGames.map((game) => {
-                // console.log(game);
-                const isPlayerInGame = game.gamePlayersIds?.includes(playerId);
-                return (
-                  <li
-                    key={game.gameId}
-                    className={`p-2 rounded ${
-                      isPlayerInGame
-                        ? "bg-gray-700 cursor-pointer hover:bg-gray-600"
-                        : "bg-gray-500 text-gray-400 cursor-not-allowed opacity-60"
-                    }`}
-                    onClick={
-                      isPlayerInGame
-                        ? () => handleSelectGame(game.gameId)
-                        : undefined
-                    }
-                    style={{ pointerEvents: isPlayerInGame ? "auto" : "none" }}
-                  >
-                    🎮 {game.gameId} | وضعیت: {game.gameStatus}
-                  </li>
-                );
-              })}
-            </ul>
+
+        {roomGames.length > 0 &&
+          currentRoomId &&
+          !currentGameId &&
+          !currentGame && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
+              <ul className="space-y-2">
+                {roomGames.map((game) => {
+                  const isWaiting = game.gameStatus === "waiting";
+                  const isPlayer =
+                    Array.isArray(game.players) &&
+                    game.players.some((p) => p.playerId === playerId);
+                  const canClick =
+                    isWaiting || (game.gameStatus === "onGoing" && isPlayer);
+
+                  return (
+                    <li
+                      key={game.gameId}
+                      className={`p-2 rounded ${
+                        canClick
+                          ? "bg-gray-700 cursor-pointer hover:bg-gray-600"
+                          : "bg-gray-500 text-gray-400 cursor-not-allowed opacity-60"
+                      }`}
+                      onClick={
+                        canClick
+                          ? () => handleSelectGame(game.gameId)
+                          : undefined
+                      }
+                      style={{
+                        pointerEvents: canClick ? "auto" : "none",
+                      }}
+                    >
+                      {getStatusIcon(game.gameStatus)}
+                      🎮 {game.gameId} | بازی: {game.type} | وضعیت:{" "}
+                      {game.gameStatus}
+                      <span className="ml-2 text-sm text-blue-300">
+                        {game.players?.length || 0}{" "}
+                        {game.gameStatus === "onGoing"
+                          ? "نفر در حال بازی"
+                          : game.gameStatus === "waiting"
+                          ? "نفر آماده بازی"
+                          : "نفر"}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        {/* {roomGames.length > 0 &&
+          currentRoomId &&
+          !currentGameId &&
+          !currentGame && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">🎮 بازی‌های موجود:</h3>
+              <ul className="space-y-2">
+                {roomGames.map((game) => {
+                  // شرط کلیک‌پذیری:
+                  const isWaiting = game.gameStatus === "waiting";
+                  const isPlayer =
+                    Array.isArray(game.players) &&
+                    game.players.some((p) => p.playerId === playerId);
+                  const canClick =
+                    isWaiting || (game.gameStatus === "onGoing" && isPlayer);
+
+                  return (
+                    <li
+                      key={game.gameId}
+                      className={`p-2 rounded ${
+                        canClick
+                          ? "bg-gray-700 cursor-pointer hover:bg-gray-600"
+                          : "bg-gray-500 text-gray-400 cursor-not-allowed opacity-60"
+                      }`}
+                      onClick={
+                        canClick
+                          ? () => handleSelectGame(game.gameId)
+                          : undefined
+                      }
+                      style={{
+                        pointerEvents: canClick ? "auto" : "none",
+                      }}
+                    >
+                      🎮 {game.gameId} | بازی: {game.type} | وضعیت:{" "}
+                      {game.gameStatus}
+                      <span className="ml-2 text-sm text-blue-300">
+                        {game.players?.length || 0}{" "}
+                        {game.gameStatus === "onGoing"
+                          ? "نفر در حال بازی"
+                          : "نفر آماده بازی"}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )} */}
+
+        {currentRoomId && !currentGameId && !currentGame && (
+          <div className="mt-8">
+            <CreateGameBox />
           </div>
         )}
-
-        {roomPlayers.length > 0 && (
+        {currentRoomId && !currentGameId && !currentGame && (
+          <RoomInvite roomId={currentRoomId} />
+        )}
+        {roomPlayers.length > 0 && !currentGameId && !currentGame && (
           <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">جزئیات روم:</h3>
+            <h3 className="text-lg font-semibold mb-2">اعضای روم:</h3>
             {hostName && (
               <p className="mb-2 text-sm text-gray-300">
                 👑 میزبان: {hostName}
@@ -314,42 +525,15 @@ function LobbyPage() {
                   <span
                     className={p.isReady ? "text-green-400" : "text-red-400"}
                   >
-                    {p.isReady ? "✅ آماده" : "⏳ منتظر"}
+                    {/* {p.isReady ? "✅ آماده" : "⏳ منتظر"} */}
                   </span>
                 </li>
               ))}
             </ul>
           </div>
         )}
-
-        {roomPlayers.length > 0 && (
-          <button
-            onClick={() =>
-              socket.emit("toggle_ready", {
-                roomId: currentRoomId,
-              })
-            }
-            className="mt-4 w-full py-2 bg-purple-600 hover:bg-purple-700 rounded font-semibold"
-          >
-            {roomPlayers.find((p) => p.playerId === playerId)?.isReady
-              ? "❌ بی‌خیال"
-              : "✅ آماده‌ام"}
-          </button>
-        )}
-
-        {currentRoomId && isHost && (
-          <button
-            onClick={() =>
-              socket.emit("start_game", {
-                roomId: currentRoomId,
-              })
-            }
-            className="mt-2 w-full py-2 bg-red-600 hover:bg-red-700 rounded font-semibold"
-          >
-            🎬 شروع بازی
-          </button>
-        )}
       </div>
+      {currentGameId && currentGame && <GameLobby />}
     </div>
   );
 }

@@ -7,7 +7,7 @@ async function onGetGameStatus(roomId, callback) {
   console.log("onGetGameStatus");
   console.log(rooms, games);
   console.log("rooms, games");
-
+  ////////////// toFix
   const gameId = room.activeGameId;
   console.log("gameId");
   console.log(gameId);
@@ -39,6 +39,7 @@ async function onGetGameStatus(roomId, callback) {
       nextPhaseData: dbGame.nextPhaseData,
       logs: dbGame.logs,
       gameStatus: dbGame.gameStatus,
+      type: dbGame.type,
     };
     games.set(gameId, game);
   }

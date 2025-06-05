@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useGameContext } from "../context/GameContext";
+import { useAppContext } from "../context/AppContext";
 import { socket } from "../network/socket";
 
 export default function AuthPage() {
@@ -12,7 +12,7 @@ export default function AuthPage() {
   });
   const [error, setError] = useState("");
   const [userInfo, setUserInfo] = useState(null);
-  const { setConnectionState } = useGameContext();
+  const { setConnectionState } = useAppContext();
 
   // خواندن اطلاعات از localStorage برای حفظ وضعیت ورود
   useEffect(() => {

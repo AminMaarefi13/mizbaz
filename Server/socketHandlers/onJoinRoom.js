@@ -70,7 +70,7 @@ async function onJoinRoom(roomId, socket, io) {
     roomPlayers: room.players,
     hostName: room.hostName,
     hostId: room.hostId,
-    roomGames: room.gameIds || [],
+    roomGames: room.games || [],
   });
   // console.log("room.players", room.players);
   // console.log("room.players eeeee", room.players);
@@ -104,7 +104,7 @@ async function onJoinRoom(roomId, socket, io) {
         roomPlayers: r.players,
         hostName: r.players[0]?.nickname || "نامشخص",
         hostId: r.hostId,
-        roomGames: r.gameIds,
+        roomGames: r.games,
       };
     })
     .filter(Boolean);

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function CultRitualChoicePanel() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [revealedCard, setRevealedCard] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
-  const { connectionState, userState, gameState } = useGameContext();
+  const { connectionState, userState } = useAppContext();
+  const { gameState } = useGameContext();
   const { privatePhaseData } = userState;
   const { currentGameId, playerId } = connectionState;
   const { options } = privatePhaseData;
@@ -23,7 +25,6 @@ export default function CultRitualChoicePanel() {
     const chosenCard = cards[selectedIndex];
     setRevealedCard(chosenCard);
     setConfirmed(true);
-
 
     const payload = {
       chosenCard,

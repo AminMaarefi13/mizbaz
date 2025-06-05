@@ -1,8 +1,8 @@
 import React from "react";
-import { useGameContext } from "../../context/GameContext";
+import { useAppContext } from "../../context/AppContext";
 
 export default function EnergyBar() {
-  const { energy } = useGameContext();
+  const { energy } = useAppContext();
   return (
     <div>
       <span>انرژی: {energy} / 10</span>

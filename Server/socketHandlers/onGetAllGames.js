@@ -10,7 +10,7 @@ async function onGetAllGames(roomId, callback) {
    
     const roomData = await roomController.getAllGamesByRoomId(roomId.roomId);
     // ارسال اطلاعات بازی‌ها به کلاینت
-    callback(roomData[0].gameIds);
+    callback(roomData[0].games);
   } catch (err) {
     console.error("Error fetching all games:", err);
     callback({ error: "Error fetching all games" });

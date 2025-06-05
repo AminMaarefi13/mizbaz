@@ -1,7 +1,7 @@
 const redisClient = require("./redisClient.js");
 const { updateGameInDB } = require("./updateGameInDB.js");
 
-function startPeriodicDBSave(games, intervalMs = 5 * 60 * 1000) {
+function startPeriodicDBSave(games, intervalMs = 500 * 60 * 1000) {
   setInterval(async () => {
     console.log("Saving game states to DB...");
     for (const [gameId] of games) {

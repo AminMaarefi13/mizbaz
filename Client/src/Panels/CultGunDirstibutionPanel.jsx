@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
 
 export default function CultGunsDistributionPanel() {
   const [confirmed, setConfirmed] = useState(false);
-  const { connectionState, userState } = useGameContext();
+  const { connectionState, userState } = useAppContext();
   const { privatePhaseData } = userState;
   const { currentGameId, playerId } = connectionState;
   const { selectablePlayers, cultLeaderId } = privatePhaseData;

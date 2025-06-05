@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useGameContext } from "../context/GameContext";
+import { useAppContext } from "../context/AppContext";
 
 export default function CabinetSelectionPanel() {
   const [firstOfficerId, setFirstOfficerId] = useState(null);
   const [navigatorId, setNavigatorId] = useState(null);
-  const { userState, gameState, connectionState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { privatePhaseData } = userState;
   const { currentGameId, playerId } = connectionState;
   const [confirmed, setConfirmed] = useState(false);

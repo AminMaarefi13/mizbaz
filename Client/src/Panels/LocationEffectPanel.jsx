@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { useGameContext } from "../context/GameContext";
 import { socket } from "../network/socket";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function LocationEffectPanel() {
-  const { connectionState, userState, gameState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { privatePhaseData } = userState;
   const { currentPhase } = gameState;
   const { currentGameId } = connectionState;
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
-  const effectType = currentPhase; // مثلاً "cabin_search", 
+  const effectType = currentPhase; // مثلاً "cabin_search",
 
   const handleSelect = (id) => {
     if (confirmed) return;
@@ -37,7 +39,6 @@ export default function LocationEffectPanel() {
 
     setConfirmed(true);
   };
-
 
   const selectablePlayers = privatePhaseData.selectablePlayers;
   const effectTitles = {

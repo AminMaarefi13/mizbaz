@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function NavigationCardChoicePanel() {
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const { userState, gameState, connectionState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { navigatorId } = gameState;
   const { privatePhaseData } = userState;
   const { currentGameId, playerId } = connectionState;

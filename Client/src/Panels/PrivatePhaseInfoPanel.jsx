@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
 
 export default function PrivatePhaseInfoPanel() {
-  const { userState } = useGameContext();
+  const { userState } = useAppContext();
   const { privatePhaseData } = userState;
   const { message } = privatePhaseData;
-  
 
   return (
     <div className="mb-6 p-4 border border-indigo-500 rounded bg-indigo-50 shadow">
@@ -18,7 +17,6 @@ export default function PrivatePhaseInfoPanel() {
           {message}
         </div>
       )}
-
     </div>
   );
 }

@@ -1,13 +1,15 @@
 import { journeyMapNodes, JOURNEY_TYPES } from "../config/journeyMapNodes";
 import { quickJourneyLayout, longJourneyLayout } from "../config/journeyLayout";
-import { useGameContext } from "../context/GameContext";
 import Hexagon from "./Hexagon";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 const MapPage = () => {
   const navigate = useNavigate();
-  const { connectionState, gameState } = useGameContext();
+  const { connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { journeyType, mapPosition } = gameState;
   const { currentGameId } = connectionState;
   useEffect(() => {
@@ -111,7 +113,6 @@ const MapPage = () => {
           </div>
         )}
       </div>
-
     </div>
   );
 };

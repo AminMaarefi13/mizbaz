@@ -30,7 +30,7 @@ async function onCreateRoom(socket, io) {
     players: [newPlayer],
     hostName: name,
     hostId: playerId,
-    gameIds: [],
+    games: [],
   };
 
   rooms.set(roomId, room);
@@ -65,7 +65,7 @@ async function onCreateRoom(socket, io) {
     roomPlayers: room.players,
     hostName: room.hostName,
     hostId: room.hostId,
-    roomGames: room.gameIds,
+    games: room.games,
   });
 
   // اطمینان از وجود Set برای roomIds و اضافه کردن roomId جدید
@@ -77,29 +77,33 @@ async function onCreateRoom(socket, io) {
   logAllUsers(userSocketMap, rooms);
 
   // ارسال لیست روم‌ها به کاربر
-  const roomIds = new Set(
-    Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
-  );
+  // const roomIds = new Set(
+  //   Array.from(connectionUser?.userRooms || []).map((room) => room.roomId)
+  // );
+  // console.log("connectionUser?.userRooms");
+  // console.log(connectionUser?.userRooms);
+  // console.log("roomIds");
+  // console.log(roomIds);
+  // const userRoomsArr = Array.from(roomIds)
+  //   .map((roomId) => {
+  //     const room = rooms.get(roomId);
+  //     if (!room) return null;
 
-  const userRoomsArr = Array.from(roomIds)
-    .map((roomId) => {
-      const room = rooms.get(roomId);
-      if (!room) return null;
-
-      return {
-        roomId,
-        hostName: room.players[0]?.nickname || "نامشخص",
-        hostId: room.hostId,
-      };
-    })
-    .filter(Boolean);
-  socket.emit("user_rooms_updated", userRoomsArr);
-
+  //     return {
+  //       roomId,
+  //       hostName: room.players[0]?.nickname || "نامشخص",
+  //       hostId: room.hostId,
+  //     };
+  //   })
+  //   .filter(Boolean);
+  socket.emit("user_rooms_updated", connectionUser?.userRooms);
+  // console.log("userRoomsArr");
+  // console.log(userRoomsArr);
   await connectionController.updateConnection(playerId, {
     currentRoomId: connectionUser.currentRoomId,
     currentGameId: connectionUser.currentGameId,
     socketId: socket.id,
-    userRooms: userRoomsArr,
+    userRooms: connectionUser?.userRooms,
     name: connectionUser.name,
   });
 }

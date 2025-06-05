@@ -1,9 +1,9 @@
 // utils/gameUtils.js
 const { updateGameInMemory } = require("./updateGameInMemory.js");
 const { updateGameInDB } = require("./updateGameInDB.js");
-const {
-  broadcastGameStateToPlayers,
-} = require("./broadcastGameStateToPlayers.js");
+// const {
+//   broadcastGameStateToPlayers,
+// } = require("../games/feedTheKraken/utils/broadcastGameStateToPlayers.js");
 const { updateGameInRedis } = require("./updateGameInRedis.js");
 
 /**
@@ -20,6 +20,13 @@ const { updateGameInRedis } = require("./updateGameInRedis.js");
  * @param {boolean} [options.saveToDB=true]
  * @param {boolean} [options.broadcast=true]
  */
+const broadcastHandlers = {
+  feedTheKraken:
+    require("../games/feedTheKraken/utils/broadcastGameStateToPlayers.js")
+      .broadcastGameStateToPlayers,
+  // بازی‌های دیگر را اینجا اضافه کن
+  mineSweeper: require("../games/mineSweeper/utils/broadcastGameStateToPlayers.js").broadcastGameStateToPlayers,
+};
 async function updateAndBroadcastGame(
   games,
   gameId,
@@ -46,8 +53,17 @@ async function updateAndBroadcastGame(
   }
 
   if (broadcast) {
-    broadcastGameStateToPlayers(io, gameState, userSocketMap);
+    const type = gameState.type;
+    const handler = broadcastHandlers[type];
+    if (handler) {
+      handler(io, gameState, userSocketMap);
+    } else {
+      console.warn(`No broadcast handler found for game type: ${type}`);
+    }
   }
+  // if (broadcast) {
+  //   broadcastGameStateToPlayers(io, gameState, userSocketMap);
+  // }
 }
 
 module.exports = { updateAndBroadcastGame };

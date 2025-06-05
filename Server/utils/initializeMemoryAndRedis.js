@@ -7,6 +7,7 @@ const {
 async function initializeMemoryAndRedis(rooms, games) {
   // لود بازی‌ها
   const allGames = await restoreGamesFromDB(games, rooms);
+  console.log("allGames", allGames);
   for (const game of allGames) {
     games.set(game.gameId, game);
     await redisClient.set(`game:${game.gameId}`, JSON.stringify(game));

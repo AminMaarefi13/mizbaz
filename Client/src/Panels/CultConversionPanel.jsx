@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
 
 export default function CultConversionPanel() {
-  const { connectionState, userState } = useGameContext();
+  const { connectionState, userState } = useAppContext();
   const [selectedPlayerId, setSelectedPlayerId] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const { privatePhaseData } = userState;

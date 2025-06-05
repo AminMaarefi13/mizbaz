@@ -1,5 +1,12 @@
 const roomController = require("../controllers/roomController");
-const gameController = require("../controllers/gameController");
+const feedTheKrakenGameController = require("../controllers/feedTheKrakenGameController");
+const mineSweeperGameController = require("../controllers/mineSweeperGameController");
+
+const allGameControllers = [
+  { type: "feedTheKraken", controller: feedTheKrakenGameController },
+  { type: "mineSweeper", controller: mineSweeperGameController },
+  // بازی‌های دیگر را اضافه کن
+];
 
 // ✅ Restore rooms from MongoDB
 async function restoreRoomsFromDB(rooms) {
@@ -25,46 +32,66 @@ async function restoreRoomsFromDB(rooms) {
 
 // ✅ Restore games from MongoDB
 async function restoreGamesFromDB(games, rooms) {
-  const allGames = await gameController.getAllGames();
-  allGames.forEach((dbGame) => {
-    if (dbGame.gameStatus === "onGoing") {
-      games.set(dbGame.gameId, {
-        gameId: dbGame.gameId,
-        roomId: dbGame.roomId,
-        journeyType: dbGame.journeyType,
-        players: dbGame.players,
-        captainId: dbGame.captainId,
-        firstOfficerId: dbGame.firstOfficerId,
-        navigatorId: dbGame.navigatorId,
-        offDutyIds: dbGame.offDutyIds,
-        mapPosition: dbGame.mapPosition,
-        currentPhase: dbGame.currentPhase,
-        navigationDeck: dbGame.navigationDeck,
-        discardPile: dbGame.discardPile,
-        cultRitualDeck: dbGame.cultRitualDeck,
-        // navigationDeckLength: dbGame.navigationDeck.length,
-        // discardPileLength: dbGame.discardPile.length,
-        // cultRitualDeckLength: dbGame.cultRitualDeck.length,
-        playedNavCards: dbGame.playedNavCards,
-        gunReloadUsed: dbGame.gunReloadUsed,
-        currentVoteSessionId: dbGame.currentVoteSessionId,
-        phaseData: dbGame.phaseData,
-        nextPhaseData: dbGame.nextPhaseData,
-        logs: dbGame.logs,
-        gameStatus: dbGame.gameStatus,
-      });
-      // اگر room وجود داره، flag بازی رو روشن می‌کنیم
-      const room = rooms.get(dbGame.roomId);
-      if (room) {
-        // room.gameStarted = true;
+  for (const { type, controller } of allGameControllers) {
+    const allGames = await controller.getAllGames();
+    allGames.forEach((dbGame) => {
+      if (dbGame.gameStatus === "onGoing") {
+        games.set(dbGame.gameId, {
+          ...dbGame.toObject(), // یا هر فیلدی که لازم داری
+          type, // نوع بازی را هم ذخیره کن
+        });
+        // اگر room وجود داره، flag بازی رو روشن می‌کنیم
+        const room = rooms.get(dbGame.roomId);
+        if (room) {
+          // room.gameStarted = true;
+        }
       }
-    }
-  });
-
-  console.log("✅ Games restored from database.");
-
-  return allGames;
+    });
+    console.log("✅ Games restored from database.");
+    return allGames;
+  }
 }
+// async function restoreGamesFromDB(games, rooms) {
+//   const allGames = await gameController.getAllGames();
+//   allGames.forEach((dbGame) => {
+//     if (dbGame.gameStatus === "onGoing") {
+//       games.set(dbGame.gameId, {
+//         gameId: dbGame.gameId,
+//         roomId: dbGame.roomId,
+//         journeyType: dbGame.journeyType,
+//         players: dbGame.players,
+//         captainId: dbGame.captainId,
+//         firstOfficerId: dbGame.firstOfficerId,
+//         navigatorId: dbGame.navigatorId,
+//         offDutyIds: dbGame.offDutyIds,
+//         mapPosition: dbGame.mapPosition,
+//         currentPhase: dbGame.currentPhase,
+//         navigationDeck: dbGame.navigationDeck,
+//         discardPile: dbGame.discardPile,
+//         cultRitualDeck: dbGame.cultRitualDeck,
+//         // navigationDeckLength: dbGame.navigationDeck.length,
+//         // discardPileLength: dbGame.discardPile.length,
+//         // cultRitualDeckLength: dbGame.cultRitualDeck.length,
+//         playedNavCards: dbGame.playedNavCards,
+//         gunReloadUsed: dbGame.gunReloadUsed,
+//         currentVoteSessionId: dbGame.currentVoteSessionId,
+//         phaseData: dbGame.phaseData,
+//         nextPhaseData: dbGame.nextPhaseData,
+//         logs: dbGame.logs,
+//         gameStatus: dbGame.gameStatus,
+//       });
+//       // اگر room وجود داره، flag بازی رو روشن می‌کنیم
+//       const room = rooms.get(dbGame.roomId);
+//       if (room) {
+//         // room.gameStarted = true;
+//       }
+//     }
+//   });
+
+//   console.log("✅ Games restored from database.");
+
+//   return allGames;
+// }
 
 module.exports = {
   restoreGamesFromDB,

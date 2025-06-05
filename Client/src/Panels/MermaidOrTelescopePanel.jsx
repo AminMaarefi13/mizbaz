@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function MermaidOrTelescopePanel() {
-  const { connectionState, userState, gameState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { privatePhaseData } = userState;
   const { currentPhase } = gameState;
   const { currentGameId } = connectionState;
@@ -13,7 +15,7 @@ export default function MermaidOrTelescopePanel() {
   const [confirmed, setConfirmed] = useState(false);
 
   const { selectablePlayers } = privatePhaseData;
-  
+
   const typeLabel = currentPhase === "mermaid" ? "🧜‍♀️ پری دریایی" : "🔭 تلسکوپ";
   const title =
     currentPhase === "mermaid"

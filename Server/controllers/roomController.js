@@ -6,15 +6,15 @@ async function createRoom(
   hostId,
   hostName,
   players = [],
-  gameIds = []
-  //  activeGameId = null
+  games = []
+  //  currentGameId = null
 ) {
   const room = new Room({
     roomId,
     hostId,
     hostName,
     players,
-    gameIds: [],
+    games: [],
   });
 
   await room.save();
@@ -27,7 +27,7 @@ async function getRoomById(roomId) {
   return await Room.findOne({ roomId });
 }
 
-// آپدیت روم (مثلاً تغییر playerها، وضعیت ready، یا activeGameId)
+// آپدیت روم (مثلاً تغییر playerها، وضعیت ready، یا currentGameId)
 async function updateRoom(roomId, updates) {
   return await Room.findOneAndUpdate({ roomId }, updates, { new: true });
 }

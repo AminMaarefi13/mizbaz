@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGameContext } from "../context/GameContext";
+import { useAppContext } from "../context/AppContext";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { setConnectionState } = useGameContext();
+  const { setConnectionState } = useAppContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

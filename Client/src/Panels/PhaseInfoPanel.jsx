@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
 import { useEffect } from "react";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function PhaseInfoPanel() {
-  const { userState, gameState, connectionState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { phaseData } = gameState;
   const { eliminated } = userState;
   const { currentGameId, playerId } = connectionState;

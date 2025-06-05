@@ -1,19 +1,23 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useGameContext } from "../context/GameContext";
 
 const NavigationMenu = () => {
   const location = useLocation();
+  const { gameState } = useGameContext(); // فرض بر این است که gameState در context هست
 
   const navItems = [
     { label: "🏠 Home", path: "/" },
     { label: "⚙️ Login", path: "/login" },
     { label: "👥 Friends", path: "/friends" },
     { label: "🗺️ Lobby", path: "/lobby" },
-    { label: "🎲 Game", path: "/game" },
-    { label: "🗺️ Map", path: "/map" },
+    gameState && gameState.gameId
+      ? { label: "🎲 Game", path: `/game/${gameState.gameId}` }
+      : null,
+    gameState && gameState.gameId ? { label: "🗺️ Map", path: "/map" } : null,
     { label: "👥 Players", path: "/players" },
     { label: "⚙️ Settings", path: "/settings" },
-  ];
+  ].filter(Boolean); // حذف آیتم‌های null
 
   return (
     <nav className="flex justify-around bg-gray-950 text-white text-xs border-t border-gray-700 py-3">

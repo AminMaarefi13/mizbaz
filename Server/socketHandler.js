@@ -36,7 +36,9 @@ const {
 const gameController = require("./controllers/gameController");
 const connectionController = require("./controllers/connectionController");
 
-const { proceedToNextPhase } = require("./game/proceedToNextPhase.js");
+const {
+  proceedToNextPhase,
+} = require("./games/feedTheKraken/proceedToNextPhase.js");
 const { getValidGameAndRoom } = require("./utils/getValidGameAndRoom.js");
 const { updateAndBroadcastGame } = require("./utils/updateAndBroadcastGame.js");
 const {
@@ -46,6 +48,16 @@ const User = require("./models/UserModel.js");
 const jwt = require("jsonwebtoken");
 const { onLogout } = require("./socketHandlers/onLogout.js");
 const { getPendingRoomInvites } = require("./socketHandlers/roomInvite.js");
+const { onCreateGame } = require("./socketHandlers/onCreateGame.js");
+const { onEnterGameLobby } = require("./socketHandlers/onEnterGameLobby.js");
+
+const feedTheKrakenPhaseHandlers = require("./games/feedTheKraken/socketHandlers/phaseHandlers");
+const mineSweeperPhaseHandlers = require("./games/mineSweeper/socketHandlers/phaseHandlers");
+
+const phaseHandlerMap = {
+  feedTheKraken: feedTheKrakenPhaseHandlers,
+  mineSweeper: mineSweeperPhaseHandlers,
+};
 
 initializeMemoryAndRedis(rooms, games).then(() => {
   console.log("Memory and Redis initialized from DB");
@@ -116,16 +128,20 @@ function socketHandler(io) {
       onGetRoomState(roomId, callback);
     });
 
-    socket.on("toggle_ready", async ({ roomId }) => {
-      onToggleReady(socket, roomId, io);
+    socket.on("toggle_ready", ({ roomId, gameId }, callback) => {
+      onToggleReady(socket, roomId, gameId, io, callback);
     });
 
     socket.on("reconnect-player", () => {
       onReconnectPlayer(socket, io);
     });
 
-    socket.on("start_game", async ({ roomId }) => {
-      onStartGame(roomId, socket, io);
+    socket.on("create_game", ({ roomId, type }, cb) => {
+      onCreateGame(roomId, type, socket, io, cb);
+    });
+
+    socket.on("start_game", async ({ roomId, gameId }) => {
+      onStartGame(roomId, gameId, socket, io);
     });
     socket.on("request_game_state", async (gameId) => {
       onRequestGameState(gameId, socket, io);
@@ -140,96 +156,41 @@ function socketHandler(io) {
     });
 
     socket.on("phase_seen", async ({ gameId }) => {
-      const playerId = socket.user._id.toString();
-      const name = socket.user.name || "نامشخص";
-      console.log(`🔗 Phase seen by ${playerId} (${name})`);
-      const { game, room, roomId, gameState } = getValidGameAndRoom({
-        gameId,
-        games,
-        rooms,
-      });
-      console.log("phaseSeen");
-      console.log(playerId);
-      // پیدا کردن بازیکن فعلی
-      const player = gameState.players.find(
-        (p) => p.id === playerId && !p.eliminated
-      );
-      if (!player) return;
-
-      // جلوگیری از تکرار
-      if (gameState?.phaseData?.phaseSeen === undefined) {
-        console.log("was undefined");
-        gameState.phaseData.phaseSeen = [];
-      }
-      console.log("gameState?.phaseData?.phaseSeen");
-      console.log(gameState?.phaseData?.phaseSeen);
-      if (gameState.phaseData?.phaseSeen.includes(playerId)) return;
-      console.log("continued...");
-      gameState.phaseData.phaseSeen.push(playerId);
-      await gameController.updateGame(gameId, gameState);
-
-      // چک کن همه دیدن یا نه
-      const alivePlayerIds = gameState.players
-        .filter((p) => !p.eliminated) // یا هر شرطی برای بازیکن فعال
-        .map((p) => p.id);
-      console.log("alivePlayerIds");
-      // console.log(alivePlayerIds);
-      const allSeen = alivePlayerIds.every((id) =>
-        gameState.phaseData.phaseSeen.includes(id)
-      );
-      console.log("allSeen");
-      // console.log(allSeen);
-      const progress = {
-        current: gameState.phaseData.phaseSeen.length,
-        total: alivePlayerIds.length,
-      };
-
-      gameState.phaseData.current = progress.current;
-      gameState.phaseData.total = progress.total;
-
-      console.log("progress");
-      console.log(progress);
-      updateAndBroadcastGame(
-        games,
-        gameId,
-        gameState,
-        roomId,
-        room,
-        userSocketMap,
-        io
-      );
-      if (allSeen) {
-        proceedToNextPhase({
-          games,
-          gameState,
+      const { gameState } = getValidGameAndRoom({ gameId, games, rooms });
+      const type = gameState.type;
+      const handler = phaseHandlerMap[type]?.onPhaseSeen;
+      if (handler) {
+        await handler({
           gameId,
-          roomId,
+          socket,
+          io,
+          games,
           rooms,
           userSocketMap,
-          io,
-          eventSpecificData: "",
+          gameController,
         });
       }
     });
 
     socket.on("phase_confirm", async ({ gameId, payload }) => {
-      const { game, room, roomId, gameState } = getValidGameAndRoom({
-        gameId,
-        games,
-        rooms,
-      });
-      console.log("payload");
-      // console.log(payload);
-      proceedToNextPhase({
-        games,
-        gameState,
-        gameId,
-        roomId,
-        rooms,
-        userSocketMap,
-        io,
-        eventSpecificData: payload,
-      });
+      const { gameState } = getValidGameAndRoom({ gameId, games, rooms });
+      console.log("gameId phase_confirm");
+      console.log(gameId);
+      console.log("payload phase_confirm");
+      console.log(payload);
+      const type = gameState.type;
+      const handler = phaseHandlerMap[type]?.onPhaseConfirm;
+      if (handler) {
+        await handler({
+          gameId,
+          socket,
+          io,
+          games,
+          rooms,
+          userSocketMap,
+          payload,
+        });
+      }
     });
 
     // هندل گرفتن انرژی
@@ -316,6 +277,9 @@ function socketHandler(io) {
       getPendingRoomInvites(socket, data, cb)
     );
 
+    socket.on("enter_game_lobby", ({ roomId, gameId }, callback) => {
+      onEnterGameLobby(socket, roomId, gameId, callback);
+    });
     socket.on("disconnect", async () => {
       const user = await User.findById(playerId).populate("friends", "_id");
       user.friends.forEach((friend) => {

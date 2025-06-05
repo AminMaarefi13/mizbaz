@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { socket } from "../network/socket";
-import { useGameContext } from "../context/GameContext";
 import HoldToConfirmButton from "../UI/HoldToConfirmButton";
+import { useAppContext } from "../context/AppContext";
+import { useGameContext } from "../context/GameContext";
 
 export default function GunVotingPanel() {
   // تعریف اولیه: تفنگ‌ها با آیدی یکتا و زاویه چرخش تصادفی
   const [guns, setGuns] = useState([]);
   const [selectedGunIds, setSelectedGunIds] = useState([]);
-  const { userState, connectionState, gameState } = useGameContext();
+  const { userState, connectionState } = useAppContext();
+  const { gameState } = useGameContext();
   const { currentPhase, players, currentVoteSessionId } = gameState;
   const { votes } = userState;
   const { currentGameId, playerId } = connectionState;
@@ -24,7 +26,6 @@ export default function GunVotingPanel() {
     }));
 
     if (votes.length > 0) {
-     
       if (votes[votes.length - 1].voteSessionId === currentVoteSessionId) {
         const initialSetSelectedGunIds = initialGuns
           .filter((gun) => gun.id < votes[votes.length - 1].gunsUsed)
@@ -55,7 +56,6 @@ export default function GunVotingPanel() {
   };
 
   const handleSubmitVote = () => {
-
     const payload = {
       playerId,
       gunsUsed: selectedGunIds.length,
@@ -80,7 +80,7 @@ export default function GunVotingPanel() {
         ) : (
           guns.map((gun) => {
             const isSelected = selectedGunIds.includes(gun.id);
- 
+
             return (
               <img
                 key={gun.id}
@@ -118,7 +118,6 @@ export default function GunVotingPanel() {
         </div>
         <p className="text-center mt-2 text-gray-700">
           مجموع: <strong>{selectedGunIds.length}</strong> تفنگ
- 
         </p>
       </div>
 

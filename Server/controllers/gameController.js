@@ -1,5 +1,4 @@
-const Game = require("../models/GameModel");
-const Room = require("../models/RoomModel");
+// const Game = require("../models/FeedTheKrakenGameModel");
 
 async function createGame(gameState) {
   const game = new Game(gameState);

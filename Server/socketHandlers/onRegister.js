@@ -1,7 +1,10 @@
 const connectionController = require("../controllers/connectionController");
 const gameController = require("../controllers/gameController");
 const { logAllUsers } = require("../utils/logAllusers");
-const { makePublicState, makePrivateState } = require("../utils/makeStates");
+const {
+  makePublicState,
+  makePrivateState,
+} = require("../games/feedTheKraken/utils/makeStates");
 const {
   rooms,
   games,
