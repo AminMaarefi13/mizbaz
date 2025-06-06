@@ -10,7 +10,7 @@ function getValidGameAndRoom({ gameId, games, rooms }) {
   const game = games.get(gameId);
   console.log("getValidGameAndRoom");
   console.log("game");
-  // console.log(game);
+  console.log(game);
   if (!game) {
     return null;
   }

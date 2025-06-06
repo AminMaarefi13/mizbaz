@@ -1,5 +1,9 @@
 const phaseTransitionMap = require("./phaseTransitionMap");
 const gameController = require("../../controllers/gameController");
+const feedTheKrakenGameController = require("../../controllers/feedTheKrakenGameController");
+const gameControllers = {
+  feedTheKraken: feedTheKrakenGameController,
+};
 
 async function proceedToNextPhase({
   games,
@@ -37,9 +41,13 @@ async function proceedToNextPhase({
   if (nextPhase) {
     // آپدیت فاز به فاز بعدی
     gameState.currentPhase = nextPhase;
-    // await gameController.updateGame(gameId, { currentPhase: nextPhase });
-    await gameController.updateGame(gameId, gameState);
-    // await gameController.updateGame(gameId, { gameState: gameState, roomId });
+
+    const type = gameState.type;
+    const controller = gameControllers[type];
+    if (!controller) {
+      throw new Error(`No controller found for game type: ${type}`);
+    }
+    await feedTheKrakenGameController.updateGame(gameId, gameState);
   }
 
   let preparedData = {};

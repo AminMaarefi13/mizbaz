@@ -32,9 +32,14 @@ async function restoreRoomsFromDB(rooms) {
 
 // ✅ Restore games from MongoDB
 async function restoreGamesFromDB(games, rooms) {
+  let allGames = [];
   for (const { type, controller } of allGameControllers) {
-    const allGames = await controller.getAllGames();
-    allGames.forEach((dbGame) => {
+    console.log(`Restoring games for type: ${type}`);
+    // بازی‌های هر نوع را از دیتابیس می‌گیریم
+    console.log("Fetching all games from controller:", controller);
+    const allTypeGames = await controller.getAllGames();
+    allTypeGames.forEach((dbGame, index) => {
+      console.log("dbGame", index, dbGame);
       if (dbGame.gameStatus === "onGoing") {
         games.set(dbGame.gameId, {
           ...dbGame.toObject(), // یا هر فیلدی که لازم داری
@@ -46,10 +51,11 @@ async function restoreGamesFromDB(games, rooms) {
           // room.gameStarted = true;
         }
       }
+      allGames = [...allGames, ...allTypeGames];
     });
-    console.log("✅ Games restored from database.");
-    return allGames;
   }
+  console.log("✅ Games restored from database.");
+  return allGames;
 }
 // async function restoreGamesFromDB(games, rooms) {
 //   const allGames = await gameController.getAllGames();

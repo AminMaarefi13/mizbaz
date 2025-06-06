@@ -18,7 +18,7 @@ const MineSweeperGameSchema = new mongoose.Schema({
   currentPhase: { type: String, default: "game_start" },
   map: [],
   clientMap: [],
-  turn: { type: String, default: 0 },
+  turn: { type: Number, default: 0 },
   phaseData: {},
   nextPhaseData: {},
   allTime: [],
