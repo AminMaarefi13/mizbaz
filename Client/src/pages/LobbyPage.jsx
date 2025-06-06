@@ -335,8 +335,6 @@ function LobbyPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center mt-6 px-1 sm:px-2 md:px-4 py-4">
       <div className="w-full max-w-6xl bg-gray-800 p-2 sm:p-4 md:p-6 rounded-md shadow-2xl space-y-4">
-        <RoomInvitesInbox />
-
         <button
           className="w-full py-3 mb-4 bg-gray-500 hover:bg-gray-600 rounded-md font-semibold"
           onClick={() => window.location.reload()}
@@ -373,6 +371,8 @@ function LobbyPage() {
         >
           ساخت روم
         </button>
+
+        <RoomInvitesInbox />
 
         {userRooms?.length > 0 && !currentRoomId && (
           <div className="pt-4">

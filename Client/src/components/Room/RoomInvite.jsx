@@ -83,7 +83,7 @@ export default function RoomInvite({ roomId }) {
             </ul>
           </div>
           <div className="mb-3">
-            <span className="text-gray-300">اینوایت‌های پندینگ:</span>
+            <span className="text-gray-300">اینوایت‌های ارسال شده:</span>
             <ul className="mt-2">
               {pendingInvites.map((inv) => (
                 <li
