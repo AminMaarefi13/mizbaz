@@ -68,7 +68,7 @@ export default function MineSweeperPage() {
   const myIndex = players.findIndex((p) => p.id === playerId);
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col items-center pt-20 pb-8 px-2">
+    <div className="flex-1 w-full bg-gray-900 flex flex-col items-center pt-4 pb-4 px-2">
       {/* All Time Score */}
       <div className="w-full max-w-lg bg-cyan-800 text-white rounded-lg shadow px-4 py-2 mb-3 flex justify-center font-mono text-sm sm:text-base">
         امتیاز کلی: {allTime[1]} : {allTime[0]}
