@@ -5,7 +5,7 @@ import { useGameContext } from "../context/GameContext";
 import { useAppContext } from "../context/AppContext";
 import Tiles from "../components/MineSweeper/Tiles";
 import getGradientClass from "../UI/getGradientClass";
-import getScoreShadowClass from "../UI/getScoreShadowClass";
+import getScoreShadowClass from "../UI/سیش";
 // import ProfileImage from "../components/MineSweeper/ProfileImage";
 
 export default function MineSweeperPage() {
