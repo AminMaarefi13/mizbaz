@@ -333,7 +333,7 @@ function LobbyPage() {
   // console.log(roomGames);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-1 sm:px-2 md:px-4 py-4">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center mt-6 px-1 sm:px-2 md:px-4 py-4">
       <div className="w-full max-w-6xl bg-gray-800 p-2 sm:p-4 md:p-6 rounded-md shadow-2xl space-y-4">
         <RoomInvitesInbox />
 
@@ -351,12 +351,12 @@ function LobbyPage() {
         {!currentRoomId && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
-                onClick={handleCreateRoom}
-              >
-                ساخت روم
-              </button>
+              <input
+                className="w-full mt-3 px-4 py-3 rounded-md bg-gray-700 placeholder-gray-400 text-white"
+                placeholder="کد روم برای ورود"
+                value={roomIdInputState}
+                onChange={(e) => setRoomIdInputState(e.target.value)}
+              />
               <button
                 className="w-full py-3 bg-green-600 hover:bg-green-700 rounded-md font-bold"
                 onClick={handleJoinRoom}
@@ -364,14 +364,15 @@ function LobbyPage() {
                 ورود به روم
               </button>
             </div>
-            <input
-              className="w-full mt-3 px-4 py-3 rounded-md bg-gray-700 placeholder-gray-400 text-white"
-              placeholder="کد روم برای ورود"
-              value={roomIdInputState}
-              onChange={(e) => setRoomIdInputState(e.target.value)}
-            />
           </>
         )}
+
+        <button
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
+          onClick={handleCreateRoom}
+        >
+          ساخت روم
+        </button>
 
         {userRooms?.length > 0 && !currentRoomId && (
           <div className="pt-4">

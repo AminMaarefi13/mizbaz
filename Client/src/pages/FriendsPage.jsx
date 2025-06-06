@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { socket } from "../network/socket";
+import { useNavigate } from "react-router-dom";
 
 export default function FriendsPage() {
   const [playerId, setPlayerId] = useState(
@@ -12,6 +13,15 @@ export default function FriendsPage() {
   const [requests, setRequests] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!playerId) {
+      alert("لطفاً ابتدا وارد شوید!.");
+      navigate("/login");
+      return;
+    }
+  }, [playerId, navigate]);
 
   const fetchFriendsData = () => {
     socket.emit("get_friends_data", (data) => {
@@ -72,8 +82,8 @@ export default function FriendsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10">
-      <div className="bg-white p-6 rounded-xl shadow-lg mb-6">
+    <div className="max-w-2xl mx-auto mt-4">
+      <div className="bg-white p-6 rounded-xl shadow-lg mb-6 mr-1 ml-1">
         <h2 className="text-2xl font-bold mb-4 text-blue-700">مدیریت دوستان</h2>
         <div className="flex items-center gap-2 mb-4">
           <span className="text-gray-700">آیدی شما:</span>
@@ -92,7 +102,7 @@ export default function FriendsPage() {
         </div>
         <form onSubmit={handleSendRequest} className="flex gap-2 mb-2">
           <input
-            className="border rounded p-2 flex-1 focus:outline-blue-400 bg-gray-50 text-gray-800 placeholder-gray-500"
+            className="border rounded p-2  flex-1 focus:outline-blue-400 bg-gray-50 text-gray-800 placeholder-gray-500"
             value={targetId}
             onChange={(e) => setTargetId(e.target.value)}
             placeholder="آیدی دوست جدید"
@@ -111,7 +121,7 @@ export default function FriendsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* دوستان */}
-        <div className="bg-white rounded-xl shadow p-4">
+        <div className="bg-white rounded-xl shadow p-4 mr-1 ml-1">
           <h3 className="font-bold text-lg mb-3 text-blue-600 flex items-center gap-2">
             <span>دوستان</span>
             <span className="bg-blue-100 text-blue-700 px-2 rounded text-xs">
@@ -147,7 +157,7 @@ export default function FriendsPage() {
         </div>
 
         {/* درخواست‌های دریافتی */}
-        <div className="bg-white rounded-xl shadow p-4">
+        <div className="bg-white rounded-xl mr-1 ml-1 shadow p-4">
           <h3 className="font-bold text-lg mb-3 text-purple-600">
             درخواست‌های دریافتی
           </h3>
@@ -181,9 +191,9 @@ export default function FriendsPage() {
         </div>
 
         {/* درخواست‌های ارسال‌شده */}
-        <div className="bg-white rounded-xl shadow p-4 col-span-1 md:col-span-2">
-          <h3 className="font-bold text-lg mb-3 text-yellow-600">
-            درخواست‌های ارسال‌شده (پندینگ)
+        <div className="bg-white rounded-xl shadow p-4 mr-1 ml-1 mb-4 col-span-1 md:col-span-2">
+          <h3 className="font-bold text-lg mb-3  text-yellow-600">
+            درخواست‌های ارسال‌شده
           </h3>
           <ul className="space-y-2">
             {pendingRequests.length === 0 && (

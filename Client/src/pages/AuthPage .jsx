@@ -145,7 +145,7 @@ export default function AuthPage() {
 
   if (mode === "welcome" && userInfo) {
     return (
-      <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow text-gray-800 text-center">
+      <div className="max-w-md mx-auto mt-60 bg-white p-6 rounded shadow mr-2 ml-2 text-gray-800 text-center ">
         <h2 className="text-2xl font-bold mb-4">خوش آمدی {userInfo.name}!</h2>
         <div className="mb-2">
           <span className="font-mono">{userInfo.playerId}</span>
@@ -164,7 +164,7 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow text-gray-800">
+    <div className="max-w-md mx-auto mt-60 bg-white p-6 rounded shadow text-gray-800">
       <h2 className="text-2xl font-bold mb-4">
         {mode === "login" ? "ورود" : "ثبت‌نام"}
       </h2>
