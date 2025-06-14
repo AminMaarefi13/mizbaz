@@ -20,9 +20,9 @@ const {
 const { startVoting } = require("./gamePhases/startVoting");
 const { telescopeCardDecision } = require("./gamePhases/telescopeCardDecision");
 const { votePreResult } = require("./gamePhases/votePreResult");
-const { voteTieBreakStart } = require("./gamePhases/voteTieBreakStart");
-const { voteTieBreakChoose } = require("./gamePhases/voteTieBreakChoose");
 const { submitVote } = require("./gamePhases/submitVote");
+const voteTieBeforeStart = require("./gamePhases/VoteTieBeforeStart");
+const { voteTieBreak } = require("./gamePhases/VoteTieBreak");
 
 const phaseTransitionMap = {
   game_start: {
@@ -43,32 +43,27 @@ const phaseTransitionMap = {
     handler: submitVote,
     prepare: (gameState) => gameState.nextPhaseData || {},
   },
-  vote_pre_result: {
-    next: "vote_pre_result",
-    handler: votePreResult,
-    prepare: (gameState) => gameState.nextPhaseData || {},
-  },
   mutiny_success: {
     next: "cabinet_formation",
     handler: startCabinetFormationPhase,
     prepare: (gameState) => gameState.nextPhaseData || {},
   },
+  vote_pre_result: {
+    next: "vote_tie_break_before_start",
+    handler: votePreResult,
+    prepare: (gameState) => gameState.nextPhaseData || {},
+  },
+  vote_tie_break_before_start: {
+    next: "vote_tie_break",
+    handler: voteTieBeforeStart,
+    prepare: (gameState) => gameState.nextPhaseData || {},
+  },
   vote_tie_break: {
-    next: "vote_tie_break_start",
-    handler: voteTieBreakStart,
+    next: "vote_tie_break",
+    handler: voteTieBreak,
     prepare: (gameState) => gameState.nextPhaseData || {},
   },
-  vote_tie_break_start: {
-    next: "vote_tie_break_choose",
-    handler: voteTieBreakChoose,
-    prepare: (gameState) => gameState.nextPhaseData || {},
-  },
-  vote_tie_break_choose: {
-    next: "vote_tie_break_start",
-    handler: voteTieBreakStart,
-    prepare: (gameState) => gameState.nextPhaseData || {},
-  },
-  vote_tie_resolved: {
+  vote_tie_break_resolved: {
     next: "cabinet_formation",
     handler: startCabinetFormationPhase,
     prepare: (gameState) => gameState.nextPhaseData || {},
@@ -99,6 +94,11 @@ const phaseTransitionMap = {
     prepare: (gameState) => gameState.nextPhaseData || {},
   },
   emergency_cabinet_confirmed: {
+    next: "navigation_cards_draw",
+    handler: startNavigationDrawPhase,
+    prepare: (gameState) => gameState.nextPhaseData || {},
+  },
+  only_captain_cabinet_confirmed: {
     next: "navigation_cards_draw",
     handler: startNavigationDrawPhase,
     prepare: (gameState) => gameState.nextPhaseData || {},

@@ -37,3 +37,6 @@
     border-image-slice: 1;
   }
 }
+body {
+  font-family: "Vazir", sans-serif;
+}

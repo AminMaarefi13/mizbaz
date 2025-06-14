@@ -1,28 +1,15 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../network/socket";
-import { cn } from "../utils/cn";
-import CabinetSelectionPanel from "../Panels/CabinetSelectionPanel";
-import GunVotingPanel from "../Panels/GunVotingPanel";
-import VoteTieBreakPanel from "../Panels/VoteTieBreakPanel";
-import NavigationCardChoicePanel from "../Panels/NavigationCardChoicePanel";
-import LocationEffectPanel from "../Panels/LocationEffectPanel";
-import FloggingChoicePanel from "../Panels/FloggingChoicePanel";
-import CultRitualChoicePanel from "../Panels/CultRitualChoicePanel";
-import MermaidOrTelescopePanel from "../Panels/MermaidOrTelescopePanel";
-import TelescopeCardDecisionPanel from "../Panels/TelescopeCardDecisionPanel";
-import MermaidCardsViewPanel from "../Panels/MermaidCardsViewPanel";
-import CultConversionPanel from "../Panels/CultConversionPanel";
-import CultCabinSearchResultPanel from "../Panels/CultCabinSearchResultPanel";
-import CultGunsDistributionPanel from "../Panels/CultGunDirstibutionPanel";
-import PhaseInfoPanel from "../Panels/PhaseInfoPanel";
-import PrivatePhaseInfoPanel from "../Panels/PrivatePhaseInfoPanel";
 import ProgressBar from "../UI/ProgressBar";
 import EnergyBar from "../components/Energy/EnergyBar";
 import RewardedAdButton from "../components/Energy/RewardedAdButton";
 import { feedTheKrakenInitialState } from "../context/feedTheKrakenInitialState";
 import { useGameContext } from "../context/GameContext";
 import { useAppContext } from "../context/AppContext";
+import PlayersAndSecretInfoPanel from "../components/FeedTheKraken/PlayersAndSecretInfoPanel";
+import GameLogPanel from "../components/FeedTheKraken/GameLogPanel";
+import PhasePanelsSwitcher from "../components/FeedTheKraken/PhasePanelsSwitcher";
 
 export default function FeedTheKrakenPage() {
   const navigate = useNavigate();
@@ -33,12 +20,10 @@ export default function FeedTheKrakenPage() {
     connectionState,
     setConnectionState,
     energy,
-    setEnergy,
     subscription,
   } = useAppContext();
 
   useEffect(() => {
-    // اگر state بازی ست نشده بود، مقدار اولیه را ست کن
     if (!gameState || gameState.type !== "feedTheKraken") {
       setGameState(feedTheKrakenInitialState);
     }
@@ -57,8 +42,7 @@ export default function FeedTheKrakenPage() {
     phaseData,
   } = gameState;
 
-  const { role, knownRoles, eliminated, characterCard, privatePhaseData } =
-    userState;
+  const { role, knownRoles, characterCard, privatePhaseData } = userState;
   const { playerId, currentRoomId, currentGameId } = connectionState;
   // ⛵ جلوگیری از ورود بدون انتخاب بازی
   useEffect(() => {
@@ -113,30 +97,32 @@ export default function FeedTheKrakenPage() {
       </div>
     );
   }
-  // ...existing code...
+  // console.log(phaseData);
   return (
     <div>
-      <div className="p-2 sm:p-4 md:p-6 bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen text-gray-800 w-full">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4">
-          🧭 سفر در حال جریان: {journeyType}
+      <div
+        className="p-2 sm:p-4 md:p-6 bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen text-gray-800 w-full"
+        dir="rtl"
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-right font-vazir flex flex-row-reverse items-center gap-2">
+          <span>🧭</span>
+          <span>سفر در حال جریان: {journeyType}</span>
         </h1>
-        <div className="bg-white shadow rounded-md p-2 sm:p-4 mb-4 sm:mb-6 w-full">
-          <h2 className="text-lg sm:text-xl font-semibold mb-2">وضعیت کشتی</h2>
-          <p>📍 موقعیت نقشه: {mapPosition}</p>
-          <p>🧩 فاز فعلی: {currentPhase}</p>
+        <div className="bg-white shadow rounded-2xl p-4 mb-6 w-full border border-blue-100 text-right font-vazir">
+          <h2 className="text-lg sm:text-xl font-extrabold mb-2 text-blue-700 flex  items-center gap-2">
+            <span>🚢</span>
+            <span>وضعیت کشتی</span>
+          </h2>
+          <p className="mb-1 text-gray-700">
+            📍 موقعیت نقشه: <span className="font-bold">{mapPosition}</span>
+          </p>
+          <p className="mb-1 text-gray-700">
+            🧩 فاز فعلی: <span className="font-bold">{currentPhase}</span>
+          </p>
         </div>
         <EnergyBar />
         {!subscription && energy < 1 && <RewardedAdButton />}
-        <button
-          onClick={() => {
-            const amount = 1;
-            socket.emit("consume_energy", { amount }, (data) => {
-              if (typeof data.energy === "number") setEnergy(data.energy);
-            });
-          }}
-        >
-          کاهش انرژی (تست)
-        </button>
+
         {phaseData?.total &&
           phaseData?.current &&
           typeof phaseData.current === "number" &&
@@ -144,300 +130,30 @@ export default function FeedTheKrakenPage() {
           phaseData.total > 0 && (
             <ProgressBar current={phaseData.current} total={phaseData.total} />
           )}
-        {privatePhaseData?.message && <PrivatePhaseInfoPanel />}
-        {phaseData?.title && <PhaseInfoPanel />}
-        {currentPhase === "cabinet_formation" &&
-          captainId === playerId &&
-          privatePhaseData?.selectablePlayers && <CabinetSelectionPanel />}
-        {currentPhase === "start_voting" &&
-          !eliminated &&
-          playerId !== captainId && (
-            <GunVotingPanel key={currentVoteSessionId} />
-          )}
-        {
-          // currentPhase === "vote_tie_break_start" &&
-          privatePhaseData?.eliminatorId === playerId &&
-            privatePhaseData?.tiedPlayers && <VoteTieBreakPanel />
-        }
-        {currentPhase === "navigation_cards_draw" &&
-          privatePhaseData?.cards &&
-          (playerId === captainId || playerId === firstOfficerId) && (
-            <NavigationCardChoicePanel />
-          )}
-        {currentPhase === "navigator_choose_card" &&
-          privatePhaseData?.cards &&
-          playerId === navigatorId && <NavigationCardChoicePanel />}
-        {(currentPhase === "cabin_search" ||
-          currentPhase === "feed_the_kraken" ||
-          currentPhase === "off_with_tongue" ||
-          currentPhase === "flogging") &&
-          playerId === captainId &&
-          privatePhaseData?.selectablePlayers && (
-            <LocationEffectPanel className="mb-4 sm:mb-6 p-2 sm:p-4 border border-yellow-500 rounded-md bg-yellow-50 shadow" />
-          )}
-        {currentPhase === "select_flogging_card" &&
-          playerId === captainId &&
-          privatePhaseData?.options && <FloggingChoicePanel />}
-        {(currentPhase === "telescope" || currentPhase === "mermaid") &&
-          playerId === captainId && <MermaidOrTelescopePanel />}
-        {privatePhaseData?.type === "telescope_choice" && (
-          <TelescopeCardDecisionPanel />
-        )}
-        {privatePhaseData?.type === "mermaid_choice" && (
-          <MermaidCardsViewPanel />
-        )}
-        {currentPhase === "cult_uprising" && playerId === captainId && (
-          <CultRitualChoicePanel />
-        )}
-        {currentPhase === "cult_guns_stash_choice" &&
-          playerId === privatePhaseData.cultLeaderId && (
-            <CultGunsDistributionPanel />
-          )}
-        {currentPhase === "cult_cabin_search_result" &&
-          playerId === privatePhaseData.cultLeaderId && (
-            <CultCabinSearchResultPanel />
-          )}
-        {currentPhase === "cult_conversion_choice" &&
-          playerId === privatePhaseData.cultLeaderId && <CultConversionPanel />}
-        {currentPhase === "cult_ritual_resolved" &&
-          privatePhaseData?.type === "cult_info" && (
-            <div className="mb-4 sm:mb-6 p-2 sm:p-4 border border-yellow-500 rounded-md bg-yellow-50 shadow">
-              {privatePhaseData?.text}
-            </div>
-          )}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6 w-full">
-          <div className="bg-white shadow rounded-md p-2 sm:p-4 w-full">
-            <h2 className="text-lg sm:text-xl font-semibold mb-2">
-              👥 بازیکنان
-            </h2>
-            <ul className="space-y-2">
-              {[...players]
-                .sort((a, b) => a.seat - b.seat)
-                .map((p) => (
-                  <li
-                    key={p.id}
-                    className={cn(
-                      "p-2 rounded-md border",
-                      p.id === playerId && "border-green-600 bg-green-50"
-                    )}
-                  >
-                    <div className="font-medium">{p.name}</div>
-                    <div className="text-sm text-gray-600">
-                      صندلی #{p.seat + 1}
-                      {p.id === captainId && " | 🎖️ کاپیتان"}
-                      {p.id === firstOfficerId && " | 👨‍✈️ افسر اول"}
-                      {p.id === navigatorId && " | 🧭 کشتیران"}
-                      {(() => {
-                        const known = knownRoles.find(
-                          (k) => k.playerId === p.id
-                        );
-                        return known ? ` | 🎭 ${known.role}` : null;
-                      })()}
-                      {p.isNotARole && ` | نیست ${p.isNotARole}`}
-                      {p.guns > 0 && (
-                        <div className="inline ml-2 text-red-500">
-                          {Array(p.guns).fill("🔫").join("")}
-                        </div>
-                      )}
-                      {p.resume.length > 0 && (
-                        <div className="inline ml-2 text-red-500">
-                          {Array(p.resume.length).fill("🃏").join("")}
-                        </div>
-                      )}
-                      {p.eliminated && " | ❌ از بازی حذف شد."}
-                      {p.tongueOff && " | 👅 زبانش بریده شده"}
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
 
-          <div className="bg-white shadow rounded-md p-2 sm:p-4 w-full">
-            <h2 className="text-lg sm:text-xl font-semibold mb-2">
-              🕵️ اطلاعات مخفی شما
-            </h2>
-            <p>
-              <strong>نقش من:</strong>{" "}
-              <span className="text-indigo-700">{role}</span>
-            </p>
-            {characterCard && (
-              <p className="mt-2">
-                <strong>کارت‌ شخصیت:</strong> {characterCard}
-              </p>
-            )}
-          </div>
-        </div>
-        <div className="bg-white shadow rounded-md p-2 sm:p-4 w-full">
-          <h2 className="text-lg sm:text-xl font-semibold mb-2">📜 وقایع</h2>
-          <ul className="space-y-1 text-sm text-gray-700">
-            {[...logs].reverse().map((log, idx) => (
-              <li key={idx}>• {log.text}</li>
-            ))}
-          </ul>
-        </div>
+        <PhasePanelsSwitcher
+          currentPhase={currentPhase}
+          playerId={playerId}
+          captainId={captainId}
+          firstOfficerId={firstOfficerId}
+          navigatorId={navigatorId}
+          privatePhaseData={privatePhaseData}
+          phaseData={phaseData}
+          currentVoteSessionId={currentVoteSessionId}
+          gameState={gameState}
+        />
+        <PlayersAndSecretInfoPanel
+          players={players}
+          playerId={playerId}
+          captainId={captainId}
+          firstOfficerId={firstOfficerId}
+          navigatorId={navigatorId}
+          knownRoles={knownRoles}
+          role={role}
+          characterCard={characterCard}
+        />
+        <GameLogPanel logs={logs} />
       </div>
     </div>
   );
-  // ...existing code...
-  // return (
-  //   <div>
-  //     <div className="p-6 bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen text-gray-800">
-  //       <h1 className="text-3xl font-bold mb-4">
-  //         🧭 سفر در حال جریان: {journeyType}
-  //       </h1>
-  //       <div className="bg-white shadow rounded p-4 mb-6">
-  //         <h2 className="text-xl font-semibold mb-2">وضعیت کشتی</h2>
-  //         <p>📍 موقعیت نقشه: {mapPosition}</p>
-  //         <p>🧩 فاز فعلی: {currentPhase}</p>
-  //       </div>
-  //       <EnergyBar />
-  //       {!subscription && energy < 1 && <RewardedAdButton />}
-  //       <button
-  //         onClick={() => {
-  //           const amount = 1;
-  //           socket.emit("consume_energy", { amount }, (data) => {
-  //             if (typeof data.energy === "number") setEnergy(data.energy);
-  //           });
-  //         }}
-  //       >
-  //         کاهش انرژی (تست)
-  //       </button>
-  //       {phaseData?.total &&
-  //         phaseData?.current &&
-  //         typeof phaseData.current === "number" &&
-  //         typeof phaseData.total === "number" &&
-  //         phaseData.total > 0 && (
-  //           <ProgressBar current={phaseData.current} total={phaseData.total} />
-  //         )}
-  //       {privatePhaseData?.message && <PrivatePhaseInfoPanel />}
-  //       {phaseData?.title && <PhaseInfoPanel />}
-  //       {currentPhase === "cabinet_formation" &&
-  //         captainId === playerId &&
-  //         privatePhaseData?.selectablePlayers && <CabinetSelectionPanel />}
-  //       {currentPhase === "start_voting" &&
-  //         !eliminated &&
-  //         playerId !== captainId && (
-  //           <GunVotingPanel key={currentVoteSessionId} />
-  //         )}
-  //       {
-  //         // currentPhase === "vote_tie_break_start" &&
-  //         privatePhaseData?.eliminatorId === playerId &&
-  //           privatePhaseData?.tiedPlayers && <VoteTieBreakPanel />
-  //       }
-  //       {currentPhase === "navigation_cards_draw" &&
-  //         privatePhaseData?.cards &&
-  //         (playerId === captainId || playerId === firstOfficerId) && (
-  //           <NavigationCardChoicePanel />
-  //         )}
-  //       {currentPhase === "navigator_choose_card" &&
-  //         privatePhaseData?.cards &&
-  //         playerId === navigatorId && <NavigationCardChoicePanel />}
-  //       {(currentPhase === "cabin_search" ||
-  //         currentPhase === "feed_the_kraken" ||
-  //         currentPhase === "off_with_tongue" ||
-  //         currentPhase === "flogging") &&
-  //         playerId === captainId &&
-  //         privatePhaseData?.selectablePlayers && (
-  //           <LocationEffectPanel className="mb-6 p-4 border border-yellow-500 rounded bg-yellow-50 shadow" />
-  //         )}
-  //       {currentPhase === "select_flogging_card" &&
-  //         playerId === captainId &&
-  //         privatePhaseData?.options && <FloggingChoicePanel />}
-  //       {(currentPhase === "telescope" || currentPhase === "mermaid") &&
-  //         playerId === captainId && <MermaidOrTelescopePanel />}
-  //       {privatePhaseData?.type === "telescope_choice" && (
-  //         <TelescopeCardDecisionPanel />
-  //       )}
-  //       {privatePhaseData?.type === "mermaid_choice" && (
-  //         <MermaidCardsViewPanel />
-  //       )}
-  //       {currentPhase === "cult_uprising" && playerId === captainId && (
-  //         <CultRitualChoicePanel />
-  //       )}
-  //       {currentPhase === "cult_guns_stash_choice" &&
-  //         playerId === privatePhaseData.cultLeaderId && (
-  //           <CultGunsDistributionPanel />
-  //         )}
-  //       {currentPhase === "cult_cabin_search_result" &&
-  //         playerId === privatePhaseData.cultLeaderId && (
-  //           <CultCabinSearchResultPanel />
-  //         )}
-  //       {currentPhase === "cult_conversion_choice" &&
-  //         playerId === privatePhaseData.cultLeaderId && <CultConversionPanel />}
-  //       {currentPhase === "cult_ritual_resolved" &&
-  //         privatePhaseData?.type === "cult_info" && (
-  //           <div className="mb-6 p-4 border border-yellow-500 rounded bg-yellow-50 shadow">
-  //             {privatePhaseData?.text}
-  //           </div>
-  //         )}
-  //       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-  //         <div className="bg-white shadow rounded p-4">
-  //           <h2 className="text-xl font-semibold mb-2">👥 بازیکنان</h2>
-  //           <ul className="space-y-2">
-  //             {[...players]
-  //               .sort((a, b) => a.seat - b.seat)
-  //               .map((p) => (
-  //                 <li
-  //                   key={p.id}
-  //                   className={cn(
-  //                     "p-2 rounded border",
-  //                     p.id === playerId && "border-green-600 bg-green-50"
-  //                   )}
-  //                 >
-  //                   <div className="font-medium">{p.name}</div>
-  //                   <div className="text-sm text-gray-600">
-  //                     صندلی #{p.seat + 1}
-  //                     {p.id === captainId && " | 🎖️ کاپیتان"}
-  //                     {p.id === firstOfficerId && " | 👨‍✈️ افسر اول"}
-  //                     {p.id === navigatorId && " | 🧭 کشتیران"}
-  //                     {(() => {
-  //                       const known = knownRoles.find(
-  //                         (k) => k.playerId === p.id
-  //                       );
-  //                       // console.log(p);
-  //                       return known ? ` | 🎭 ${known.role}` : null;
-  //                     })()}
-  //                     {p.isNotARole && ` | نیست ${p.isNotARole}`}
-  //                     {p.guns > 0 && (
-  //                       <div className="inline ml-2 text-red-500">
-  //                         {Array(p.guns).fill("🔫").join("")}
-  //                       </div>
-  //                     )}
-  //                     {p.resume.length > 0 && (
-  //                       <div className="inline ml-2 text-red-500">
-  //                         {Array(p.resume.length).fill("🃏").join("")}
-  //                       </div>
-  //                     )}
-  //                     {p.eliminated && " | ❌ از بازی حذف شد."}
-  //                     {p.tongueOff && " | 👅 زبانش بریده شده"}
-  //                   </div>
-  //                 </li>
-  //               ))}
-  //           </ul>
-  //         </div>
-
-  //         <div className="bg-white shadow rounded p-4">
-  //           <h2 className="text-xl font-semibold mb-2">🕵️ اطلاعات مخفی شما</h2>
-  //           <p>
-  //             <strong>نقش من:</strong>{" "}
-  //             <span className="text-indigo-700">{role}</span>
-  //           </p>
-  //           {characterCard && (
-  //             <p className="mt-2">
-  //               <strong>کارت‌ شخصیت:</strong> {characterCard}
-  //             </p>
-  //           )}
-  //         </div>
-  //       </div>
-  //       <div className="bg-white shadow rounded p-4">
-  //         <h2 className="text-xl font-semibold mb-2">📜 وقایع</h2>
-  //         <ul className="space-y-1 text-sm text-gray-700">
-  //           {[...logs].reverse().map((log, idx) => (
-  //             <li key={idx}>• {log.text}</li>
-  //           ))}
-  //         </ul>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 }

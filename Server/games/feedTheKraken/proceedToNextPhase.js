@@ -15,7 +15,8 @@ async function proceedToNextPhase({
   io,
   eventSpecificData,
 }) {
-  delete gameState.phaseData;
+  // delete gameState.phaseData;
+  gameState.phaseData = {};
   for (const player of gameState.players) {
     if (!player.eliminated) {
       player.privatePhaseData = {};

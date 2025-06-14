@@ -72,6 +72,8 @@ function gameStartPhase(players, journeyType, roomId) {
             .filter((pid) => pid !== id)
             .map((pid) => ({
               playerId: pid,
+              playerName: shuffledPlayers.find((p) => p.playerId === pid)
+                .nickname,
               role: "pirate",
               phase: "game_init",
             }))

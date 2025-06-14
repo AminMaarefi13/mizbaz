@@ -59,6 +59,7 @@ const navigationCards = {
     { color: "red", type: "armed" },
   ],
 };
+
 // const navigationCards = {
 //   [JOURNEY_TYPES.QUICK]: [
 //     // Yellow
@@ -67,52 +68,31 @@ const navigationCards = {
 //     { color: "yellow", type: "cult_uprising" },
 //     { color: "yellow", type: "cult_uprising" },
 //     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
-//     { color: "yellow", type: "cult_uprising" },
 //     // Blue
-//     // { color: "blue", type: "disarmed" },
-//     // { color: "blue", type: "disarmed" },
-//     // { color: "blue", type: "disarmed" },
-//     // { color: "blue", type: "disarmed" },
-//     // { color: "blue", type: "disarmed" },
-//     // { color: "blue", type: "disarmed" },
+//     { color: "blue", type: "drunk" },
+//     { color: "blue", type: "drunk" },
+//     { color: "blue", type: "drunk" },
+//     { color: "blue", type: "disarmed" },
+//     { color: "blue", type: "disarmed" },
 //     // Red
-//     // { color: "red", type: "drunk" },
-//     // { color: "red", type: "drunk" },
-//     // { color: "red", type: "drunk" },
-//     // { color: "red", type: "armed" },
-//     // { color: "red", type: "armed" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "mermaid" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
-//     // { color: "red", type: "telescope" },
+//     { color: "red", type: "drunk" },
+//     { color: "red", type: "drunk" },
+//     { color: "red", type: "drunk" },
+//     { color: "red", type: "drunk" },
+//     { color: "red", type: "drunk" },
+//     { color: "red", type: "mermaid" },
+//     { color: "red", type: "mermaid" },
+//     { color: "red", type: "telescope" },
+//     { color: "red", type: "telescope" },
 //   ],
 //   [JOURNEY_TYPES.LONG]: [
 //     // Yellow
-//     { color: "yellow", type: "cult uprising" },
-//     { color: "yellow", type: "cult uprising" },
-//     { color: "yellow", type: "cult uprising" },
-//     { color: "yellow", type: "cult uprising" },
-//     { color: "yellow", type: "cult uprising" },
-//     { color: "yellow", type: "cult uprising" },
+//     { color: "yellow", type: "cult_uprising" },
+//     { color: "yellow", type: "cult_uprising" },
+//     { color: "yellow", type: "cult_uprising" },
+//     { color: "yellow", type: "cult_uprising" },
+//     { color: "yellow", type: "cult_uprising" },
+//     { color: "yellow", type: "cult_uprising" },
 //     // Blue
 //     { color: "blue", type: "drunk" },
 //     { color: "blue", type: "drunk" },
@@ -134,6 +114,22 @@ const navigationCards = {
 //     { color: "red", type: "armed" },
 //   ],
 // };
+
+const cultRitualCards = [
+  "cult_conversion",
+  "cult_conversion",
+  "cult_conversion",
+  "cult_guns_stash",
+  "cult_cabin_search",
+];
+
+// const cultRitualCards = [
+//   "cult_conversion",
+//   "cult_conversion",
+//   "cult_conversion",
+//   "cult_guns_stash",
+//   "cult_cabin_search",
+// ];
 
 const offDutyCards = {
   [JOURNEY_TYPES.QUICK]: {
@@ -166,22 +162,6 @@ const mapTokens = {
     off_with_tongue: 1,
   },
 };
-
-const cultRitualCards = [
-  "cult_conversion",
-  "cult_conversion",
-  "cult_conversion",
-  "cult_guns_stash",
-  "cult_cabin_search",
-];
-
-// const cultRitualCards = [
-//   "cult_conversion",
-//   "cult_conversion",
-//   "cult_conversion",
-//   "cult_guns_stash",
-//   "cult_cabin_search",
-// ];
 
 const characterCards = [
   "captain",

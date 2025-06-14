@@ -47,7 +47,7 @@ export default function HoldToConfirmButton({
   return (
     <div
       className={`
-        relative w-full max-w-3xl mx-auto h-14 rounded-xl overflow-hidden shadow-lg select-none
+        relative w-full max-w-3xl mx-auto mt-4 h-14 rounded-xl overflow-hidden shadow-lg select-none
         ${
           disabled
             ? "bg-gray-400 cursor-not-allowed"

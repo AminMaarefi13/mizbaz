@@ -63,7 +63,7 @@ async function onCreateGame(roomId, type, socket, io) {
     games.set(gameId, game);
 
     console.log("games");
-    console.log(games);
+    // console.log(games);
     if (!room.games) {
       room.games = [];
     }
@@ -77,7 +77,7 @@ async function onCreateGame(roomId, type, socket, io) {
     });
     console.log("game");
 
-    console.log(game);
+    // console.log(game);
 
     // try {
     //   await gameController.createGame(game);

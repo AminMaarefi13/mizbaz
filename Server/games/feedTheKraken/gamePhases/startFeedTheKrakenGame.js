@@ -25,7 +25,8 @@ async function startFeedTheKrakenGame({
     phase: "start_game",
     title: "شروع بازی",
     type: "see",
-    message: "بازی شروع شد! نقش مخفی خود را ببینید. کاپیتان: " + captain.name,
+    phaseSeen: [],
+    // message: "بازی شروع شد! نقش مخفی خود را ببینید. کاپیتان: " + captain.name,
     phaseSeen: [],
   };
   for (const pl of gameState.players) {
@@ -34,7 +35,7 @@ async function startFeedTheKrakenGame({
       pl.privatePhaseData = {
         phase: "start_game",
         title: "شروع بازی",
-        message: privateMessage,
+        // message: privateMessage,
       };
     }
   }
