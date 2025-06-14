@@ -21,8 +21,8 @@ const { startVoting } = require("./gamePhases/startVoting");
 const { telescopeCardDecision } = require("./gamePhases/telescopeCardDecision");
 const { votePreResult } = require("./gamePhases/votePreResult");
 const { submitVote } = require("./gamePhases/submitVote");
-const { voteTieBeforeStart } = require("./gamePhases/VoteTieBeforeStart");
-const { voteTieBreak } = require("./gamePhases/VoteTieBreak");
+const voteTieBeforeStart = require("./gamePhases/voteTieBeforeStarts");
+const { voteTieBreak } = require("./gamePhases/voteTieBreaks");
 
 const phaseTransitionMap = {
   game_start: {
