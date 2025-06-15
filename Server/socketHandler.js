@@ -51,15 +51,8 @@ const { getPendingRoomInvites } = require("./socketHandlers/roomInvite.js");
 const { onCreateGame } = require("./socketHandlers/onCreateGame.js");
 const { onEnterGameLobby } = require("./socketHandlers/onEnterGameLobby.js");
 
-const feedTheKrakenPhaseHandlers = require("./games/feedTheKraken/socketHandlers/phaseHandlers");
-const mineSweeperPhaseHandlers = require("./games/mineSweeper/socketHandlers/phaseHandlers");
-
-const phaseHandlerMap = {
-  feedTheKraken: feedTheKrakenPhaseHandlers,
-  mineSweeper: mineSweeperPhaseHandlers,
-};
-
 const { gameControllers } = require("./utils/gameControllers.js");
+const { phaseHandlerMap } = require("./utils/phaseHandlerMap.js");
 
 initializeMemoryAndRedis(rooms, games).then(() => {
   console.log("Memory and Redis initialized from DB");
