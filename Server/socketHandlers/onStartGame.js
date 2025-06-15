@@ -11,8 +11,7 @@ const {
   startMineSweeperGame,
 } = require("../games/mineSweeper/gamePhases/startMineSweeperGame");
 
-const feedTheKrakenGameController = require("../controllers/feedTheKrakenGameController");
-const mineSweeperGameController = require("../controllers/mineSweeperGameController");
+const { gameControllers } = require("../utils/gameControllers");
 
 const gameStartMap = {
   feedTheKraken: startFeedTheKrakenGame,
@@ -45,10 +44,6 @@ async function onStartGame(roomId, gameId, socket, io) {
       return socket.emit("error_message", "نوع بازی پشتیبانی نمی‌شود.");
     }
 
-    const gameControllers = {
-      feedTheKraken: feedTheKrakenGameController,
-      mineSweeper: mineSweeperGameController,
-    };
     const type = game.type;
     const controller = gameControllers[type];
 

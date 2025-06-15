@@ -59,8 +59,7 @@ const phaseHandlerMap = {
   mineSweeper: mineSweeperPhaseHandlers,
 };
 
-const feedTheKrakenGameController = require("./controllers/feedTheKrakenGameController");
-const mineSweeperGameController = require("./controllers/mineSweeperGameController");
+const { gameControllers } = require("./utils/gameControllers.js");
 
 initializeMemoryAndRedis(rooms, games).then(() => {
   console.log("Memory and Redis initialized from DB");
@@ -69,7 +68,7 @@ initializeMemoryAndRedis(rooms, games).then(() => {
 });
 
 function socketHandler(io) {
-  console.log("sdfsfsdfs");
+  console.log("Inside socket io");
   io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token;
     console.log("token");
@@ -163,10 +162,6 @@ function socketHandler(io) {
       const type = gameState.type;
       const handler = phaseHandlerMap[type]?.onPhaseSeen;
 
-      const gameControllers = {
-        feedTheKraken: feedTheKrakenGameController,
-        mineSweeper: mineSweeperGameController,
-      };
       const controller = gameControllers[type];
       if (handler) {
         await handler({

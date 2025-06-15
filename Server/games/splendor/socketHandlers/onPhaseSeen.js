@@ -1,3 +1,9 @@
+const { getValidGameAndRoom } = require("../../../utils/getValidGameAndRoom");
+const {
+  updateAndBroadcastGame,
+} = require("../../../utils/updateAndBroadcastGame");
+const { proceedToNextPhase } = require("../proceedToNextPhase");
+
 async function onPhaseSeen({
   gameId,
   socket,
@@ -5,6 +11,7 @@ async function onPhaseSeen({
   games,
   rooms,
   userSocketMap,
+  gameController,
 }) {
   const playerId = socket.user._id.toString();
   const name = socket.user.name || "نامشخص";

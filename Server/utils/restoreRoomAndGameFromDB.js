@@ -1,12 +1,5 @@
 const roomController = require("../controllers/roomController");
-const feedTheKrakenGameController = require("../controllers/feedTheKrakenGameController");
-const mineSweeperGameController = require("../controllers/mineSweeperGameController");
-
-const allGameControllers = [
-  { type: "feedTheKraken", controller: feedTheKrakenGameController },
-  { type: "mineSweeper", controller: mineSweeperGameController },
-  // بازی‌های دیگر را اضافه کن
-];
+const { allGameControllers } = require("./gameControllers");
 
 // ✅ Restore rooms from MongoDB
 async function restoreRoomsFromDB(rooms) {
