@@ -3,9 +3,9 @@ import { socket } from "../../network/socket";
 import { useAppContext } from "../../context/AppContext";
 
 const GAME_TYPES = [
-  { value: "feedTheKraken", label: "Feed the Kraken" },
+  { value: "splendor", label: "Splendor" },
   { value: "mineSweeper", label: "Mine Sweeper" },
-  // بازی‌های دیگر را اینجا اضافه کن
+  { value: "feedTheKraken", label: "Feed the Kraken" },
 ];
 
 export default function CreateGameBox() {

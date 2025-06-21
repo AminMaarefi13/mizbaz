@@ -68,6 +68,15 @@ export const GameProvider = ({ children }) => {
           currentGameId: state.publicState.gameId,
         }));
         localStorage.setItem("currentGameId", state.publicState.gameId);
+      } else if (state?.publicState.type === "splendor") {
+        console.log("Splendor game state received:");
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        localStorage.setItem("currentGameId", state.publicState.gameId);
       }
     });
 
@@ -84,6 +93,15 @@ export const GameProvider = ({ children }) => {
         localStorage.setItem("currentGameId", state.publicState.gameId);
       } else if (state?.publicState.type === "mineSweeper") {
         console.log("MineSweeper game state received:");
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        localStorage.setItem("currentGameId", state.publicState.gameId);
+      } else if (state?.publicState.type === "splendor") {
+        console.log("Splendor game state received:");
         setGameState(state.publicState);
         setConnectionState((prev) => ({
           ...prev,

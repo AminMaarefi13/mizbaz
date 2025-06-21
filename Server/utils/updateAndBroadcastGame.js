@@ -5,6 +5,7 @@ const { updateGameInDB } = require("./updateGameInDB.js");
 //   broadcastGameStateToPlayers,
 // } = require("../games/feedTheKraken/utils/broadcastGameStateToPlayers.js");
 const { updateGameInRedis } = require("./updateGameInRedis.js");
+const { broadcastHandlers } = require("./broadcastHandlers.js");
 
 /**
  * به‌روزرسانی بازی در حافظه، دیتابیس، و ارسال وضعیت به بازیکنان
@@ -20,13 +21,7 @@ const { updateGameInRedis } = require("./updateGameInRedis.js");
  * @param {boolean} [options.saveToDB=true]
  * @param {boolean} [options.broadcast=true]
  */
-const broadcastHandlers = {
-  feedTheKraken:
-    require("../games/feedTheKraken/utils/broadcastGameStateToPlayers.js")
-      .broadcastGameStateToPlayers,
-  // بازی‌های دیگر را اینجا اضافه کن
-  mineSweeper: require("../games/mineSweeper/utils/broadcastGameStateToPlayers.js").broadcastGameStateToPlayers,
-};
+
 async function updateAndBroadcastGame(
   games,
   gameId,

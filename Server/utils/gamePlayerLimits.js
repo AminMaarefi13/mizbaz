@@ -1,10 +1,11 @@
 const gamePlayerLimits = {
   feedTheKraken: { min: 5, max: 11 },
   mineSweeper: { min: 2, max: 2 },
+  splendor: { min: 2, max: 4 },
 };
 
 function getPlayerLimits(gameType) {
-  return gamePlayerLimits[gameType] || { min: 2, max: 2 }; // 
+  return gamePlayerLimits[gameType] || { min: 2, max: 2 }; //
 }
 
 module.exports = { getPlayerLimits };

@@ -2,14 +2,13 @@ const { shuffle } = require("../../../utils/shuffle");
 const { generator } = require("../utils/generator");
 const roomController = require("../../../controllers/roomController");
 const { makePublicState } = require("../utils/makeStates");
-const { getStats } = require("../../../controllers/mineSweeperStatsContoller");
 
 // onStartGame
 // onStartGame
 // onStartGame
 // onStartGame
 // onStartGame
-async function startMineSweeperGame({
+async function startSplendorGame({
   readyPlayers,
   roomId,
   gameId,
@@ -20,47 +19,236 @@ async function startMineSweeperGame({
   games,
   rooms,
 }) {
-  const rows = 8;
-  const columns = 7;
-
-  let [nullsArr, mapArr] = generator(rows, columns);
-  console.log(nullsArr);
-  console.log(mapArr);
-  let initialmapArr = mapArr.map((item, index) => {
-    return {
-      index: index,
-      // val: "none",
-      val: item,
-      position: "none",
-      group: "none",
-    };
-  });
-
-  nullsArr.forEach((item, index) => {
-    item.forEach((setItem) => {
-      initialmapArr[setItem].group = index;
-    });
-  });
-
-  const clientInitialmapArr = initialmapArr.map((item, index) => {
-    return {
-      index: index,
-      val: "none",
-      position: "none",
-      group: "none",
-    };
-  });
-
   const shuffledPlayers = shuffle([...readyPlayers]);
 
-  const finalPlayers = shuffledPlayers.map((player) => {
+  const numberOfPlayers = shuffledPlayers.length;
+
+  let [
+    levelOneDevCardsDeckRandom,
+    levelTwoDevCardsDeckRandom,
+    levelThreeDevCardsDeckRandom,
+    levelOneDevCardsVisibleRandom,
+    levelTwoDevCardsVisibleRandom,
+    levelThreeDevCardsVisibleRandom,
+    nobleTilesDeckRandom,
+    chipQuantity,
+  ] = generator(numberOfPlayers);
+
+  const finalPlayers = shuffledPlayers.map((player, index) => {
     const id = player.playerId;
     const name = player.nickname;
-    const score = 0;
+    const chips =
+      index === 55
+        ? [
+            { color: "yellow", quantity: 1 },
+            { color: "black", quantity: 3 },
+            { color: "blue", quantity: 4 },
+            { color: "red", quantity: 2 },
+          ]
+        : [
+            { color: "white", quantity: 0 },
+            { color: "black", quantity: 0 },
+            { color: "blue", quantity: 0 },
+            { color: "red", quantity: 0 },
+            { color: "green", quantity: 0 },
+            { color: "yellow", quantity: 0 },
+          ];
+    const devCards =
+      index === 55
+        ? [
+            {
+              color: "red",
+              cost: { black: 5 },
+              prestigePoints: 2,
+            },
+            {
+              color: "red",
+              cost: { red: 6 },
+              prestigePoints: 3,
+            },
+            {
+              color: "red",
+              cost: { white: 2, red: 2, black: 3 },
+              prestigePoints: 1,
+            },
+            {
+              color: "red",
+              cost: { white: 1, blue: 4, green: 2 },
+              prestigePoints: 2,
+            },
+            {
+              color: "red",
+              cost: { blue: 3, red: 2, black: 3 },
+              prestigePoints: 1,
+            },
+            {
+              color: "green",
+              cost: { white: 2, blue: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { red: 3 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { white: 1, blue: 1, red: 1, black: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { blue: 2, red: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { black: 4 },
+              prestigePoints: 1,
+            },
+            {
+              color: "green",
+              cost: { white: 1, blue: 1, red: 1, black: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { blue: 1, red: 2, black: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { white: 1, blue: 3, green: 1 },
+              prestigePoints: 0,
+            },
+            // Red
+            {
+              color: "red",
+              cost: { blue: 2, green: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 3 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 1, blue: 1, green: 1, black: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 2, red: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 4 },
+              prestigePoints: 1,
+            },
+            {
+              color: "red",
+              cost: { white: 2, blue: 1, green: 1, black: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 2, green: 1, black: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 1, red: 1, black: 3 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { white: 1, blue: 1, red: 1, black: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { blue: 1, red: 2, black: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 2, red: 2 },
+              prestigePoints: 0,
+            },
+            {
+              color: "red",
+              cost: { white: 4 },
+              prestigePoints: 1,
+            },
+            {
+              color: "red",
+              cost: { white: 2, blue: 1, green: 1, black: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "white",
+              cost: { blue: 1, red: 1, green: 2, black: 1 },
+              prestigePoints: 0,
+            },
+            {
+              color: "green",
+              cost: { white: 3, red: 3, green: 2 },
+              prestigePoints: 1,
+            },
+            {
+              color: "green",
+              cost: { blue: 5, green: 3 },
+              prestigePoints: 2,
+            },
+          ]
+        : [];
+    const reservedCards =
+      index === 55
+        ? [
+            {
+              color: "red",
+              cost: { white: 3, blue: 5, green: 3, black: 3 },
+              prestigePoints: 3,
+            },
+            {
+              color: "white",
+              cost: { red: 5, black: 3 },
+              prestigePoints: 2,
+            },
+          ]
+        : [];
+    const nobleTilesOwned =
+      index === 55
+        ? [
+            {
+              cost: { red: 3, green: 3, black: 3 },
+              prestigePoints: 3,
+            },
+            {
+              cost: { red: 4, green: 4 },
+              prestigePoints: 3,
+            },
+          ]
+        : [];
+    const prestigePoints = index === 55 ? 13 : 0;
+    const seat = index;
     return {
       id,
       name,
-      score,
+      chips,
+      // whiteChips,
+      // blueChips,
+      // redChips,
+      // greenChips,
+      // blackChips,
+      // yellowChips,
+      devCards,
+      reservedCards,
+      nobleTilesOwned,
+      prestigePoints,
+      seat,
     };
   });
   // ساخت وضعیت اولیه بازی
@@ -69,64 +257,46 @@ async function startMineSweeperGame({
     roomId,
     players: finalPlayers,
     currentPhase: "game_start",
-    map: initialmapArr,
-    clientMap: clientInitialmapArr,
+    // levelOneDevCardsDeck: levelOneDevCardsDeckRandom,
+    // levelTwoDevCardsDeck: levelTwoDevCardsDeckRandom,
+    // levelThreeDevCardsDeck: levelThreeDevCardsDeckRandom,
+    // levelOneDevCardsVisible: levelOneDevCardsVisibleRandom,
+    // levelTwoDevCardsVisible: levelTwoDevCardsVisibleRandom,
+    // levelThreeDevCardsVisible: levelThreeDevCardsVisibleRandom,
+    devCardsDeck: [
+      levelOneDevCardsDeckRandom,
+      levelTwoDevCardsDeckRandom,
+      levelThreeDevCardsDeckRandom,
+    ],
+    devCardsVisible: [
+      levelOneDevCardsVisibleRandom,
+      levelTwoDevCardsVisibleRandom,
+      levelThreeDevCardsVisibleRandom,
+    ],
+    nobleTilesDeck: nobleTilesDeckRandom,
+    chipQuantities: [
+      { color: "white", quantity: chipQuantity },
+      { color: "blue", quantity: chipQuantity },
+      { color: "red", quantity: chipQuantity },
+      { color: "green", quantity: chipQuantity },
+      { color: "black", quantity: chipQuantity },
+      { color: "yellow", quantity: 5 },
+    ],
     turn: 0,
+    finalRound: false,
     phaseData: {},
     nextPhaseData: {},
     logs: [
       {
-        type: "event",
+        type: "start",
         text: `🎮 بازی شروع شد `,
       },
     ],
     gameStatus: "onGoing",
-    type: "mineSweeper",
+    type: "splendor",
   };
 
-  // gameState.phaseData = {
-  //   phase: "start_game",
-  //   title: "شروع بازی",
-  //   // type: "see",
-  //   message: "بازی شروع شد! نقش مخفی خود را ببینید. کاپیتان: " + captain.name,
-  //   phaseSeen: [],
-  // };
-
-  // gameState.nextPhaseData = { emergency: false };
   gameState.gameId = gameId;
-
-  const stats = await getStats(finalPlayers[0].id, finalPlayers[1].id);
-  console.log("statsaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  console.log(stats);
-
-  const id0 = finalPlayers[0].id;
-  const id1 = finalPlayers[1].id;
-  console.log("ddddddddddddd");
-  console.log(id0);
-  console.log(id1);
-  // console.log(stats.playerA);
-  // console.log(id0);
-  // console.log(id1);
-  // console.log(stats.playerA === id0);
-  // console.log(stats.playerA === id1);
-  console.log("ddddddddddddd");
-
-  let allTimeScore = [0, 0]; // [player0Wins, player1Wins]
-
-  if (stats) {
-    console.log(stats);
-    if (stats.playerA === id0 && stats.playerB === id1) {
-      allTimeScore = [stats.aWins, stats.bWins];
-      console.log("allTimeScore");
-      console.log(allTimeScore);
-    } else if (stats.playerA === id1 && stats.playerB === id0) {
-      allTimeScore = [stats.bWins, stats.aWins];
-      console.log("allTimeScore");
-      console.log(allTimeScore);
-    }
-  }
-
-  gameState.allTime = allTimeScore;
 
   // ذخیره وضعیت اولیه بازی در دیتابیس
   const gameDataToSave = {
@@ -134,15 +304,17 @@ async function startMineSweeperGame({
     roomId,
     players: gameState.players,
     currentPhase: gameState.currentPhase,
-    map: gameState.map,
-    clientMap: gameState.clientMap,
+    devCardsDeck: gameState.devCardsDeck,
+    devCardsVisible: gameState.devCardsVisible,
+    nobleTilesDeck: gameState.nobleTilesDeck,
+    chipQuantities: gameState.chipQuantities,
+    finalRound: gameState.finalRound,
     turn: gameState.turn,
     phaseData: gameState.phaseData,
     nextPhaseData: gameState.nextPhaseData,
     logs: gameState.logs,
     gameStatus: gameState.gameStatus,
     type: gameState.type,
-    allTime: gameState.allTime,
   };
   await gameController.createGame(gameDataToSave);
 
@@ -182,4 +354,4 @@ async function startMineSweeperGame({
   }
 }
 
-module.exports = { startMineSweeperGame };
+module.exports = { startSplendorGame };

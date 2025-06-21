@@ -7,23 +7,24 @@ const NavigationMenu = () => {
   const { gameState } = useGameContext();
 
   const navItems = [
-    { label: "🏠 Home", path: "/" },
-    { label: "⚙️ Login", path: "/login" },
-    { label: "👥 Friends", path: "/friends" },
-    { label: "🗺️ Lobby", path: "/lobby" },
+    { label: "🏠 خانه", path: "/" },
+    { label: "⚙️ ورود", path: "/login" },
+    { label: "👥 دوستان", path: "/friends" },
+    { label: "🗺️ لابی", path: "/lobby" },
     gameState && gameState.gameId
-      ? { label: "🎲 Game", path: `/game/${gameState.gameId}` }
+      ? { label: "🎲 بازی", path: `/game/${gameState.gameId}` }
       : null,
     gameState && gameState.gameId && gameState.type === "feedTheKraken"
-      ? { label: "🗺️ Map", path: "/map" }
+      ? ({ label: "🗺️ نقشه", path: "/map" },
+        { label: "👥 بازیکنان", path: "/players" })
       : null,
-    { label: "👥 Players", path: "/players" },
-    { label: "⚙️ Settings", path: "/settings" },
+
+    { label: "⚙️ تنظیمات", path: "/settings" },
   ].filter(Boolean);
 
   return (
     <nav className="flex justify-around bg-gray-950 text-white text-xs border-t border-gray-700 py-3">
-      {navItems.map((item) => (
+      {navItems.reverse().map((item) => (
         <Link
           key={item.path}
           to={item.path}

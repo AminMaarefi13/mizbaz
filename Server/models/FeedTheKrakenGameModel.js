@@ -5,7 +5,7 @@ const voteSchema = new mongoose.Schema({
   playerId: String,
   nickname: String,
   gunsUsed: Number,
-  seen: { type: Boolean, default: false }, // ✅ اضافه شده
+  seen: { type: Boolean, default: false },
   timestamp: { type: Date, default: Date.now },
 });
 

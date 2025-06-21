@@ -3,21 +3,8 @@ const gameController = require("../controllers/gameController");
 const { rooms, games, userSocketMap } = require("../utils/memoryStore");
 const { getPlayerLimits } = require("../utils/gamePlayerLimits");
 
-// ایمپورت توابع شروع بازی‌ها
-const {
-  startFeedTheKrakenGame,
-} = require("../games/feedTheKraken/gamePhases/startFeedTheKrakenGame");
-const {
-  startMineSweeperGame,
-} = require("../games/mineSweeper/gamePhases/startMineSweeperGame");
-
 const { gameControllers } = require("../utils/gameControllers");
-
-const gameStartMap = {
-  feedTheKraken: startFeedTheKrakenGame,
-  mineSweeper: startMineSweeperGame,
-  // ...
-};
+const { gameStartMap } = require("../utils/gameStartMap");
 
 async function onStartGame(roomId, gameId, socket, io) {
   const playerId = socket.user._id.toString();

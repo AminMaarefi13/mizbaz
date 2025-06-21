@@ -1,11 +1,6 @@
+const { gameSocketHandlers } = require("../utils/gameSocketHandlers");
 const { getValidGameAndRoom } = require("../utils/getValidGameAndRoom");
 const { rooms, games, userSocketMap } = require("../utils/memoryStore");
-
-// مپ هندلرها بر اساس نوع بازی
-const gameSocketHandlers = {
-  feedTheKraken: require("../games/feedTheKraken/socketHandlers/onRequestGameState"),
-  mineSweeper: require("../games/mineSweeper/socketHandlers/onRequestGameState"),
-};
 
 async function onRequestGameState(gameId, socket, io) {
   console.log("onRequestGameState called with gameId:", gameId);
