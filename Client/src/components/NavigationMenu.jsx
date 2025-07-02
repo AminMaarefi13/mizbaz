@@ -7,34 +7,34 @@ const NavigationMenu = () => {
   const { gameState } = useGameContext();
 
   const navItems = [
-    { label: "🏠 خانه", path: "/" },
-    { label: "⚙️ ورود", path: "/login" },
-    { label: "👥 دوستان", path: "/friends" },
-    { label: "🗺️ لابی", path: "/lobby" },
+    { name: "خانه", label: "🏠", path: "/" },
+    { name: "ورود", label: "🚪", path: "/login" },
+    { name: "دوستان", label: "👥", path: "/friends" },
+    { name: "لابی", label: "🎪", path: "/lobby" },
     gameState && gameState.gameId
-      ? { label: "🎲 بازی", path: `/game/${gameState.gameId}` }
+      ? { name: "بازی", label: "🎲", path: `/game/${gameState.gameId}` }
       : null,
     gameState && gameState.gameId && gameState.type === "feedTheKraken"
-      ? ({ label: "🗺️ نقشه", path: "/map" },
-        { label: "👥 بازیکنان", path: "/players" })
+      ? { name: "نقشه", label: "🗺️", path: "/map" }
       : null,
 
-    { label: "⚙️ تنظیمات", path: "/settings" },
+    { name: "تنظیمات", label: "⚙️", path: "/settings" },
   ].filter(Boolean);
 
   return (
-    <nav className="flex justify-around bg-gray-950 text-white text-xs border-t border-gray-700 py-3">
+    <nav className="flex items-center justify-around bg-gray-950 text-white text-xs border-t border-gray-700 py-1">
       {navItems.reverse().map((item) => (
         <Link
           key={item.path}
           to={item.path}
-          className={`px-3 py-1 rounded-lg transition ${
+          className={`flex flex-col items-center justify-center w-16 h-12 px-1 py-4 rounded-lg transition ${
             location.pathname === item.path
               ? "bg-blue-600 text-white font-semibold shadow"
               : "text-gray-400 hover:text-blue-400"
           }`}
         >
-          {item.label}
+          <div className=" text-sm">{item.label}</div>
+          <div>{item.name}</div>
         </Link>
       ))}
     </nav>

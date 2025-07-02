@@ -44,9 +44,9 @@ export default function RoomInvite({ roomId }) {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow mb-6">
+    <div className="bg-gray-800">
       <button
-        className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded font-bold w-full mb-2"
+        className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded font-bold w-full h-12 mb-2"
         onClick={() => setOpen((prev) => !prev)}
       >
         {open ? "بستن دعوت دوستان" : "دعوت دوستان به روم"}
@@ -62,45 +62,53 @@ export default function RoomInvite({ roomId }) {
               {invitees.map((f) => (
                 <li
                   key={f._id}
-                  className="flex items-center gap-3 bg-gray-700 rounded-lg px-3 py-2 shadow"
+                  className="flex items-center justify-between gap-3 bg-gray-700 rounded-lg px-3 py-2 shadow"
                 >
-                  {/* آواتار دایره‌ای با حرف اول اسم */}
-                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold text-lg">
-                    {f.name?.charAt(0) || "?"}
+                  <div className="w-full flex items-center justify-between gap-4 bg-gray-700 rounded-lg px-3 py-2 shadow">
+                    <div className="flex items-center gap-3 bg-gray-700 rounded-lg ">
+                      {/* آواتار دایره‌ای با حرف اول اسم */}
+                      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white font-bold text-lg">
+                        {f.name?.charAt(0) || "?"}
+                      </div>
+                      <span className="text-white font-medium">{f.name}</span>
+                    </div>
+                    <div>
+                      <button
+                        className="ml-auto bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow"
+                        onClick={() => handleInvite(f._id)}
+                        disabled={pendingInvites.some(
+                          (inv) => inv.friendId === f._id
+                        )}
+                      >
+                        دعوت
+                      </button>
+                    </div>
                   </div>
-                  <span className="text-white font-medium">{f.name}</span>
-                  <button
-                    className="ml-auto bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow"
-                    onClick={() => handleInvite(f._id)}
-                    disabled={pendingInvites.some(
-                      (inv) => inv.friendId === f._id
-                    )}
-                  >
-                    دعوت
-                  </button>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="mb-3">
-            <span className="text-gray-300">اینوایت‌های ارسال شده:</span>
-            <ul className="mt-2">
-              {pendingInvites.map((inv) => (
-                <li
-                  key={inv.to + "-" + inv.from}
-                  className="flex items-center gap-2 bg-gray-700 rounded-lg px-3 py-2 shadow"
-                >
-                  <span className="text-white">{inv.toName}</span>
-                  <button
-                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs ml-auto"
-                    onClick={() => handleCancelInvite(inv.to)}
+          {pendingInvites.length > 0 && (
+            <div className="mb-3">
+              <span className="text-gray-300">دعوت های ارسال شده:</span>
+              <ul className="mt-2">
+                {pendingInvites.map((inv) => (
+                  <li
+                    key={inv.to + "-" + inv.from}
+                    className="flex  items-center justify-between gap-2 bg-gray-700 rounded-lg px-3 py-2 shadow"
                   >
-                    حذف
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    <span className="w-full text-white">{inv.toName}</span>
+                    <button
+                      className="bg-red-500 w-20 h-8 hover:bg-red-600 text-white px-2 py-1 rounded text-xs ml-auto"
+                      onClick={() => handleCancelInvite(inv.to)}
+                    >
+                      حذف
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { socket } from "../../network/socket";
 import { useAppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import GAME_TYPES from "../../UI/gameTypes";
+import GAME_STATUS_LABELS from "../../UI/gameStatusLabels";
 
 export default function GameLobby() {
   const navigate = useNavigate();
@@ -10,6 +12,10 @@ export default function GameLobby() {
   const { playerId, currentGame, currentGameId, currentRoomId, isHost } =
     connectionState;
   if (!currentGame) return null;
+
+  const gameType = GAME_TYPES.find((games) => {
+    return games.value === currentGame.type;
+  });
 
   useEffect(() => {
     function handleGamePlayersUpdated({ gameId, gamePlayers }) {
@@ -88,22 +94,40 @@ export default function GameLobby() {
     navigate(`/game/${currentGameId}`);
   };
   return (
-    <div className="max-w-md w-full bg-gray-800 p-6 rounded-lg shadow-lg mt-8 mx-auto">
+    <div
+      className="max-w-md w-full bg-gray-800 p-6 rounded-lg shadow-lg mt-8 mx-auto"
+      style={{ direction: "rtl" }}
+    >
       <h3 className="font-bold text-2xl text-blue-400 mb-4 text-center">
         لابی بازی
       </h3>
       <div className="mb-3 flex flex-col gap-1">
-        <div>
-          <span className="text-gray-300">نوع بازی: </span>
-          <span className="text-white font-semibold">{currentGame.type}</span>
-        </div>
-        <div>
-          <span className="text-gray-300">آیدی بازی: </span>
-          <span className="text-white font-mono">{currentGame.gameId}</span>
-        </div>
-        <div>
-          <span className="text-gray-300">وضعیت: </span>
-          <span className="text-white">{currentGame.gameStatus}</span>
+        <div className="flex justify-between items-center">
+          <div className="mb-3 flex flex-col gap-2">
+            <div>
+              <span className="text-gray-300">بازی: </span>
+
+              <span className="text-white font-semibold">{gameType.label}</span>
+            </div>
+            <div>
+              <span className="text-gray-300">آیدی بازی: </span>
+              <span className="text-white font-mono">{currentGame.gameId}</span>
+            </div>
+            <div>
+              <span className="text-gray-300">وضعیت: </span>
+              <span className="text-white">
+                {GAME_STATUS_LABELS[currentGame.gameStatus]}
+              </span>
+            </div>
+          </div>
+          <div>
+            <img
+              src={gameType.image}
+              alt=""
+              className="w-32 h-32 rounded object-cover block"
+              style={{ aspectRatio: "1 / 1" }}
+            />
+          </div>
         </div>
       </div>
       <div className="mb-4">

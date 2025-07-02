@@ -7,6 +7,9 @@ const broadcastHandlers = {
       .broadcastGameStateToPlayers,
   splendor: require("../games/splendor/utils/broadcastGameStateToPlayers.js")
     .broadcastGameStateToPlayers,
+  splendorDuel:
+    require("../games/splendorDuel/utils/broadcastGameStateToPlayers.js")
+      .broadcastGameStateToPlayers,
 };
 
 module.exports = {

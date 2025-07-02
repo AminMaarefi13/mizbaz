@@ -82,7 +82,7 @@ export default function FriendsPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-4">
+    <div className="max-w-2xl mx-auto mt-4" style={{ direction: "rtl" }}>
       <div className="bg-white p-6 rounded-xl shadow-lg mb-6 mr-1 ml-1">
         <h2 className="text-2xl font-bold mb-4 text-blue-700">مدیریت دوستان</h2>
         <div className="flex items-center gap-2 mb-4">
@@ -135,7 +135,7 @@ export default function FriendsPage() {
             {friends.map((f, idx) => (
               <li
                 key={f._id}
-                className={`flex items-center gap-3 border-b pb-2 last:border-b-0 ${
+                className={`flex items-center gap-3 border-b py-2 last:border-b-0 ${
                   idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                 } text-gray-800`}
               >
@@ -168,23 +168,25 @@ export default function FriendsPage() {
             {requests.map((r, idx) => (
               <li
                 key={r._id}
-                className={`flex items-center gap-3 border-b pb-2 last:border-b-0 ${
+                className={`flex items-center justify-between gap-3 border-b py-2 last:border-b-0 ${
                   idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                 } text-gray-800`}
               >
                 <span className="font-medium">{r.name}</span>
-                <button
-                  className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
-                  onClick={() => respondRequest(r._id, true)}
-                >
-                  قبول
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
-                  onClick={() => respondRequest(r._id, false)}
-                >
-                  رد
-                </button>
+                <div className={"flex items-center justify-center gap-3 "}>
+                  <button
+                    className="bg-green-500 w-28 h-8 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+                    onClick={() => respondRequest(r._id, true)}
+                  >
+                    قبول
+                  </button>
+                  <button
+                    className="bg-red-500 w-28 h-8 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+                    onClick={() => respondRequest(r._id, false)}
+                  >
+                    رد
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -202,17 +204,19 @@ export default function FriendsPage() {
             {pendingRequests.map((r, idx) => (
               <li
                 key={r._id}
-                className={`flex items-center gap-3 border-b pb-2 last:border-b-0 ${
+                className={`flex items-center justify-between gap-3 border-b py-2 last:border-b-0 ${
                   idx % 2 === 0 ? "bg-gray-50" : "bg-white"
                 } text-gray-800`}
               >
                 <span className="font-medium">{r.name}</span>
-                <button
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs"
-                  onClick={() => cancelRequest(r._id)}
-                >
-                  لغو
-                </button>
+                <div className={"flex items-center justify-center gap-3 "}>
+                  <button
+                    className="bg-yellow-500 w-28 h-8 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs"
+                    onClick={() => cancelRequest(r._id)}
+                  >
+                    لغو
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

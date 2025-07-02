@@ -36,7 +36,7 @@ export default function RoomInvitesInbox() {
   if (!roomInvites.length) return null;
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow mb-6">
+    <div className="bg-gray-700 w-full p-4 rounded-lg shadow mb-6">
       <h3 className="font-bold text-lg mb-2 text-blue-400">
         دعوت‌های دریافتی به روم
       </h3>
@@ -44,27 +44,30 @@ export default function RoomInvitesInbox() {
         {roomInvites.map((inv) => (
           <li
             key={inv.roomId + inv.from._id}
-            className="flex items-center gap-2"
+            className="flex flex-col items-start justify-center gap-2 p-2 rounded-lg shadow"
           >
-            <span>
-              دعوت به روم {inv.roomId} از {inv.from.name}
+            <span className="w-full">
+              دعوت به روم {inv.roomId} از{" "}
+              <span className="text-lg text-blue-200">{inv.from.name}</span>
             </span>
-            <button
-              className="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
-              onClick={() =>
-                handleRespondInvite(inv.roomId, inv.from._id, true)
-              }
-            >
-              قبول
-            </button>
-            <button
-              className="bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs"
-              onClick={() =>
-                handleRespondInvite(inv.roomId, inv.from._id, false)
-              }
-            >
-              رد
-            </button>
+            <div className="flex w-full justify-around">
+              <button
+                className="bg-green-500 w-28 h-8 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+                onClick={() =>
+                  handleRespondInvite(inv.roomId, inv.from._id, true)
+                }
+              >
+                قبول
+              </button>
+              <button
+                className="bg-gray-500 w-28 h-8 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs"
+                onClick={() =>
+                  handleRespondInvite(inv.roomId, inv.from._id, false)
+                }
+              >
+                رد
+              </button>
+            </div>
           </li>
         ))}
       </ul>

@@ -145,7 +145,10 @@ export default function AuthPage() {
 
   if (mode === "welcome" && userInfo) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div
+        className="flex items-center justify-center min-h-screen"
+        style={{ direction: "rtl" }}
+      >
         <div className="max-w-md w-full bg-white p-5 rounded shadow text-gray-800 text-center mx-4">
           <h2 className="text-2xl font-bold mb-4">خوش آمدی {userInfo.name}!</h2>
           <div className="mb-2">

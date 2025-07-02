@@ -3,6 +3,7 @@ import { useGameContext } from "../context/GameContext";
 import FeedTheKrakenPage from "./FeedTheKrakenPage";
 import MineSweeperPage from "./MineSweeperPage";
 import SplendorPage from "./SplendorPage";
+import SplendorDuelPage from "./SplendorDuelPage";
 
 export default function GameRouter() {
   const { gameState } = useGameContext();
@@ -20,6 +21,8 @@ export default function GameRouter() {
       return <MineSweeperPage />;
     case "splendor":
       return <SplendorPage />;
+    case "splendorDuel":
+      return <SplendorDuelPage />;
     default:
       // نوع نامعتبر → برگشت به لابی
       return <Navigate to="/lobby" replace />;

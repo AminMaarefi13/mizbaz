@@ -9,9 +9,12 @@ import CreateGameBox from "../components/Room/CreateGameBox";
 import { getStatusIcon } from "../utils/getStatusIcon";
 import { useGameContext } from "../context/GameContext";
 import { useAppContext } from "../context/AppContext";
+import GAME_TYPES from "../UI/gameTypes";
+import GAME_STATUS_LABELS from "../UI/gameStatusLabels";
 
 function LobbyPage() {
   const [roomIdInputState, setRoomIdInputState] = useState("");
+  const [visibleGamesCount, setVisibleGamesCount] = useState(5);
 
   const navigate = useNavigate();
   const { setUserState, connectionState, setConnectionState } = useAppContext();
@@ -197,6 +200,15 @@ function LobbyPage() {
           currentGameId: state.publicState.gameId,
         }));
         localStorage.setItem("currentGameId", state.publicState.gameId);
+      } else if (state?.publicState.type === "splendorDuel") {
+        console.log("Splendor Duel game state received:");
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        localStorage.setItem("currentGameId", state.publicState.gameId);
       }
       navigate(`/game/${state.publicState.gameId}`);
     });
@@ -227,6 +239,18 @@ function LobbyPage() {
         localStorage.setItem("currentGameId", state.publicState.gameId);
       } else if (state?.publicState.type === "splendor") {
         console.log("Splendor game state received:", state.publicState);
+        setGameState(state.publicState);
+        setConnectionState((prev) => ({
+          ...prev,
+          currentRoomId: state.publicState.roomId,
+          currentGameId: state.publicState.gameId,
+        }));
+        console.log(state.publicState.gameId);
+        console.log(state.publicState);
+        navigate(`/game/${state.publicState.gameId}`);
+        localStorage.setItem("currentGameId", state.publicState.gameId);
+      } else if (state?.publicState.type === "splendorDuel") {
+        console.log("Splendor Duel game state received:", state.publicState);
         setGameState(state.publicState);
         setConnectionState((prev) => ({
           ...prev,
@@ -350,161 +374,223 @@ function LobbyPage() {
     }));
     localStorage.removeItem("currentRoomId");
     localStorage.removeItem("currentGameId");
+    setVisibleGamesCount(5);
   };
   // console.log(roomGames);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center mt-6 px-1 sm:px-2 md:px-4 py-4">
-      <div className="w-full max-w-6xl bg-gray-800 p-2 sm:p-4 md:p-6 rounded-md shadow-2xl space-y-4">
-        <button
+    <div
+      className="min-h-screen bg-gray-900 text-white flex flex-col items-center mt-6 px-1 sm:px-2 md:px-4 py-4"
+      style={{ direction: "rtl" }}
+    >
+      {!currentGameId && !currentGame && (
+        <div className="w-full max-w-6xl bg-gray-800 p-2 sm:p-4 md:p-6 rounded-md shadow-2xl space-y-4">
+          {/* <button
           className="w-full py-3 mb-4 bg-gray-500 hover:bg-gray-600 rounded-md font-semibold"
           onClick={() => window.location.reload()}
         >
           🔄 ریلود صفحه
-        </button>
-        <h2 className="text-2xl font-bold mb-4 text-center">🎮 ورود به بازی</h2>
+        </button> */}
+          {currentRoomId && !currentGameId && (
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              🎮 ورود به بازی
+            </h2>
+          )}
 
-        <div className="mb-2">!{name} خوش اومدی</div>
-        <div className="mb-4">{playerId} :آیدی</div>
+          {/* <div className="mb-2">!{name} خوش اومدی</div>
+        <div className="mb-4">{playerId} :آیدی</div> */}
 
-        {!currentRoomId && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input
-                className="w-full mt-3 px-4 py-3 rounded-md bg-gray-700 placeholder-gray-400 text-white"
-                placeholder="کد روم برای ورود"
-                value={roomIdInputState}
-                onChange={(e) => setRoomIdInputState(e.target.value)}
-              />
-              <button
-                className="w-full py-3 bg-green-600 hover:bg-green-700 rounded-md font-bold"
-                onClick={handleJoinRoom}
-              >
-                ورود به روم
-              </button>
-            </div>
-          </>
-        )}
-
-        <button
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
-          onClick={handleCreateRoom}
-        >
-          ساخت روم
-        </button>
-
-        <RoomInvitesInbox />
-
-        {userRooms?.length > 0 && !currentRoomId && (
-          <div className="pt-4">
-            <h3 className="text-lg font-semibold mb-3">📁 روم‌های شما:</h3>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {userRooms.map((room) => (
-                <li
-                  key={room.roomId}
-                  className="bg-gray-700 hover:bg-gray-600 p-3 rounded-md cursor-pointer transition"
-                  onClick={() => handleEnterRoom(room.roomId)}
+          {!currentRoomId && (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  className="w-full mt-3 px-4 py-3 rounded-md bg-gray-700 placeholder-gray-400 text-white"
+                  placeholder="کد روم برای ورود"
+                  value={roomIdInputState}
+                  onChange={(e) => setRoomIdInputState(e.target.value)}
+                />
+                <button
+                  className="w-full py-3 bg-green-600 hover:bg-green-700 rounded-md font-bold"
+                  onClick={handleJoinRoom}
                 >
-                  🏠 {room.roomId} | میزبان: {room.hostName}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                  ورود به روم
+                </button>
+              </div>
+            </>
+          )}
 
-        {roomGames.length > 0 &&
-          currentRoomId &&
-          !currentGameId &&
-          !currentGame && (
+          {!currentRoomId && (
+            <button
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-bold"
+              onClick={handleCreateRoom}
+            >
+              ساخت روم
+            </button>
+          )}
+
+          <RoomInvitesInbox />
+
+          {userRooms?.length > 0 && !currentRoomId && (
             <div className="pt-4">
-              <h3 className="text-lg font-semibold mb-3">🎮 بازی‌های موجود:</h3>
+              <h3 className="text-lg font-semibold mb-3">📁 روم‌های شما:</h3>
               <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {roomGames.map((game) => {
-                  const isWaiting = game.gameStatus === "waiting";
-                  const isPlayer =
-                    Array.isArray(game.players) &&
-                    game.players.some((p) => p.playerId === playerId);
-                  const canClick =
-                    isWaiting || (game.gameStatus === "onGoing" && isPlayer);
-
-                  return (
-                    <li
-                      key={game.gameId}
-                      className={`p-3 rounded-md transition ${
-                        canClick
-                          ? "bg-gray-700 hover:bg-gray-600 cursor-pointer"
-                          : "bg-gray-600 text-gray-400 opacity-60 cursor-not-allowed"
-                      }`}
-                      onClick={
-                        canClick
-                          ? () => handleSelectGame(game.gameId)
-                          : undefined
-                      }
-                      style={{
-                        pointerEvents: canClick ? "auto" : "none",
-                      }}
-                    >
-                      {getStatusIcon(game.gameStatus)} 🎮 {game.gameId} | بازی:{" "}
-                      {game.type} | وضعیت: {game.gameStatus}
-                      <span className="ml-2 text-sm text-blue-300">
-                        {game.players?.length || 0}{" "}
-                        {game.gameStatus === "onGoing"
-                          ? "نفر در حال بازی"
-                          : game.gameStatus === "waiting"
-                          ? "نفر آماده بازی"
-                          : "نفر"}
+                {userRooms.map((room) => (
+                  <li
+                    key={room.roomId}
+                    className="bg-gray-700 hover:bg-gray-600 p-3 rounded-md cursor-pointer transition flex justify-between items-center"
+                    onClick={() => handleEnterRoom(room.roomId)}
+                  >
+                    {" "}
+                    <div>
+                      میزبان:{" "}
+                      <span className="text-lg text-blue-200">
+                        {room.hostName}
                       </span>
-                    </li>
-                  );
-                })}
+                    </div>
+                    <div className="text-xs text-blue-200">
+                      ID: {room.roomId}
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
+          {currentRoomId && !currentGameId && !currentGame && (
+            <>
+              <div className="pt-6" style={{ direction: "ltr" }}>
+                <CreateGameBox />
+              </div>
+            </>
+          )}
+          {currentRoomId && !currentGameId && !currentGame && (
+            <button
+              className="w-full py-3 bg-yellow-600 hover:bg-yellow-700 rounded-md font-bold"
+              onClick={handleBackToLobby}
+            >
+              بازگشت به لابی
+            </button>
+          )}
 
-        {currentRoomId && !currentGameId && !currentGame && (
-          <button
-            className="w-full py-3 bg-yellow-600 hover:bg-yellow-700 rounded-md font-bold"
-            onClick={handleBackToLobby}
-          >
-            بازگشت به لابی
-          </button>
-        )}
+          {roomGames.length > 0 &&
+            currentRoomId &&
+            !currentGameId &&
+            !currentGame && (
+              <div className="pt-4">
+                <h3 className="text-lg font-semibold mb-3">
+                  🎮 بازی‌های موجود:
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {roomGames
+                    .slice()
+                    .reverse()
+                    .slice(0, visibleGamesCount)
+                    .map((game) => {
+                      const isWaiting = game.gameStatus === "waiting";
+                      const isPlayer =
+                        Array.isArray(game.players) &&
+                        game.players.some((p) => p.playerId === playerId);
+                      const canClick =
+                        isWaiting ||
+                        (game.gameStatus === "onGoing" && isPlayer);
+                      const gameType = GAME_TYPES.find((g) => {
+                        return g.value === game.type;
+                      });
 
-        {currentRoomId && !currentGameId && !currentGame && (
-          <>
-            <div className="pt-6">
-              <CreateGameBox />
-            </div>
-            <RoomInvite roomId={currentRoomId} />
-          </>
-        )}
-
-        {roomPlayers.length > 0 && !currentGameId && !currentGame && (
-          <div className="pt-6">
-            <h3 className="text-lg font-semibold mb-3">👥 اعضای روم:</h3>
-            {hostName && (
-              <p className="mb-2 text-sm text-gray-300">
-                👑 میزبان: {hostName}
-              </p>
+                      return (
+                        <div
+                          key={game.gameId}
+                          className={`p-3 rounded-md transition relative overflow-hidden ${
+                            canClick
+                              ? "bg-gray-700 hover:bg-gray-600 cursor-pointer"
+                              : "bg-gray-600 text-gray-400 opacity-60 cursor-not-allowed"
+                          }`}
+                          onClick={
+                            canClick
+                              ? () => handleSelectGame(game.gameId)
+                              : undefined
+                          }
+                          style={{
+                            pointerEvents: canClick ? "auto" : "none",
+                            backgroundImage: `url(${gameType.imageBanner})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                          }}
+                        >
+                          {/* لایه مشکی نیمه شفاف فقط روی کارت */}
+                          <div className="absolute inset-0 bg-black/50 rounded-md" />
+                          {/* محتوای اصلی */}
+                          <div className="relative z-10 flex flex-col text-lg">
+                            <div className="flex justify-between">
+                              <span>
+                                {getStatusIcon(game.gameStatus)} 🎮{" "}
+                                {gameType.label}
+                              </span>
+                              <span>
+                                وضعیت: {GAME_STATUS_LABELS[game.gameStatus]}
+                              </span>
+                            </div>
+                            <span className="ml-2 mr-4 mt-1 text-blue-200 flex justify-between items-center">
+                              <span>
+                                {game.players?.length || 0}{" "}
+                                {game.gameStatus === "onGoing"
+                                  ? "نفر در حال بازی"
+                                  : game.gameStatus === "waiting"
+                                  ? "نفر آماده بازی"
+                                  : "نفر"}
+                              </span>
+                              <span className="text-xs text-blue-100">
+                                ID: {game.gameId}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                {roomGames.length > visibleGamesCount && (
+                  <div
+                    className="flex justify-center mt-4"
+                    style={{ direction: "rtl" }}
+                  >
+                    <button
+                      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded font-bold text-white"
+                      onClick={() => setVisibleGamesCount((c) => c + 5)}
+                    >
+                      دیدن بازی های بیشتر...
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {roomPlayers.map((p) => (
-                <li
-                  key={p.playerId}
-                  className="bg-gray-700 px-4 py-2 rounded-md flex justify-between items-center"
-                >
-                  <span>
-                    {p.nickname} | ID: {p.playerId}
-                  </span>
-                  <span
-                    className={p.isReady ? "text-green-400" : "text-red-400"}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+
+          {currentRoomId && !currentGameId && (
+            <RoomInvite roomId={currentRoomId} />
+          )}
+          {roomPlayers.length > 0 && !currentGameId && !currentGame && (
+            <div className="pt-6">
+              <h3 className="text-lg font-semibold mb-3">👥 اعضای روم:</h3>
+              {hostName && (
+                <p className="mb-2 text-lg text-gray-300">
+                  👑 میزبان: {hostName}
+                </p>
+              )}
+              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {roomPlayers.map((p) => (
+                  <li
+                    key={p.playerId}
+                    className="bg-gray-700 px-4 py-2 rounded-md flex justify-between items-center"
+                  >
+                    <span className="text-m text-gray-100">{p.nickname}</span>
+                    <span className="text-xs text-blue-100">
+                      ID: {p.playerId}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {currentGameId && currentGame && <GameLobby />}
     </div>

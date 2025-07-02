@@ -116,7 +116,10 @@ export default function MineSweeperPage() {
 
       {/* Winner Banner */}
       {(players[0].score === 8 || players[1].score === 8) && (
-        <div className="w-full max-w-md bg-gray-200 text-black rounded-lg shadow px-4 py-8 mb-3 flex flex-col items-center text-xl sm:text-2xl font-bold">
+        <div
+          className="w-full max-w-md bg-gray-200 text-black rounded-lg shadow px-4 py-8 mb-3 flex flex-col items-center text-xl sm:text-2xl font-bold"
+          style={{ direction: "rtl" }}
+        >
           <div>
             {players[0].score === 8 ? players[0].name : players[1].name}
           </div>

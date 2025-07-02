@@ -203,7 +203,7 @@ const DEV_CARDS = {
       cost: { white: 1, blue: 3, green: 1 },
       prestigePoints: 0,
       level: 1,
-      index: "1g7",
+      index: "1g8",
     },
     // Red
     {

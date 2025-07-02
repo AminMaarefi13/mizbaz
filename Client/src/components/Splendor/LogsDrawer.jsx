@@ -45,7 +45,7 @@ function LogChipWithdraw({ player, chipsWithdrew }) {
         })}
       </div>
       <div className=" font-bold text-sm text-gray-800">
-        ------------------------------------
+        --------------------{" "}
       </div>
     </>
   );
@@ -78,7 +78,7 @@ function LogDevCardReserved({ player, reservedCard }) {
         </div>
       </div>
       <div className=" font-bold text-sm text-gray-800">
-        ------------------------------------
+        --------------------{" "}
       </div>
     </>
   );
@@ -111,7 +111,7 @@ function LogNobleCardBuy({ player, selectedNobleCard }) {
         </div>
       </div>
       <div className=" font-bold text-sm text-gray-800">
-        ------------------------------------
+        --------------------{" "}
       </div>
     </>
   );
@@ -142,7 +142,7 @@ function LogDevCardBuy({ player, selectedCard }) {
         </div>
       </div>
       <div className=" font-bold text-sm text-gray-800">
-        ------------------------------------
+        --------------------{" "}
       </div>
     </>
   );
@@ -189,7 +189,7 @@ function LogChipSelected({ player, selectedList }) {
         })}
       </div>
       <div className=" font-bold text-sm text-gray-800">
-        ------------------------------------
+        --------------------
       </div>
     </>
   );

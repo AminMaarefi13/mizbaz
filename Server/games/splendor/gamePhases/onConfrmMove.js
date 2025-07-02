@@ -129,8 +129,42 @@ async function onConfirmMove({
     return;
   }
 
-  checkGameOver(gameState);
+  const gameOver = checkGameOver(gameState);
 
+  if (gameOver) {
+    gameState.currentPhase = "game_over";
+    console.log("room before");
+    console.log(room);
+    const thisGame = room.games.find((g) => g.gameId === gameId);
+    if (thisGame) {
+      thisGame.gameStatus = "gameOver";
+    }
+    console.log("thisGame");
+    console.log(thisGame);
+    console.log("room after");
+    console.log(room);
+    // بروزرسانی دیتابیس روم
+    await roomController.updateRoom(roomId, {
+      games: room.games,
+    });
+    console.log("gamessssssssssssssss");
+    console.log(game);
+    io.to(roomId).emit("room_games_updated", {
+      roomId,
+      games: room.games,
+    });
+
+    updateAndBroadcastGame(
+      games,
+      gameId,
+      gameState,
+      roomId,
+      room,
+      userSocketMap,
+      io
+    );
+    return;
+  }
   // به‌روزرسانی بازی در حافظه و دیتابیس
   updateAndBroadcastGame(
     games,

@@ -21,8 +21,15 @@ export default function GameOver({ gameState, myIndex }) {
         {sortedPlayers.map((player) => {
           return (
             <>
-              <div key={player.seat}>
-                {player.name}: {player.prestigePoints}
+              <div
+                key={player.seat}
+                className="flex gap-2"
+                style={{ direction: "rtl" }}
+              >
+                <div>{player.devCards.length} کارت | </div>
+                <div>
+                  {player.prestigePoints} :{player.name}
+                </div>
               </div>
             </>
           );

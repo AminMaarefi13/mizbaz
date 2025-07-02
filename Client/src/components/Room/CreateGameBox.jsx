@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { socket } from "../../network/socket";
 import { useAppContext } from "../../context/AppContext";
+import GameTypeSelect from "./GameTypeSelect";
 
 const GAME_TYPES = [
+  { value: "splendorDuel", label: "SplendorDuel" },
   { value: "splendor", label: "Splendor" },
-  { value: "mineSweeper", label: "Mine Sweeper" },
+  { value: "mineSweeper", label: "Minesweeper" },
   { value: "feedTheKraken", label: "Feed the Kraken" },
 ];
 
@@ -32,18 +34,13 @@ export default function CreateGameBox() {
 
   return (
     <div className="bg-gray-700 p-4 rounded-lg shadow mb-4 flex flex-col gap-3">
-      <h3 className="font-bold text-lg text-blue-400 mb-2">ایجاد بازی جدید</h3>
-      <select
-        className="bg-gray-800 text-white px-3 py-2 rounded"
-        value={gameType}
-        onChange={(e) => setGameType(e.target.value)}
+      <h3
+        className="font-bold text-lg text-blue-400 mb-2"
+        style={{ direction: "rtl" }}
       >
-        {GAME_TYPES.map((g) => (
-          <option key={g.value} value={g.value}>
-            {g.label}
-          </option>
-        ))}
-      </select>
+        ایجاد بازی جدید
+      </h3>
+      <GameTypeSelect value={gameType} onChange={setGameType} />
       <button
         className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold"
         onClick={handleCreateGame}
