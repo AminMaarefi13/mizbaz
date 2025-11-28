@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PlayerInfoPanel from "./PlayerInfoPanel";
 import { useGameContext } from "../../context/GameContext";
-import ChipBoard from "./chipBoard";
+import ChipBoard from "./ChipBoard";
 
 export default function ChipBoardPanel({ myIndex, player }) {
   const [openPanel, setOpenPanel] = useState(null);
